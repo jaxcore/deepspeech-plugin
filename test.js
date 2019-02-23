@@ -1,67 +1,36 @@
 
 let Listen = require('./lib/listen');
 
-
-// setTimeout(function() {
-// 	stopSecording();
-// },5000);
+let listen = new Listen({
+	modelPath: './models/output_graph.pbmm',
+	alphabetPath: './models/alphabet.txt'
+});
 
 const readline = require('readline').createInterface({
 	input: process.stdin,
 	output: process.stdout
 });
 
-// function startRecognition() {
-// 	console.log('Starting recognition...');
-//
-// 	setTimeout(function() {
-// 		let result = 'blah blah';
-// 		console.log('Recognized as:', result);
-// 		startConsoleLoop();
-// 	}, 2000);
-// }
-
 function startConsoleLoop() {
-	readline.question('Press any key to start recording.', (name) => {
+	readline.question('\nPress any key to start recording.\n', (name) => {
 		
 		const onRecognize = function(text) {
 			console.log('Recognized as:', text);
-			// process.exit();
-			console.log('\n\n');
 			startConsoleLoop();
 		};
 		
-		const stopRecording = Listen.start(onRecognize);
+		listen.start(onRecognize);
 		
-		// console.log(`Hi ${name}!`);
-		//console.log('Press any key to stop recording and begin recognition.');
-		
-		readline.question('Press any key to stop.', (name) => {
-			stopRecording();
-			
+		readline.question('Press any key to stop.\n', (name) => {
+			listen.stop();
 			console.log('Stopped recording.');
-			
-			// startRecognition();
 		});
-		//readline.close();
 	});
 }
-
 
 process.stdin.resume();
 
 startConsoleLoop();
-
-//console.warn(`Press ctrl+c to exit.`);
-
-// Write incoming data out the console.
-/*audioRecorder.stream().on('data', function(chunk) {
-	console.log(chunk);
-});*/
-
-// Keep process alive.
-// process.stdin.resume();
-// console.warn(`Press ctrl+c to exit.`);
 
 // Pawn = poned pan pon paw porn pin pa
 // Knight = night net neat night knight might night meet not neat knit night not

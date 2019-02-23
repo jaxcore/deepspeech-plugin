@@ -1,0 +1,16 @@
+{
+  "name": "jaxcore-listen",
+  "version": "0.0.1",
+  "description": "Jaxcore voice recognition library based on Mozilla DeepSpeech",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Jaxcore",
+  "license": "MIT",
+  "dependencies": {
+    "deepspeech": "^0.4.1",
+    "node-audiorecorder": "^1.4.0",
+    "node-record-lpcm16": "^0.3.1"
+  }
+}

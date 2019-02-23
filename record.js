@@ -26,6 +26,7 @@ if (!fs.existsSync(alphabetPath)){
 let model = new DeepSpeech.Model(modelPath, N_FEATURES, N_CONTEXT, alphabetPath, BEAM_WIDTH);
 
 //const fileStream = fs.createWriteStream(fileName, { encoding: 'binary' });
+
 var memoryStream = new MemoryStream();
 
 const audioRecorder = new AudioRecorder({

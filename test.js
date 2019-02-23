@@ -31,7 +31,7 @@ function startConsoleLoop() {
 			startConsoleLoop();
 		};
 		
-		const stopRecording = Listen.startRecording(onRecognize);
+		const stopRecording = Listen.start(onRecognize);
 		
 		// console.log(`Hi ${name}!`);
 		//console.log('Press any key to stop recording and begin recognition.');

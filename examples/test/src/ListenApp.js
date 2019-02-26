@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import Jaxcore, { Listen } from 'jaxcore-client';
 
-class App extends Component {
+import ListenVisualizer from './ListenVisualizer';
+
+class ListenApp extends Component {
   constructor() {
     super();
     
@@ -56,17 +58,20 @@ class App extends Component {
     return (
       <div className="App">
   
+        <ListenVisualizer width={300} height={300} isRecording={this.state.isRecording}/>
+        <button onMouseDown={e=>this.setState({isRecording:true})} onMouseUp={e=>this.setState({isRecording:false})} onMouseOut={e=>this.setState({isRecording:false})}>listen</button>
+        
         <div>
-          Extension Status {this.state.connectedExtension?'Connected':'Disconnected'}
+          <button onMouseDown={e=>this.startRecording()} onMouseUp={e=>this.stopRecording()} onMouseOut={e=>this.stopRecording()}>Record</button>
         </div>
-        
-        
-        <button onMouseDown={e=>this.startRecording()} onMouseUp={e=>this.stopRecording()} onMouseOut={e=>this.stopRecording()}>Record</button>
-        
+  
         <div>
           Listen Status {this.state.isRecording?'Recording':'Stopped'}
         </div>
-        
+        <div>
+          Extension Status {this.state.connectedExtension?'Connected':'Disconnected'}
+        </div>
+  
         <br/>
         
         <div>
@@ -98,4 +103,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default ListenApp;

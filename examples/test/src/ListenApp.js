@@ -13,6 +13,7 @@ class ListenApp extends Component {
       connectedExtension: false
     };
     
+    global.app = this;
   }
   
   componentDidMount() {
@@ -59,10 +60,14 @@ class ListenApp extends Component {
       <div className="App">
   
         <ListenVisualizer width={300} height={300} isRecording={this.state.isRecording}/>
-        <button onMouseDown={e=>this.setState({isRecording:true})} onMouseUp={e=>this.setState({isRecording:false})} onMouseOut={e=>this.setState({isRecording:false})}>listen</button>
+  
         
         <div>
-          <button onMouseDown={e=>this.startRecording()} onMouseUp={e=>this.stopRecording()} onMouseOut={e=>this.stopRecording()}>Record</button>
+          <button onMouseDown={e=>this.startRecording()} onMouseUp={e=>this.stopRecording()} onMouseOut={e=>this.stopRecording()}>Start Voice Recogition</button>
+        </div>
+        
+        <div>
+          <button onMouseDown={e=>this.setState({isRecording:true})} onMouseUp={e=>this.setState({isRecording:false})} onMouseOut={e=>this.setState({isRecording:false})}>Test Mic</button>
         </div>
   
         <div>

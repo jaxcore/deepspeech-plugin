@@ -48,6 +48,10 @@ class ListenVisualizer extends Component {
 		// var rafID = null;
 		this.mediaStreamSource = null;
 		this._draw = this.draw.bind(this);
+		
+		this.isRecording = false;
+		
+		global.vis = this;
 	}
 	
 	componentWillReceiveProps(props) {
@@ -56,6 +60,7 @@ class ListenVisualizer extends Component {
 		}
 		
 		if ('isRecording' in props) {
+			console.log('change isRecording',props.isRecording);
 			this.setIsRecording(props.isRecording);
 		}
 	}
@@ -78,7 +83,10 @@ class ListenVisualizer extends Component {
 	}
 	
 	createAudioMeter(audioContext, clipLevel, averaging, clipLag) {
+		//this.audioContext = audioContext;
+		
 		var processor = audioContext.createScriptProcessor(512);
+		//this.processor = processor;
 		processor.onaudioprocess = volumeAudioProcess;
 		processor.clipping = false;
 		processor.lastClip = 0;
@@ -89,7 +97,7 @@ class ListenVisualizer extends Component {
 		
 		// this will have no effect, since we don't copy the input to the output,
 		// but works around a current Chrome bug.
-		processor.connect(audioContext.destination);
+		processor.connect(this.audioContext.destination);
 		
 		processor.checkClipping =
 			function () {
@@ -111,6 +119,7 @@ class ListenVisualizer extends Component {
 	
 	setIsRecording(isRecording) {
 		if (this.isRecording === isRecording) {
+			console.log('same');
 			return;
 		}
 		this.isRecording = isRecording;
@@ -119,10 +128,15 @@ class ListenVisualizer extends Component {
 	}
 	
 	stopRecording() {
-	
+		this.mediaStreamSource.context.close();
+		this.mediaStreamSource.disconnect(this.meter);
+		this.meter.disconnect(this.audioContext.destination);
+		// this.audioContext.close();
+		this.isDrawing = false;
 	}
 	
 	startRecording() {
+		console.log('startRecording ?');
 		let ctx = this.canvasRef.current.getContext('2d');
 		
 		// grab our canvas
@@ -136,6 +150,8 @@ class ListenVisualizer extends Component {
 		
 		
 		const success = (stream) => {
+			console.log('startRecording success');
+			
 			// Create an AudioNode from the stream.
 			this.mediaStreamSource = this.audioContext.createMediaStreamSource(stream);
 			
@@ -149,7 +165,7 @@ class ListenVisualizer extends Component {
 		};
 		
 		const fail = (e) => {
-			console.log('fail');
+			console.log('startRecording fail');
 			debugger;
 		};
 		
@@ -180,10 +196,9 @@ class ListenVisualizer extends Component {
 	}
 	
 	startDrawing() {
-		if (!this.isDrawing) {
-			this.isDrawing = true;
-			this.draw()
-		}
+		this.isDrawing = true;
+		this.draw()
+	
 	}
 	
 	stopDrawing() {
@@ -208,7 +223,7 @@ class ListenVisualizer extends Component {
 			
 			
 			// clear the background
-			ctx.clearRect(0, 0, this.width, this.height);
+			// ctx.clearRect(0, 0, this.width, this.height);
 			
 			// check if we're currently clipping
 			if (this.meter.checkClipping()) {

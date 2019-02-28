@@ -91,9 +91,9 @@ class ListenVisualizer extends Component {
 		processor.clipping = false;
 		processor.lastClip = 0;
 		processor.volume = 0;
-		processor.clipLevel = clipLevel || 0.98;
-		processor.averaging = averaging || 0.95;
-		processor.clipLag = clipLag || 750;
+		processor.clipLevel = clipLevel || 0.99; //0.98;
+		processor.averaging = averaging || 0.97; //0.95;
+		processor.clipLag = clipLag || 500; //750;
 		
 		// this will have no effect, since we don't copy the input to the output,
 		// but works around a current Chrome bug.
@@ -206,32 +206,65 @@ class ListenVisualizer extends Component {
 	}
 	
 	draw() {
+		
 		if (!this.canvasRef) {
 			console.log('no canvas');
 			return;
 		}
 		
-		let ctx = this.canvasRef.current.getContext('2d');
-		ctx.fillStyle = '#000000';
-		ctx.fillRect(0, 0, this.width, this.height);
+		this.theme = {
+			color: '#0000FF',
+			clipColor: '#FFFFFF',
+			background: '#000000'
+		};
 		
-		if (!this.props.isRecording || !this.meter) {
-			console.log('not drawing');
+		
+		
+		let ctx = this.canvasRef.current.getContext('2d');
+		if (this.theme.background) {
+			ctx.fillStyle = this.theme.background;
+			ctx.fillRect(0, 0, this.width, this.height);
 		}
 		else {
-			console.log('IS drawing');
+			ctx.clearRect(0, 0, this.width, this.height);
+		}
+		
+		ctx.lineWidth = 3;
+		
+		if (!this.props.isRecording || !this.meter) {
+			ctx.strokeStyle = this.theme.color;
 			
+			console.log('not drawing');
+			// let maxsize = (Math.min(this.width, this.height) / 2) - ctx.lineWidth;
+			let size = 1;
+			ctx.beginPath();
+			ctx.arc(this.width/2, this.height/2, size, 0, 2 * Math.PI, false);
+			ctx.stroke();
+			ctx.closePath();
+		}
+		else {
+			console.log('IS drawing ', this.meter.volume);
+			
+			ctx.strokeStyle = this.meter.checkClipping()? this.theme.clipColor : this.theme.color;
 			
 			// clear the background
 			// ctx.clearRect(0, 0, this.width, this.height);
-			
 			// check if we're currently clipping
-			if (this.meter.checkClipping()) {
-				ctx.fillStyle = "red";
-			} else {
-				ctx.fillStyle = "green";
-			}
-			ctx.fillRect(0, 0, this.meter.volume * this.width * 1.4, this.height);
+			
+			let maxsize = (Math.min(this.width, this.height) / 2) - ctx.lineWidth;
+			let size = this.meter.volume * maxsize;
+			
+			ctx.beginPath();
+			ctx.arc(this.width/2, this.height/2, size, 0, 2 * Math.PI, false);
+			ctx.stroke();
+			ctx.closePath();
+			
+			// if (this.meter.checkClipping()) {
+			// 	ctx.fillStyle = "red";
+			// } else {
+			// 	ctx.fillStyle = "green";
+			// }
+			// ctx.fillRect(0, 0, this.meter.volume * this.width * 1.4, this.height);
 			
 			if (this.isDrawing) {
 				

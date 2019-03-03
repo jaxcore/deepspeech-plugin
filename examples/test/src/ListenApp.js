@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import Jaxcore, { Listen } from 'jaxcore-client';
-
-import ListenVisualizer from './ListenVisualizer';
+import Jaxcore, { Listen, MonauralScope } from 'jaxcore-client';
+// import MicScope from './MicScope';
 
 class ListenApp extends Component {
   constructor() {
     super();
+    
+    this.canvasRef = React.createRef();
     
     this.state = {
       isRecording: false,
@@ -25,9 +26,10 @@ class ListenApp extends Component {
       
     });
     
-    global.app = this;
-    
     this.connect();
+  
+    this.micVisualization = new MonauralScope(this.canvasRef.current);
+    this.micVisualization.draw();
   }
   
   connect() {
@@ -59,15 +61,15 @@ class ListenApp extends Component {
     return (
       <div className="App">
   
-        <ListenVisualizer width={300} height={300} isRecording={this.state.isRecording}/>
-  
+        {/*<MicScope width={300} height={300} isRecording={this.state.isRecording}/>*/}
+        <canvas ref={this.canvasRef} width="300" height="300"/>
         
         <div>
           <button onMouseDown={e=>this.startRecording()} onMouseUp={e=>this.stopRecording()} onMouseOut={e=>this.stopRecording()}>Start Voice Recogition</button>
         </div>
         
         <div>
-          <button onMouseDown={e=>this.setState({isRecording:true})} onMouseUp={e=>this.setState({isRecording:false})} onMouseOut={e=>this.setState({isRecording:false})}>Test Mic</button>
+          <button onMouseDown={e=>this.startMicVisualization()} onMouseUp={e=>this.stopMicVisualization()} onMouseOut={e=>this.stopMicVisualization()}>Test Mic</button>
         </div>
   
         <div>
@@ -96,6 +98,7 @@ class ListenApp extends Component {
       isRecording: true
     }, () => {
       Listen.start();
+      this.startMicVisualization();
     });
   }
   
@@ -104,7 +107,18 @@ class ListenApp extends Component {
       isRecording: false
     }, () => {
       Listen.stop();
+      this.stopMicVisualization();
     });
+  }
+  
+  startMicVisualization() {
+    this.setState({isRecording:true});
+    this.micVisualization.startRecording();
+  }
+  
+  stopMicVisualization() {
+    this.setState({isRecording:false});
+    this.micVisualization.stopRecording();
   }
 }
 

@@ -25,7 +25,7 @@ const volumeAudioProcess = function (event) {
 	this.volume = Math.max(rms, this.volume * this.averaging);
 };
 
-class ListenVisualizer extends Component {
+class MicScope extends Component {
 	constructor(props) {
 		super();
 		
@@ -79,7 +79,7 @@ class ListenVisualizer extends Component {
 	}
 	
 	render() {
-		return (<canvas ref={this.canvasRef} width="0" height="0"/>)
+		return (<canvas ref={this.canvasRef} width="0" height="0"/>);
 	}
 	
 	createAudioMeter(audioContext, clipLevel, averaging, clipLag) {
@@ -278,4 +278,4 @@ class ListenVisualizer extends Component {
 	
 }
 
-export default ListenVisualizer;
+export default MicScope;

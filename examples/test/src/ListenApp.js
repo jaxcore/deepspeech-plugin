@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import Jaxcore, {Listen, MonauralScope} from 'jaxcore-client';
-// import MicScope from './MicScope';
+
 import wordsToNumbers from 'words-to-numbers';
 
 const letters = 'abcdefghijklmnopqrstuvwxyz';
@@ -78,6 +78,10 @@ function wordsToLetters(words) {
 	console.log('not a letter:', words);
 }
 
+function wordsToAlphaNumberic(words) {
+
+}
+
 class ListenApp extends Component {
 	constructor() {
 		super();
@@ -105,7 +109,10 @@ class ListenApp extends Component {
 		
 		this.connect();
 		
-		this.micVisualization = new MonauralScope(this.canvasRef.current);
+		this.micVisualization = new MonauralScope(this.canvasRef.current, {
+			color: '#FF0000'
+		});
+		
 		this.micVisualization.draw();
 	}
 	
@@ -116,6 +123,9 @@ class ListenApp extends Component {
 			}
 			else if (this.state.mode === 'letters') {
 				text = wordsToLetters(text);
+			}
+			else if (this.state.mode === 'alphanum') {
+				text = wordsToAlphaNumberic(text);
 			}
 			
 			let results = this.state.results;
@@ -150,18 +160,32 @@ class ListenApp extends Component {
 		return (
 			<div className="App">
 				
-				{/*<MicScope width={300} height={300} isRecording={this.state.isRecording}/>*/}
 				<canvas ref={this.canvasRef} width="300" height="300"/>
 				
 				<div>
 					<button onMouseDown={e => this.startRecording()} onMouseUp={e => this.stopRecording()}
-							onMouseOut={e => this.stopRecording()}>Start Voice Recogition
+							onMouseOut={e => this.stopRecording()}>Start Listening
 					</button>
-					<span>
-						<input name="mode" type="radio" value="anything" checked={this.state.mode==='anything'} onChange={e=>this.onChangeMode(e)}/> Anything&nbsp;
-						<input name="mode" type="radio" value="numbers" checked={this.state.mode==='numbers'} onChange={e=>this.onChangeMode(e)}/> Numbers&nbsp;
-						<input name="mode" type="radio" value="letters" checked={this.state.mode==='letters'} onChange={e=>this.onChangeMode(e)}/> Letters&nbsp;
-					</span>
+				</div>
+				
+				<div>
+					Recognize:
+					
+					&nbsp;
+					<input id="anything" name="mode" type="radio" value="anything" checked={this.state.mode==='anything'} onChange={e=>this.onChangeMode(e)}/>
+					<label htmlFor="anything">Anything</label>
+					
+					&nbsp;
+					<input id="numbers" name="mode" type="radio" value="numbers" checked={this.state.mode==='numbers'} onChange={e=>this.onChangeMode(e)}/>
+					<label htmlFor="numbers">Numbers</label>
+					
+					&nbsp;
+					<input id="letters" name="mode" type="radio" value="letters" checked={this.state.mode==='letters'} onChange={e=>this.onChangeMode(e)}/>
+					<label htmlFor="letters">Letters</label>
+					
+					&nbsp;
+					<input id="alphanum" name="mode" type="radio" value="alphanum" checked={this.state.mode==='alphanum'} onChange={e=>this.onChangeMode(e)}/>
+					<label htmlFor="alphanum">Alpha Numeric</label>
 				</div>
 				
 				<div>

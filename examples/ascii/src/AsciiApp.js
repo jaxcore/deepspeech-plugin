@@ -5,21 +5,96 @@ import Speak from "jaxcore-speak";
 import en from "jaxcore-speak/voices/en/en.json";
 
 import ascii from './ascii.json';
+global.ascii = ascii;
 
-const asciiWords = {};
-
+const asciiWords = [];
+global.asciiWords = asciiWords;
 function processAscii() {
-	let words;
-	for (let a in ascii) {
-		words = ascii[a];
-		if (!words) {
-			console.log('no words for ',a);
-			debugger;
+	let dec, ch, words;
+	for (dec in ascii) {
+		ch = ascii[dec][0];
+		words = ascii[dec][1];
+		dec = parseInt(dec);
+		if (dec>=65 && dec<=90) { // A-Z
+			words.unshift("uppercase "+ch);
+			words.unshift("upper case "+ch);
+			words.unshift("capital "+ch);
 		}
-		asciiWords[a] = words;
+		else if (dec>=97 && dec<=122) { // a-z
+			words.unshift("lowercase "+ch);
+			words.unshift("lower case "+ch);
+			words.unshift(ch);
+		}
+		if (words.length===0) {
+			asciiWords.push([ch, dec]);
+		}
+		else {
+			words.forEach(function (word) {
+				asciiWords.push([word, dec]);
+			});
+		}
 	}
+	asciiWords.sort(function(a,b) {
+
+		if (a[0].length === b[0].length) {
+			return parseInt(a[1]) > parseInt(b[1]);
+		}
+		return a[0].length < b[0].length? 1:-1;
+	});
 }
 processAscii();
+
+function flattenArray(a) {
+
+}
+
+function processText(text) {
+	let index = null;
+	
+	let w;
+	let strIndex;
+	for (let i = 0; i < asciiWords.length; i++) {
+		w = asciiWords[i][0];
+		
+		
+		let same = false;
+		if (text === w) {
+			index = i;
+			strIndex = 0;
+			same = true;
+			break;
+		}
+		else {
+			let reg = new RegExp("^"+w+" | "+w+" | "+w+"$");
+			let m = text.match(reg);
+			if (m) {
+				index = i;
+				strIndex = m.index;
+				break;
+			}
+		}
+	}
+	if (index !== null) {
+		let found = asciiWords[index][0];
+		let dec = asciiWords[index][1];
+		let ch = ascii[dec][0];
+		let before = text.substring(0,strIndex);
+		let after = text.substring(strIndex+found.length+1);
+		let ret = []; //b,found,a];
+		let b = processText(before);
+		let a = processText(after);
+		
+		if (b) ret.push(b);
+		ret.push(ch);
+		if (a) ret.push(a);
+		let r = ret.flat();
+		return r;
+	}
+	else {
+		//
+	}
+}
+global.processText = processText;
 
 Speak.addLanguages(en);
 
@@ -76,13 +151,10 @@ class AsciiApp extends Component {
 		});
 	}
 	
-	processText(text) {
-		
-		const asciiChars = [];
-		
+	receiveWords(text) {
 		this.setState({
-			recognizedText: text,
-			asciiChars
+			recognizedText: text
+			
 		});
 	}
 	
@@ -113,8 +185,10 @@ class AsciiApp extends Component {
 		let i = 0;
 		let words;
 		let rows = [];
-		for (let a in ascii) {
-			words = ascii[a];
+		let a;
+		for (let dec in ascii) {
+			a = ascii[dec][0];
+			words = ascii[dec][1];
 			
 			let clss = '';
 			if (this.state.mouseSelected === i) clss += 'mouseSelected ';
@@ -124,7 +198,7 @@ class AsciiApp extends Component {
 			
 			let rowi = i;
 			words.forEach((word,index) => {
-				wordElms.push(<a href="/" onClick={e => this.clickRow(e, rowi, a, word)}>
+				wordElms.push(<a key={index} href="/" onClick={e => this.clickRow(e, rowi, a, word)}>
 					{word}
 				</a>);
 			});
@@ -133,12 +207,13 @@ class AsciiApp extends Component {
 			wordElms.forEach((w,i) => {
 				words2.push(w);
 				if (i<words.length-1) {
-					words2.push((<span>{' '}/{' '}</span>));
+					words2.push((<span key={'s_'+i}>{' '}/{' '}</span>));
 				}
 			});
 			
 			let firstWord = words[0];
 			rows.push(<tr key={i} className={clss} onClick={e=>this.clickRow(e,rowi,a,firstWord)}>
+				<td className="dec">{dec}</td>
 				<td className="char">{a}</td>
 				<td>{words2}</td>
 			</tr>);
@@ -149,11 +224,14 @@ class AsciiApp extends Component {
 		return (<table>
 			<tbody className="header">
 				<tr className="header">
+					<th className="dec">dec</th>
 					<th className="char">char</th>
-					<th className="words" colspan="6">words</th>
+					<th className="words" colSpan="6">words</th>
 				</tr>
 			</tbody>
-			{rows}
+			<tbody>
+				{rows}
+			</tbody>
 		</table>);
 	}
 	

@@ -5,48 +5,47 @@ import Speak from "jaxcore-speak";
 import en from "jaxcore-speak/voices/en/en.json";
 
 import ascii from './ascii.json';
+
 global.ascii = ascii;
 
 const asciiWords = [];
 global.asciiWords = asciiWords;
+
 function processAscii() {
 	let dec, ch, words;
 	for (dec in ascii) {
 		ch = ascii[dec][0];
 		words = ascii[dec][1];
 		dec = parseInt(dec);
-		if (dec>=65 && dec<=90) { // A-Z
-			words.unshift("uppercase "+ch);
-			words.unshift("upper case "+ch);
-			words.unshift("capital "+ch);
-		}
-		else if (dec>=97 && dec<=122) { // a-z
-			words.unshift("lowercase "+ch);
-			words.unshift("lower case "+ch);
+		if (dec >= 65 && dec <= 90) { // A-Z
+			let lch = ch.toLowerCase();
+			words.unshift("uppercase " + lch);
+			words.unshift("upper case " + lch);
+			words.unshift("capital " + lch);
+		} else if (dec >= 97 && dec <= 122) { // a-z
+			words.unshift("lowercase " + ch);
+			words.unshift("lower case " + ch);
 			words.unshift(ch);
 		}
-		if (words.length===0) {
+		if (words.length === 0) {
 			asciiWords.push([ch, dec]);
-		}
-		else {
+		} else {
 			words.forEach(function (word) {
 				asciiWords.push([word, dec]);
 			});
 		}
 	}
-	asciiWords.sort(function(a,b) {
-
+	asciiWords.sort(function (a, b) {
+		
 		if (a[0].length === b[0].length) {
 			return parseInt(a[1]) > parseInt(b[1]);
 		}
-		return a[0].length < b[0].length? 1:-1;
+		return a[0].length < b[0].length ? 1 : -1;
 	});
 }
+
 processAscii();
 
-function flattenArray(a) {
-
-}
 
 function processText(text) {
 	let index = null;
@@ -63,9 +62,8 @@ function processText(text) {
 			strIndex = 0;
 			same = true;
 			break;
-		}
-		else {
-			let reg = new RegExp("^"+w+" | "+w+" | "+w+"$");
+		} else {
+			let reg = new RegExp("^" + w + " | " + w + " | " + w + "$");
 			let m = text.match(reg);
 			if (m) {
 				index = i;
@@ -78,22 +76,24 @@ function processText(text) {
 		let found = asciiWords[index][0];
 		let dec = asciiWords[index][1];
 		let ch = ascii[dec][0];
-		let before = text.substring(0,strIndex);
-		let after = text.substring(strIndex+found.length+1);
+		let before = text.substring(0, strIndex);
+		let after = text.substring(strIndex + found.length + 1);
 		let ret = []; //b,found,a];
 		let b = processText(before);
 		let a = processText(after);
 		
 		if (b) ret.push(b);
-		ret.push(ch);
+		
+		ret.push(dec);
+		
 		if (a) ret.push(a);
 		let r = ret.flat();
 		return r;
-	}
-	else {
+	} else {
 		//
 	}
 }
+
 global.processText = processText;
 
 Speak.addLanguages(en);
@@ -109,7 +109,7 @@ class AsciiApp extends Component {
 		this.inputRef = React.createRef();
 		this.state = {
 			mouseSelected: 1,
-			voiceSelected: [4,6,11],
+			recognizedCharacters: [4, 6, 11],
 			text: '',
 			recognizedText: ''
 		};
@@ -120,7 +120,7 @@ class AsciiApp extends Component {
 		
 		Listen.on('recognized', (text) => {
 			console.log('recognized:', text);
-			this.processText(text);
+			this.receiveText(text);
 		});
 		
 		Spin.connectAll((spin) => {
@@ -151,10 +151,12 @@ class AsciiApp extends Component {
 		});
 	}
 	
-	receiveWords(text) {
+	receiveText(text) {
+		let recognizedCharacters = processText(text);
+		if (!recognizedCharacters) recognizedCharacters = [];
 		this.setState({
-			recognizedText: text
-			
+			recognizedText: text,
+			recognizedCharacters
 		});
 	}
 	
@@ -162,14 +164,19 @@ class AsciiApp extends Component {
 		return (
 			<div>
 				<div className="panel">
-					<button onMouseDown={e => this.startRecording()} onMouseUp={e => this.stopRecording()}>Start</button>
-					<input ref={this.inputRef} value={this.state.text} onChange={e=>this.onChangeText(e)}/>
+					<button onMouseDown={e => this.startRecording()} onMouseUp={e => this.stopRecording()}>Start
+					</button>
+					<input ref={this.inputRef} value={this.state.text} onChange={e => this.onChangeText(e)}/>
 					<br/>
 					Recognized Text: {this.state.recognizedText}
+					<br/>
+					Processed Characters : {this.state.recognizedCharacters.map((dec) => {
+					return ascii[dec][0];
+				}).join(' ')}
 				</div>
 				
 				{this.renderAscii()}
-				
+			
 			</div>
 		);
 	}
@@ -192,27 +199,27 @@ class AsciiApp extends Component {
 			
 			let clss = '';
 			if (this.state.mouseSelected === i) clss += 'mouseSelected ';
-			if (this.state.voiceSelected.indexOf(i)>-1) clss += 'voiceSelected';
+			if (this.state.recognizedCharacters.indexOf(i) > -1) clss += 'voiceSelected';
 			
 			let wordElms = [];
 			
 			let rowi = i;
-			words.forEach((word,index) => {
+			words.forEach((word, index) => {
 				wordElms.push(<a key={index} href="/" onClick={e => this.clickRow(e, rowi, a, word)}>
 					{word}
 				</a>);
 			});
 			
 			let words2 = [];
-			wordElms.forEach((w,i) => {
+			wordElms.forEach((w, i) => {
 				words2.push(w);
-				if (i<words.length-1) {
-					words2.push((<span key={'s_'+i}>{' '}/{' '}</span>));
+				if (i < words.length - 1) {
+					words2.push((<span key={'s_' + i}>{' '}/{' '}</span>));
 				}
 			});
 			
 			let firstWord = words[0];
-			rows.push(<tr key={i} className={clss} onClick={e=>this.clickRow(e,rowi,a,firstWord)}>
+			rows.push(<tr key={i} className={clss} onClick={e => this.clickRow(e, rowi, a, firstWord)}>
 				<td className="dec">{dec}</td>
 				<td className="char">{a}</td>
 				<td>{words2}</td>
@@ -223,14 +230,14 @@ class AsciiApp extends Component {
 		
 		return (<table>
 			<tbody className="header">
-				<tr className="header">
-					<th className="dec">dec</th>
-					<th className="char">char</th>
-					<th className="words" colSpan="6">words</th>
-				</tr>
+			<tr className="header">
+				<th className="dec">dec</th>
+				<th className="char">char</th>
+				<th className="words" colSpan="6">words</th>
+			</tr>
 			</tbody>
 			<tbody>
-				{rows}
+			{rows}
 			</tbody>
 		</table>);
 	}
@@ -244,10 +251,9 @@ class AsciiApp extends Component {
 		if (!word) {
 			word = a;
 			if (/[A-Z]/.test(word)) {
-				word = "uppercase "+word;
-			}
-			else if (/[a-z]/.test(word)) {
-				word = "letter "+word;
+				word = "uppercase " + word;
+			} else if (/[a-z]/.test(word)) {
+				word = "letter " + word;
 			}
 		}
 		

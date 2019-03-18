@@ -6,6 +6,21 @@ import en from "jaxcore-speak/voices/en/en.json";
 
 import ascii from './ascii.json';
 
+const asciiWords = {};
+
+function processAscii() {
+	let words;
+	for (let a in ascii) {
+		words = ascii[a];
+		if (!words) {
+			console.log('no words for ',a);
+			debugger;
+		}
+		asciiWords[a] = words;
+	}
+}
+processAscii();
+
 Speak.addLanguages(en);
 
 let voice = new Speak({language: 'en/en', profile: 'Jack'});
@@ -22,23 +37,15 @@ class AsciiApp extends Component {
 			voiceSelected: [4,6,11],
 			text: '',
 			recognizedText: ''
-		}
+		};
+		global.app = this;
 	}
 	
 	componentDidMount() {
-		this.greetings = true;
-		window.addEventListener('mousedown', () => {
-			if (this.greetings) {
-				this.greetings = false;
-				voice.speak('Greetings');
-			}
-		});
 		
 		Listen.on('recognized', (text) => {
 			console.log('recognized:', text);
-			this.setState({
-				recognizedText: text
-			});
+			this.processText(text);
 		});
 		
 		Spin.connectAll((spin) => {
@@ -69,6 +76,16 @@ class AsciiApp extends Component {
 		});
 	}
 	
+	processText(text) {
+		
+		const asciiChars = [];
+		
+		this.setState({
+			recognizedText: text,
+			asciiChars
+		});
+	}
+	
 	render() {
 		return (
 			<div>
@@ -93,35 +110,45 @@ class AsciiApp extends Component {
 	
 	renderAscii() {
 		
-		const rows = ascii.map((row,i) => {
+		let i = 0;
+		let words;
+		let rows = [];
+		for (let a in ascii) {
+			words = ascii[a];
+			
 			let clss = '';
 			if (this.state.mouseSelected === i) clss += 'mouseSelected ';
 			if (this.state.voiceSelected.indexOf(i)>-1) clss += 'voiceSelected';
 			
-			let words = [];
-			for (let w=1;w<10;w++) {
-				if (row[w]) {
-					words.push(<span>
-							<a href="/" onClick={e=>this.clickRow(e,i,row,w)}>
-								{row[w]}
-							</a>
-							{' '}
-						</span>);
-				}
-			}
+			let wordElms = [];
 			
-			return (<tr key={i} className={clss} onClick={e=>this.clickRow(e,i,row,'1')}>
-				<td className="dec">{row.dec}</td>
-				<td className="hex">{row.hex}</td>
-				<td className="char">{row['char']}</td>
-				<td>{words}</td>
+			let rowi = i;
+			words.forEach((word,index) => {
+				wordElms.push(<a href="/" onClick={e => this.clickRow(e, rowi, a, word)}>
+					{word}
+				</a>);
+			});
+			
+			let words2 = [];
+			wordElms.forEach((w,i) => {
+				words2.push(w);
+				if (i<words.length-1) {
+					words2.push((<span>{' '}/{' '}</span>));
+				}
+			});
+			
+			let firstWord = words[0];
+			rows.push(<tr key={i} className={clss} onClick={e=>this.clickRow(e,rowi,a,firstWord)}>
+				<td className="char">{a}</td>
+				<td>{words2}</td>
 			</tr>);
-		});
+			
+			i++;
+		}
+		
 		return (<table>
 			<tbody className="header">
 				<tr className="header">
-					<th className="dec">dec</th>
-					<th className="hex">hex</th>
 					<th className="char">char</th>
 					<th className="words" colspan="6">words</th>
 				</tr>
@@ -130,15 +157,23 @@ class AsciiApp extends Component {
 		</table>);
 	}
 	
-	clickRow(e, i, row, word) {
-		console.log('click',e.target.innerHTML);
+	clickRow(e, i, a, word) {
 		e.preventDefault();
-		e.cancelBubble = true;
 		e.stopPropagation();
 		this.setState({
 			mouseSelected: i
 		});
-		voice.speak(ascii[i][word]);
+		if (!word) {
+			word = a;
+			if (/[A-Z]/.test(word)) {
+				word = "uppercase "+word;
+			}
+			else if (/[a-z]/.test(word)) {
+				word = "letter "+word;
+			}
+		}
+		
+		voice.speak(word);
 	}
 	
 	startRecording() {

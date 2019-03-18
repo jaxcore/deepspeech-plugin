@@ -27,6 +27,10 @@ table, td {
   border-spacing: 0;
 }
 
+td, th {
+  padding: 4px;
+}
+
 .dec, .hex, .char {
   width: 70px;
 }
@@ -63,4 +67,8 @@ tr.mouseSelected td {
 
 td.char {
   text-align:center;
+}
+
+tr.voiceSelected TD A {
+  color: #FFF;
 }

@@ -11,6 +11,14 @@ global.ascii = ascii;
 const asciiWords = [];
 global.asciiWords = asciiWords;
 
+function sortWordLength(a, b) {
+	
+	if (a[0].length === b[0].length) {
+		return parseInt(a[1]) > parseInt(b[1]);
+	}
+	return a[0].length < b[0].length ? 1 : -1;
+}
+
 function processAscii() {
 	let dec, ch, words;
 	for (dec in ascii) {
@@ -19,11 +27,12 @@ function processAscii() {
 		dec = parseInt(dec);
 		if (dec >= 65 && dec <= 90) { // A-Z
 			let lch = ch.toLowerCase();
-			words.unshift("uppercase " + lch);
+			// words.unshift("uppercase " + lch);
 			words.unshift("upper case " + lch);
 			words.unshift("capital " + lch);
 		} else if (dec >= 97 && dec <= 122) { // a-z
-			words.unshift("lowercase " + ch);
+			// words.unshift("lowercase " + ch);
+			words.unshift("letter " + ch);
 			words.unshift("lower case " + ch);
 			words.unshift(ch);
 		}
@@ -35,13 +44,7 @@ function processAscii() {
 			});
 		}
 	}
-	asciiWords.sort(function (a, b) {
-		
-		if (a[0].length === b[0].length) {
-			return parseInt(a[1]) > parseInt(b[1]);
-		}
-		return a[0].length < b[0].length ? 1 : -1;
-	});
+	asciiWords.sort(sortWordLength);
 }
 
 processAscii();
@@ -106,10 +109,11 @@ class AsciiApp extends Component {
 		super();
 		this.numSpins = 0;
 		this.firstRecognition = true;
+		this.isRecording = true;
 		this.inputRef = React.createRef();
 		this.state = {
 			mouseSelected: 1,
-			recognizedCharacters: [4, 6, 11],
+			recognizedChars: [4, 6, 11],
 			text: '',
 			recognizedText: ''
 		};
@@ -152,11 +156,11 @@ class AsciiApp extends Component {
 	}
 	
 	receiveText(text) {
-		let recognizedCharacters = processText(text);
-		if (!recognizedCharacters) recognizedCharacters = [];
+		let recognizedChars = processText(text);
+		if (!recognizedChars) recognizedChars = [];
 		this.setState({
 			recognizedText: text,
-			recognizedCharacters
+			recognizedChars
 		});
 	}
 	
@@ -170,7 +174,7 @@ class AsciiApp extends Component {
 					<br/>
 					Recognized Text: {this.state.recognizedText}
 					<br/>
-					Processed Characters : {this.state.recognizedCharacters.map((dec) => {
+					Processed Characters : {this.state.recognizedChars.map((dec) => {
 					return ascii[dec][0];
 				}).join(' ')}
 				</div>
@@ -199,7 +203,7 @@ class AsciiApp extends Component {
 			
 			let clss = '';
 			if (this.state.mouseSelected === i) clss += 'mouseSelected ';
-			if (this.state.recognizedCharacters.indexOf(i) > -1) clss += 'voiceSelected';
+			if (this.state.recognizedChars.indexOf(i) > -1) clss += 'voiceSelected';
 			
 			let wordElms = [];
 			
@@ -262,10 +266,18 @@ class AsciiApp extends Component {
 	
 	startRecording() {
 		Listen.start();
+		this.setState({
+			isRecording:true,
+			recognizedText: '',
+			recognizedChars: [],
+		});
 	}
 	
 	stopRecording() {
 		Listen.stop();
+		this.setState({
+			isRecording:false
+		});
 	}
 }
 

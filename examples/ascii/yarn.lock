@@ -5352,6 +5352,27 @@ istanbul-reports@^1.5.1:
   dependencies:
     handlebars "^4.0.3"
 
+jaxcore-client@^0.0.2:
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/jaxcore-client/-/jaxcore-client-0.0.2.tgz#e8241282d8fce5de3865373274791f89b7c2fdb6"
+  integrity sha512-SBxuG8BFNIPm9URRWoS7f8S6JvaWx21DW5DQdm0Uf/blnvrsVf+PnFnMNxz++iEllC2eBmWeafxQ5MYnHUV0Xg==
+  dependencies:
+    jaxcore-plugin "0.0.2"
+
+jaxcore-plugin@0.0.2:
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/jaxcore-plugin/-/jaxcore-plugin-0.0.2.tgz#23174cb9cc9af1c2010e5072e12c88caf58ead1f"
+  integrity sha512-iF89ENWznurn2o+MpSNH6wD6Qpkryxj/9q1IOwJMZjNNM6OzmneSckR2vjuIwLFKMOK/AFWkuDGppDfSNKc62w==
+  dependencies:
+    chalk "^2.4.1"
+
+jaxcore-speak@^0.0.2:
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/jaxcore-speak/-/jaxcore-speak-0.0.2.tgz#3377acc7abce4145a3ce70b072919a43ae733fe0"
+  integrity sha512-tTb+lsQCFCkeBp8SYnsp06Pt2Ca/nEmUqI57pjibGQdCaqm9U7dMRcJ47a1HX1abyPbLmihft5tEDJj4ALt0oQ==
+  dependencies:
+    sam-js "https://github.com/jaxcore/sam#jsonly"
+
 jest-changed-files@^23.4.2:
   version "23.4.2"
   resolved "https://registry.yarnpkg.com/jest-changed-files/-/jest-changed-files-23.4.2.tgz#1eed688370cd5eebafe4ae93d34bb3b64968fe83"
@@ -8079,7 +8100,7 @@ react-dev-utils@^8.0.0:
     strip-ansi "5.0.0"
     text-table "0.2.0"
 
-react-dom@16.8.4:
+react-dom@^16.8.4:
   version "16.8.4"
   resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-16.8.4.tgz#1061a8e01a2b3b0c8160037441c3bf00a0e3bc48"
   integrity sha512-Ob2wK7XG2tUDt7ps7LtLzGYYB6DXMCLj0G5fO6WeEICtT4/HdpOi7W/xLzZnR6RCG1tYza60nMdqtxzA8FaPJQ==
@@ -8148,7 +8169,7 @@ react-scripts@2.1.8:
   optionalDependencies:
     fsevents "1.2.4"
 
-react@16.8.4:
+react@^16.8.4:
   version "16.8.4"
   resolved "https://registry.yarnpkg.com/react/-/react-16.8.4.tgz#fdf7bd9ae53f03a9c4cd1a371432c206be1c4768"
   integrity sha512-0GQ6gFXfUH7aZcjGVymlPOASTuSjlQL4ZtVC5YKH+3JL6bBLCVO21DknzmaPlI90LN253ojj02nsapy+j7wIjg==
@@ -8588,6 +8609,10 @@ safe-regex@^1.1.0:
   version "2.1.2"
   resolved "https://registry.yarnpkg.com/safer-buffer/-/safer-buffer-2.1.2.tgz#44fa161b0187b9549dd84bb91802f9bd8385cd6a"
   integrity sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==
+
+"sam-js@git+https://github.com/jaxcore/sam.git#jsonly":
+  version "0.0.2"
+  resolved "git+https://github.com/jaxcore/sam.git#3fb5450033072ba494958179eb5af05325e2f07a"
 
 sane@^2.0.0:
   version "2.5.2"

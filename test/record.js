@@ -1,3 +1,5 @@
+// records for 5 seconds then processes result
+
 const fs = require(`fs`);
 const path = require(`path`);
 const AudioRecorder = require(`node-audiorecorder`);

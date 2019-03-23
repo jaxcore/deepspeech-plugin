@@ -1,5 +1,5 @@
 
-let Listen = require('./lib/listen');
+let Listen = require('../lib/listen');
 
 let listen = new Listen({
 	// modelPath: './models/output_graph.pbmm',

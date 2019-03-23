@@ -1,3 +1,4 @@
+
 const DeepSpeech = require('deepspeech');
 const Fs = require('fs');
 const Sox = require('sox-stream');
@@ -8,18 +9,16 @@ const Wav = require('node-wav');
 const BEAM_WIDTH = 1024;
 const N_FEATURES = 26;
 const N_CONTEXT = 9;
-let modelPath = '../voice/models/output_graph.pbmm';
-let alphabetPath = '../voice/models/alphabet.txt';
+let modelPath = '../models/output_graph.pbmm';
+let alphabetPath = '../models/alphabet.txt';
 
 let model = new DeepSpeech.Model(modelPath, N_FEATURES, N_CONTEXT, alphabetPath, BEAM_WIDTH);
 
-// TODO: use language file options?
-// const LM_ALPHA = 0.75;
-// const LM_BETA = 1.85;
-// let lmPath = '';
-// let triePath = '';
-// model.enableDecoderWithLM(alphabetPath, lmPath, triePath, LM_ALPHA, LM_BETA);
-
+const LM_ALPHA = 0.75;
+const LM_BETA = 1.85;
+let lmPath = '../models/lm.binary';
+let triePath = '../models/trie';
+model.enableDecoderWithLM(alphabetPath, lmPath, triePath, LM_ALPHA, LM_BETA);
 
 const buffer = Fs.readFileSync('./audio.wav');
 const result = Wav.decode(buffer);

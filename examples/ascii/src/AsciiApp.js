@@ -4,6 +4,8 @@ import Jaxcore, {Spin, Listen, MonauralScope} from 'jaxcore-client';
 import Speak from "jaxcore-speak";
 import en from "jaxcore-speak/voices/en/en.json";
 
+import chess from './vocabularies/chess.json';
+
 import ascii from './ascii.json';
 
 global.ascii = ascii;
@@ -27,6 +29,13 @@ function processAscii() {
 		dec = parseInt(dec);
 		if (dec >= 65 && dec <= 90) { // A-Z
 			let lch = ch.toLowerCase();
+			let letter = dec + 32;
+			let letterwords = ascii[letter][1];
+			letterwords.forEach((lw) => {
+				words.unshift("upper case " + lw);
+				words.unshift("capital " + lw);
+			});
+			// words = words.concat(letterwords);
 			// words.unshift("uppercase " + lch);
 			words.unshift("upper case " + lch);
 			words.unshift("capital " + lch);
@@ -117,10 +126,51 @@ class AsciiApp extends Component {
 			text: '',
 			recognizedText: ''
 		};
+		
+		this.speakScopeRef = React.createRef();
+		this.listenScopeRef = React.createRef();
+		
 		global.app = this;
 	}
 	
 	componentDidMount() {
+		this.speakScope = new MonauralScope(this.speakScopeRef.current, {
+			lineWidth: 1,
+			strokeColor: '#FF0000',
+			fillColor: 'rgba(255,0,0,0.1)',
+			bgFillColor: 'rgba(180,64,64,0.05)',
+			dotColor: '#FF0000',
+			dotSize: 2,
+			background: null
+		});
+		this.speakScope.draw();
+		voice.setVisualizer(this.speakScope);
+		
+		this.listenScope = new MonauralScope(this.listenScopeRef.current, {
+			lineWidth: 1,
+			strokeColor: '#0000FF',
+			fillColor: 'rgba(0,0,255,0.1)',
+			bgFillColor: 'rgba(64,64,180,0.05)',
+			dotColor: '#0000FF',
+			dotSize: 2,
+			background: null
+		});
+		this.listenScope.draw();
+		
+		window.addEventListener('keydown', (e) => {
+			if (e.keyCode === 32) {
+				e.preventDefault();
+				this.startRecording();
+			}
+			// console.log('d', e.keyCode);
+			
+		});
+		window.addEventListener('keyup', (e) => {
+			if (e.keyCode === 32) {
+				e.preventDefault();
+				this.stopRecording();
+			}
+		});
 		
 		Listen.on('recognized', (text) => {
 			console.log('recognized:', text);
@@ -168,15 +218,13 @@ class AsciiApp extends Component {
 		return (
 			<div>
 				<div className="panel">
-					<button onMouseDown={e => this.startRecording()} onMouseUp={e => this.stopRecording()}>Start
-					</button>
-					<input ref={this.inputRef} value={this.state.text} onChange={e => this.onChangeText(e)}/>
-					<br/>
 					Recognized Text: {this.state.recognizedText}
 					<br/>
 					Processed Characters : {this.state.recognizedChars.map((dec) => {
 					return ascii[dec][0];
 				}).join(' ')}
+					<canvas id="speak" ref={this.speakScopeRef} width="70" height="70"/>
+					<canvas id="listen" ref={this.listenScopeRef} width="70" height="70"/>
 				</div>
 				
 				{this.renderAscii()}
@@ -265,19 +313,25 @@ class AsciiApp extends Component {
 	}
 	
 	startRecording() {
-		Listen.start();
-		this.setState({
-			isRecording:true,
-			recognizedText: '',
-			recognizedChars: [],
-		});
+		if (!this.state.isRecording) {
+			Listen.start();
+			this.listenScope.startRecording();
+			this.setState({
+				isRecording: true,
+				recognizedText: '',
+				recognizedChars: [],
+			});
+		}
 	}
 	
 	stopRecording() {
-		Listen.stop();
-		this.setState({
-			isRecording:false
-		});
+		if (this.state.isRecording) {
+			Listen.stop();
+			this.listenScope.stopRecording();
+			this.setState({
+				isRecording: false
+			});
+		}
 	}
 }
 

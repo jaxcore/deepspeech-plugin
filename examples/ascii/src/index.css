@@ -17,6 +17,8 @@ div.panel {
   height:70px;
   background: #fff;
   border-bottom: 2px solid #333;
+  font-size: 25px;
+  line-height:32px;
 }
 
 table {
@@ -71,4 +73,17 @@ td.char, td.dec {
 
 tr.voiceSelected TD A {
   color: #FFF;
+}
+
+#speak {
+  /*background:red;*/
+  position: absolute;
+  right:70px;
+  top:0;
+}
+#listen {
+  /*background:blue;*/
+  position: absolute;
+  right:0;
+  top:0;
 }

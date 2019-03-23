@@ -42,7 +42,8 @@ class AsciiApp extends Component {
 			lineWidth: 1,
 			strokeColor: '#FF0000',
 			fillColor: 'rgba(255,0,0,0.1)',
-			bgFillColor: 'rgba(180,64,64,0.05)',
+			bgOnColor: 'rgba(180,64,64,0.08)',
+			bgOffColor: 'rgba(180,180,180,0.08)',
 			dotColor: '#FF0000',
 			dotSize: 2,
 			background: null
@@ -54,7 +55,8 @@ class AsciiApp extends Component {
 			lineWidth: 1,
 			strokeColor: '#0000FF',
 			fillColor: 'rgba(0,0,255,0.1)',
-			bgFillColor: 'rgba(64,64,180,0.05)',
+			bgOnColor: 'rgba(64,64,180,0.08)',
+			bgOffColor: 'rgba(180,180,180,0.08)',
 			dotColor: '#0000FF',
 			dotSize: 2,
 			background: null

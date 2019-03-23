@@ -86,7 +86,7 @@ function loadAscii() {
 			let r = ret.flat();
 			return r;
 		} else {
-			//
+			return [];
 		}
 	};
 	

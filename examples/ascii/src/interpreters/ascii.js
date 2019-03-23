@@ -1,4 +1,4 @@
-import ascii from './ascii.json';
+import asciiData from './ascii.json';
 
 function sortWordLength(a, b) {
 	if (a[0].length === b[0].length) {
@@ -11,14 +11,14 @@ function loadAscii() {
 	let asciiWords = [];
 	
 	let dec, ch, words;
-	for (dec in ascii) {
-		ch = ascii[dec][0];
-		words = ascii[dec][1];
+	for (dec in asciiData) {
+		ch = asciiData[dec][0];
+		words = asciiData[dec][1];
 		dec = parseInt(dec);
 		if (dec >= 65 && dec <= 90) { // A-Z
 			let lch = ch.toLowerCase();
 			let letter = dec + 32;
-			let letterwords = ascii[letter][1];
+			let letterwords = asciiData[letter][1];
 			letterwords.forEach((lw) => {
 				words.unshift("upper case " + lw);
 				words.unshift("capital " + lw);
@@ -36,9 +36,9 @@ function loadAscii() {
 		if (words.length === 0) {
 			asciiWords.push([ch, dec]);
 		} else {
-			words.forEach(function (word) {
-				asciiWords.push([word, dec]);
-			});
+			for (let w=0;w<words.length;w++) {
+				asciiWords.push([words[w], dec]);
+			}
 		}
 	}
 	asciiWords.sort(sortWordLength);
@@ -71,7 +71,7 @@ function loadAscii() {
 		if (index !== null) {
 			let found = asciiWords[index][0];
 			let dec = asciiWords[index][1];
-			let ch = ascii[dec][0];
+			// let ch = asciiData[dec][0];
 			let before = text.substring(0, strIndex);
 			let after = text.substring(strIndex + found.length + 1);
 			let ret = []; //b,found,a];
@@ -93,7 +93,8 @@ function loadAscii() {
 	return asciiInterpreter;
 }
 
-export default {
-	data: ascii,
-	interpreter: loadAscii()
-};
+export {asciiData};
+
+const interpreter = loadAscii();
+
+export default interpreter;

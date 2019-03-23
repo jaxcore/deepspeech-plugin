@@ -1,7 +1,16 @@
-import ascii from './ascii.js';
-import chess from './chess.js';
+import ascii, {asciiData} from './ascii.js';
+import chess, {chessData} from './chess.js';
 
-export default {
+const interpreterData = {
+	ascii: asciiData,
+	chess: chessData
+};
+
+export {interpreterData};
+
+const interpreters = {
 	ascii,
 	chess
 };
+
+export default interpreters;

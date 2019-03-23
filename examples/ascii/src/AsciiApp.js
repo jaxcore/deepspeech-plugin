@@ -4,9 +4,10 @@ import Jaxcore, {Spin, Listen, MonauralScope} from 'jaxcore-client';
 import Speak from "jaxcore-speak";
 import en from "jaxcore-speak/voices/en/en.json";
 
-import interpreters from './interpreters';
+import interpreters, {interpreterData} from './interpreters';
 
-//global.asciiWords = asciiWords;
+global.interpreterData = interpreterData;
+global.interpreters = interpreters;
 
 Speak.addLanguages(en);
 
@@ -25,11 +26,13 @@ class AsciiApp extends Component {
 			recognizedChars: [],
 			text: '',
 			recognizedText: '',
-			selectedProcessor: 'ascii'
+			selectedInterpreter: 'ascii'
 		};
 		
 		this.speakScopeRef = React.createRef();
 		this.listenScopeRef = React.createRef();
+		
+		this.interpreters = Object.keys(interpreterData);
 		
 		global.app = this;
 	}
@@ -107,12 +110,24 @@ class AsciiApp extends Component {
 	}
 	
 	receiveText(text) {
-		let recognizedChars = interpreters.ascii(text);
-		if (!recognizedChars) recognizedChars = [];
+		let recognizedChars = interpreters[this.state.selectedInterpreter](text);
 		this.setState({
 			recognizedText: text,
 			recognizedChars
 		});
+		
+		// if (this.state.selectedInterpreter === 'ascii') {
+		// 	let recognizedChars = interpreters.ascii(text);
+		// 	this.setState({
+		// 		recognizedText: text,
+		// 		recognizedChars
+		// 	});
+		// } else {
+		// 	console.log('interpreting', text);
+		// 	let recognizedWords = interpreters.chess(text);
+		// 	console.log('recognizedWords', recognizedWords);
+		//
+		// }
 	}
 	
 	render() {
@@ -121,12 +136,12 @@ class AsciiApp extends Component {
 				<div className="panel">
 					Recognized Text: {this.state.recognizedText}
 					<br/>
-					Processed Characters : {this.state.recognizedChars.map((dec) => {
-					return interpreters.ascii.data[dec][0];
-				}).join(' ')}
-					<select className="selectedProcessor" value={this.state.selectedProcessor} onChange={e=>this.changeProcessor(e)}>
-						<option value="ascii">ascii</option>
-						<option value="chess">chess</option>
+					Interpreted Result: {this.renderInterpretedResult()}
+					<select className="selectedInterpreter" value={this.state.selectedInterpreter}
+							onChange={e => this.changeInterpreter(e)}>
+						{ this.interpreters.map((interpreter,i) => {
+							return (<option value={interpreter} key={i}>{interpreter}</option>);
+						}) }
 					</select>
 					<canvas id="speak" ref={this.speakScopeRef} width="70" height="70"/>
 					<canvas id="listen" ref={this.listenScopeRef} width="70" height="70"/>
@@ -138,10 +153,22 @@ class AsciiApp extends Component {
 		);
 	}
 	
-	changeProcessor(e) {
-		let selectedProcessor = e.target.options[e.target.selectedIndex].value;
+	renderInterpretedResult() {
+		let interpreter = this.state.selectedInterpreter;
+		if (interpreter === 'ascii') {
+			this.state.recognizedChars.map((key) => {
+				return interpreterData[interpreter][key][0];
+			}).join(' ')
+		}
+		else {
+			return this.state.recognizedChars.join(' ');
+		}
+	}
+	
+	changeInterpreter(e) {
+		let selectedInterpreter = e.target.options[e.target.selectedIndex].value;
 		this.setState({
-			selectedProcessor
+			selectedInterpreter
 		});
 	}
 	
@@ -152,29 +179,54 @@ class AsciiApp extends Component {
 	}
 	
 	renderTable() {
-		if (this.state.selectedProcessor === 'ascii') return this.renderAscii();
+		if (this.state.selectedInterpreter === 'ascii') return this.renderAscii();
 		else {
-			let data = interpreters.chess.data;
-			let rows = data.map((line,i) => {
-				let tds = line.map((word,j) => {
-					return (<td key={j}>{word}</td>);
-				})
-				return (<tr key={i}>
-					{tds}
-				</tr>);
-			});
+			let data = interpreterData.chess;
+			let trs = [];
+			let i = 0;
+			for (let key in data) {
+				i++;
+				
+				let wordLinks = [];
+				data[key].forEach((word,index) => {
+					wordLinks.push(<span key={index}>
+						{word}
+					</span>);
+					if (index < data[key].length-1) {
+						wordLinks.push((<span key={'s_' + index}>{' '}/{' '}</span>));
+					}
+				});
+				
+				let clss = '';
+				if (this.state.mouseSelected === i) clss += 'mouseSelected ';
+				if (this.state.recognizedChars.indexOf(key) > -1) clss += 'voiceSelected';
+				
+				let rowi = i;
+				trs.push((<tr key={i} className={clss} onClick={e => this.clickTR(e, rowi, key)}>
+					<td key={0}>{data[key][0]}</td>
+					<td key={1}>{wordLinks}</td>
+				</tr>));
+			}
 			return (<table>
 				<tbody className="header">
 				<tr className="header">
-					<th className="dec">target</th>
-					<th className="words" colSpan="6">words</th>
+					<th className="dec">Chess</th>
 				</tr>
 				</tbody>
 				<tbody>
-				{rows}
+				{trs}
 				</tbody>
 			</table>);
 		}
+	}
+	
+	clickTR(e, i, word) {
+		e.preventDefault();
+		e.stopPropagation();
+		this.setState({
+			mouseSelected: i
+		});
+		voice.speak(word);
 	}
 	
 	renderAscii() {
@@ -183,9 +235,9 @@ class AsciiApp extends Component {
 		let words;
 		let rows = [];
 		let a;
-		for (let dec in interpreters.ascii.data) {
-			a = interpreters.ascii.data[dec][0];
-			words = interpreters.ascii.data[dec][1];
+		for (let dec in interpreterData.ascii) {
+			a = interpreterData.ascii[dec][0];
+			words = interpreterData.ascii[dec][1];
 			
 			let clss = '';
 			if (this.state.mouseSelected === i) clss += 'mouseSelected ';

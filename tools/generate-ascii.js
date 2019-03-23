@@ -17,7 +17,7 @@ csv({
 		}
 		let words = [];
 		for (let w = 1; w < 10; w++) {
-			if (row[w]) {
+			if (row[w]!=='') {
 				words.push(row[w]);
 			}
 		}

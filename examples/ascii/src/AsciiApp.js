@@ -4,109 +4,9 @@ import Jaxcore, {Spin, Listen, MonauralScope} from 'jaxcore-client';
 import Speak from "jaxcore-speak";
 import en from "jaxcore-speak/voices/en/en.json";
 
-import chess from './vocabularies/chess.json';
+import interpreters from './interpreters';
 
-import ascii from './ascii.json';
-
-global.ascii = ascii;
-
-const asciiWords = [];
-global.asciiWords = asciiWords;
-
-function sortWordLength(a, b) {
-	
-	if (a[0].length === b[0].length) {
-		return parseInt(a[1]) > parseInt(b[1]);
-	}
-	return a[0].length < b[0].length ? 1 : -1;
-}
-
-function processAscii() {
-	let dec, ch, words;
-	for (dec in ascii) {
-		ch = ascii[dec][0];
-		words = ascii[dec][1];
-		dec = parseInt(dec);
-		if (dec >= 65 && dec <= 90) { // A-Z
-			let lch = ch.toLowerCase();
-			let letter = dec + 32;
-			let letterwords = ascii[letter][1];
-			letterwords.forEach((lw) => {
-				words.unshift("upper case " + lw);
-				words.unshift("capital " + lw);
-			});
-			// words = words.concat(letterwords);
-			// words.unshift("uppercase " + lch);
-			words.unshift("upper case " + lch);
-			words.unshift("capital " + lch);
-		} else if (dec >= 97 && dec <= 122) { // a-z
-			// words.unshift("lowercase " + ch);
-			words.unshift("letter " + ch);
-			words.unshift("lower case " + ch);
-			words.unshift(ch);
-		}
-		if (words.length === 0) {
-			asciiWords.push([ch, dec]);
-		} else {
-			words.forEach(function (word) {
-				asciiWords.push([word, dec]);
-			});
-		}
-	}
-	asciiWords.sort(sortWordLength);
-}
-
-processAscii();
-
-
-function processText(text) {
-	let index = null;
-	
-	let w;
-	let strIndex;
-	for (let i = 0; i < asciiWords.length; i++) {
-		w = asciiWords[i][0];
-		
-		
-		let same = false;
-		if (text === w) {
-			index = i;
-			strIndex = 0;
-			same = true;
-			break;
-		} else {
-			let reg = new RegExp("^" + w + " | " + w + " | " + w + "$");
-			let m = text.match(reg);
-			if (m) {
-				index = i;
-				strIndex = m.index;
-				break;
-			}
-		}
-	}
-	if (index !== null) {
-		let found = asciiWords[index][0];
-		let dec = asciiWords[index][1];
-		let ch = ascii[dec][0];
-		let before = text.substring(0, strIndex);
-		let after = text.substring(strIndex + found.length + 1);
-		let ret = []; //b,found,a];
-		let b = processText(before);
-		let a = processText(after);
-		
-		if (b) ret.push(b);
-		
-		ret.push(dec);
-		
-		if (a) ret.push(a);
-		let r = ret.flat();
-		return r;
-	} else {
-		//
-	}
-}
-
-global.processText = processText;
+//global.asciiWords = asciiWords;
 
 Speak.addLanguages(en);
 
@@ -124,7 +24,8 @@ class AsciiApp extends Component {
 			mouseSelected: null,
 			recognizedChars: [],
 			text: '',
-			recognizedText: ''
+			recognizedText: '',
+			selectedProcessor: 'ascii'
 		};
 		
 		this.speakScopeRef = React.createRef();
@@ -153,8 +54,7 @@ class AsciiApp extends Component {
 			bgFillColor: 'rgba(64,64,180,0.05)',
 			dotColor: '#0000FF',
 			dotSize: 2,
-			background: null,
-			selectedProcessor: 'ascii'
+			background: null
 		});
 		this.listenScope.draw();
 		
@@ -207,7 +107,7 @@ class AsciiApp extends Component {
 	}
 	
 	receiveText(text) {
-		let recognizedChars = processText(text);
+		let recognizedChars = interpreters.ascii(text);
 		if (!recognizedChars) recognizedChars = [];
 		this.setState({
 			recognizedText: text,
@@ -222,9 +122,9 @@ class AsciiApp extends Component {
 					Recognized Text: {this.state.recognizedText}
 					<br/>
 					Processed Characters : {this.state.recognizedChars.map((dec) => {
-					return ascii[dec][0];
+					return interpreters.ascii.data[dec][0];
 				}).join(' ')}
-					<select class="selectedProcessor" value={this.state.selectedProcessor} onChange={e=>this.changeProcessor(e)}>
+					<select className="selectedProcessor" value={this.state.selectedProcessor} onChange={e=>this.changeProcessor(e)}>
 						<option value="ascii">ascii</option>
 						<option value="chess">chess</option>
 					</select>
@@ -254,7 +154,7 @@ class AsciiApp extends Component {
 	renderTable() {
 		if (this.state.selectedProcessor === 'ascii') return this.renderAscii();
 		else {
-			let data = chess;
+			let data = interpreters.chess.data;
 			let rows = data.map((line,i) => {
 				let tds = line.map((word,j) => {
 					return (<td key={j}>{word}</td>);
@@ -283,9 +183,9 @@ class AsciiApp extends Component {
 		let words;
 		let rows = [];
 		let a;
-		for (let dec in ascii) {
-			a = ascii[dec][0];
-			words = ascii[dec][1];
+		for (let dec in interpreters.ascii.data) {
+			a = interpreters.ascii.data[dec][0];
+			words = interpreters.ascii.data[dec][1];
 			
 			let clss = '';
 			if (this.state.mouseSelected === i) clss += 'mouseSelected ';

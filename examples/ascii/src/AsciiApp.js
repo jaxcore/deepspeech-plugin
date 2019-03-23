@@ -121,8 +121,8 @@ class AsciiApp extends Component {
 		this.isRecording = true;
 		this.inputRef = React.createRef();
 		this.state = {
-			mouseSelected: 1,
-			recognizedChars: [4, 6, 11],
+			mouseSelected: null,
+			recognizedChars: [],
 			text: '',
 			recognizedText: ''
 		};
@@ -153,7 +153,8 @@ class AsciiApp extends Component {
 			bgFillColor: 'rgba(64,64,180,0.05)',
 			dotColor: '#0000FF',
 			dotSize: 2,
-			background: null
+			background: null,
+			selectedProcessor: 'ascii'
 		});
 		this.listenScope.draw();
 		
@@ -223,20 +224,57 @@ class AsciiApp extends Component {
 					Processed Characters : {this.state.recognizedChars.map((dec) => {
 					return ascii[dec][0];
 				}).join(' ')}
+					<select class="selectedProcessor" value={this.state.selectedProcessor} onChange={e=>this.changeProcessor(e)}>
+						<option value="ascii">ascii</option>
+						<option value="chess">chess</option>
+					</select>
 					<canvas id="speak" ref={this.speakScopeRef} width="70" height="70"/>
 					<canvas id="listen" ref={this.listenScopeRef} width="70" height="70"/>
 				</div>
 				
-				{this.renderAscii()}
+				{this.renderTable()}
 			
 			</div>
 		);
+	}
+	
+	changeProcessor(e) {
+		let selectedProcessor = e.target.options[e.target.selectedIndex].value;
+		this.setState({
+			selectedProcessor
+		});
 	}
 	
 	onChangeText(e) {
 		this.setState({
 			text: e.target.value
 		});
+	}
+	
+	renderTable() {
+		if (this.state.selectedProcessor === 'ascii') return this.renderAscii();
+		else {
+			let data = chess;
+			let rows = data.map((line,i) => {
+				let tds = line.map((word,j) => {
+					return (<td key={j}>{word}</td>);
+				})
+				return (<tr key={i}>
+					{tds}
+				</tr>);
+			});
+			return (<table>
+				<tbody className="header">
+				<tr className="header">
+					<th className="dec">target</th>
+					<th className="words" colSpan="6">words</th>
+				</tr>
+				</tbody>
+				<tbody>
+				{rows}
+				</tbody>
+			</table>);
+		}
 	}
 	
 	renderAscii() {

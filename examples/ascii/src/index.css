@@ -87,3 +87,8 @@ tr.voiceSelected TD A {
   right:0;
   top:0;
 }
+
+select.selectedProcessor {
+  float:right;
+  margin-right:150px;
+}

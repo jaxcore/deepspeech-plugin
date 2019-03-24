@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import Jaxcore, {Spin, Listen, MonauralScope} from 'jaxcore-client';
 
+import bumblebee from 'bumblebee-hotword';
+
 import Speak from "jaxcore-speak";
 import en from "jaxcore-speak/voices/en/en.json";
 
@@ -20,13 +22,14 @@ class AsciiApp extends Component {
 		this.numSpins = 0;
 		this.firstRecognition = true;
 		this.isRecording = true;
-		this.inputRef = React.createRef();
+		
 		this.state = {
 			mouseSelected: null,
 			recognizedChars: [],
 			text: '',
 			recognizedText: '',
-			selectedInterpreter: 'ascii'
+			selectedInterpreter: 'ascii',
+			bumbleBeeStarted: false
 		};
 		
 		this.speakScopeRef = React.createRef();
@@ -34,10 +37,35 @@ class AsciiApp extends Component {
 		
 		this.interpreters = Object.keys(interpreterData);
 		
+		this.soundBBStart = new Audio('ding-start.wav');
+		this.soundBBStop = new Audio('end.wav');
 		global.app = this;
 	}
 	
+	toggleBumbleBee() {
+		if (this.state.bumbleBeeStarted) this.stopBumbleBee();
+		else this.startBumbleBee();
+	}
+	startBumbleBee() {
+		if (!this.state.bumbleBeeStarted) {
+			bumblebee.start(() => {
+				alert('hi');
+			});
+			this.setState({bumbleBeeStarted:true});
+			this.soundBBStart.play();
+		}
+	}
+	stopBumbleBee() {
+		if (this.state.bumbleBeeStarted) {
+			bumblebee.stop();
+			this.setState({bumbleBeeStarted:false});
+			this.soundBBStop.play();
+		}
+	}
+	
 	componentDidMount() {
+		
+		
 		this.speakScope = new MonauralScope(this.speakScopeRef.current, {
 			lineWidth: 1,
 			strokeColor: '#FF0000',
@@ -139,12 +167,24 @@ class AsciiApp extends Component {
 					Recognized Text: {this.state.recognizedText}
 					<br/>
 					Interpreted Result: {this.renderInterpretedResult()}
-					<select className="selectedInterpreter" value={this.state.selectedInterpreter}
-							onChange={e => this.changeInterpreter(e)}>
-						{ this.interpreters.map((interpreter,i) => {
-							return (<option value={interpreter} key={i}>{interpreter}</option>);
-						}) }
-					</select>
+					
+					<div className="panelOptions">
+						<div>
+							<span>BumbleBee:</span>
+							<button onClick={e=>this.toggleBumbleBee()}>
+							{this.state.bumbleBeeStarted?'Stop':'Start'}
+						</button>
+						</div>
+						<div>
+							<span>Interpreter:</span>
+							<select className="selectedInterpreter" value={this.state.selectedInterpreter}
+									onChange={e => this.changeInterpreter(e)}>
+								{ this.interpreters.map((interpreter,i) => {
+									return (<option value={interpreter} key={i}>{interpreter}</option>);
+								}) }
+							</select>
+						</div>
+					</div>
 					<canvas id="speak" ref={this.speakScopeRef} width="70" height="70"/>
 					<canvas id="listen" ref={this.listenScopeRef} width="70" height="70"/>
 				</div>

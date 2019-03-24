@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "bumblebee-hotword": "^0.0.1",
     "jaxcore-client": "^0.0.2",
     "jaxcore-speak": "^0.0.2",
     "react": "^16.8.4",

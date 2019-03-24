@@ -89,6 +89,19 @@ tr.voiceSelected TD A {
 }
 
 select.selectedInterpreter {
+
+}
+div.panelOptions {
+  position: absolute;
+  right: 150px;
+  top: 0;
+}
+div.panelOptions div {
   float:right;
-  margin-right:150px;
+  clear: both;
+  font-size: 13px;
+  /*line-height: 1.6em;*/
+}
+div.panelOptions div * {
+  /*vertical-align: top;*/
 }

@@ -2166,6 +2166,11 @@ builtin-status-codes@^3.0.0:
   resolved "https://registry.yarnpkg.com/builtin-status-codes/-/builtin-status-codes-3.0.0.tgz#85982878e21b98e1c66425e03d0174788f569ee8"
   integrity sha1-hZgoeOIbmOHGZCXgPQF0eI9Wnug=
 
+bumblebee-hotword@^0.0.1:
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/bumblebee-hotword/-/bumblebee-hotword-0.0.1.tgz#689f707fe4c2d10358e0d800b81e56e82837f433"
+  integrity sha512-GOBGvTRVl1Qyo/33q1TEfgWtz/jtlYuRvR24M2bSfjgYC/MvA+8ly1g2IHehNyc2NraFUQ+TpyqzzkOmpZPuvw==
+
 bytes@3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/bytes/-/bytes-3.0.0.tgz#d32815404d689699f85a4ea4fa8755dd13a96048"
@@ -8610,9 +8615,9 @@ safe-regex@^1.1.0:
   resolved "https://registry.yarnpkg.com/safer-buffer/-/safer-buffer-2.1.2.tgz#44fa161b0187b9549dd84bb91802f9bd8385cd6a"
   integrity sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==
 
-"sam-js@git+https://github.com/jaxcore/sam.git#jsonly":
+"sam-js@https://github.com/jaxcore/sam#jsonly":
   version "0.0.2"
-  resolved "git+https://github.com/jaxcore/sam.git#3fb5450033072ba494958179eb5af05325e2f07a"
+  resolved "https://github.com/jaxcore/sam#3fb5450033072ba494958179eb5af05325e2f07a"
 
 sane@^2.0.0:
   version "2.5.2"

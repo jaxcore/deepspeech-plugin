@@ -19,40 +19,6 @@ function loadChess() {
 	}
 	chessWords.sort(sortWordLength);
 	
-	// debugger;
-	
-	// for (dec in ascii) {
-	// 	ch = ascii[dec][0];
-	// 	words = ascii[dec][1];
-	// 	dec = parseInt(dec);
-	// 	if (dec >= 65 && dec <= 90) { // A-Z
-	// 		let lch = ch.toLowerCase();
-	// 		let letter = dec + 32;
-	// 		let letterwords = ascii[letter][1];
-	// 		letterwords.forEach((lw) => {
-	// 			words.unshift("upper case " + lw);
-	// 			words.unshift("capital " + lw);
-	// 		});
-	// 		// words = words.concat(letterwords);
-	// 		// words.unshift("uppercase " + lch);
-	// 		words.unshift("upper case " + lch);
-	// 		words.unshift("capital " + lch);
-	// 	} else if (dec >= 97 && dec <= 122) { // a-z
-	// 		// words.unshift("lowercase " + ch);
-	// 		words.unshift("letter " + ch);
-	// 		words.unshift("lower case " + ch);
-	// 		words.unshift(ch);
-	// 	}
-	// 	if (words.length === 0) {
-	// 		asciiWords.push([ch, dec]);
-	// 	} else {
-	// 		words.forEach(function (word) {
-	// 			asciiWords.push([word, dec]);
-	// 		});
-	// 	}
-	// }
-	// asciiWords.sort(sortWordLength);
-	
 	
 	const chessInterpreter = function(text, prevText, prevIndex, afterBefore) {
 		let index = null;
@@ -62,7 +28,6 @@ function loadChess() {
 		
 		for (let i = 0; i < chessWords.length; i++) {
 			w = chessWords[i][0];
-
 			
 			let same = false;
 			if (text === w) {
@@ -95,7 +60,11 @@ function loadChess() {
 
 			if (b) ret.push(b);
 
-			ret.push(key);
+			ret.push({
+				key,
+				word: w,
+				index: strIndex
+			});
 			
 			if (a) ret.push(a);
 			let r = ret.flat();

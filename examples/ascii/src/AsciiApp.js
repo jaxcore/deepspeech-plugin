@@ -140,11 +140,16 @@ class AsciiApp extends Component {
 	}
 	
 	receiveText(text) {
-		let recognizedChars = interpreters[this.state.selectedInterpreter](text);
+		let recognizedKeys = interpreters[this.state.selectedInterpreter](text);
+		let recognizedChars = recognizedKeys.map((k) => {
+			return k.key
+		});
 		this.setState({
 			recognizedText: text,
+			recognizedKeys,
 			recognizedChars
 		});
+		console.log('recognizedKeys', recognizedKeys);
 		
 		// if (this.state.selectedInterpreter === 'ascii') {
 		// 	let recognizedChars = interpreters.ascii(text);

@@ -11,6 +11,7 @@
   "dependencies": {
     "csvtojson": "^2.0.8",
     "deepspeech": "^0.4.1",
-    "node-audiorecorder": "^1.4.0"
+    "node-audiorecorder": "^1.4.0",
+    "node-vad": "^1.1.2"
   }
 }

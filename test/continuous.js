@@ -9,6 +9,6 @@ listen.on('recognize', function(text) {
 listen.startContinuous();
 
 // setTimeout(function() {
-// 	listen.stopContinuous();
-// 	process.exit();
-// },20000);
+// // // 	listen.stopContinuous();
+// // // 	process.exit();
+// // // },20000);

@@ -10,30 +10,54 @@ function sortWordLength(a, b) {
 function loadAscii() {
 	let asciiWords = [];
 	
-	let dec, ch, words;
+	let dec, ch;
+	
+	var words;
+	
+	// todo: improve performance by converting all single words to a hash
+	
 	for (dec in asciiData) {
 		ch = asciiData[dec][0];
 		words = asciiData[dec][1];
+		if (!words) {
+			asciiData[dec][1] = [];
+			words = [];
+		}
+		
 		dec = parseInt(dec);
+		
 		if (dec >= 65 && dec <= 90) { // A-Z
 			let lch = ch.toLowerCase();
 			let letter = dec + 32;
 			let letterwords = asciiData[letter][1];
+			if (!letterwords) {
+				asciiData[letter][1] = [];
+				letterwords = [lch];
+			}
+			
 			letterwords.forEach((lw) => {
 				words.unshift("upper case " + lw);
+				asciiData[dec][1].push(words[0]);
 				words.unshift("capital " + lw);
+				asciiData[dec][1].push(words[0]);
 			});
+			
 			// words = words.concat(letterwords);
 			// words.unshift("uppercase " + lch);
 			words.unshift("upper case " + lch);
 			words.unshift("capital " + lch);
+			
+			
+			
 		} else if (dec >= 97 && dec <= 122) { // a-z
 			// words.unshift("lowercase " + ch);
 			words.unshift("letter " + ch);
 			words.unshift("lower case " + ch);
 			words.unshift(ch);
 		}
+		
 		if (words.length === 0) {
+			debugger;
 			asciiWords.push([ch, dec]);
 		} else {
 			for (let w=0;w<words.length;w++) {
@@ -41,6 +65,7 @@ function loadAscii() {
 			}
 		}
 	}
+	
 	asciiWords.sort(sortWordLength);
 	
 	const asciiInterpreter = function(text) {
@@ -50,7 +75,6 @@ function loadAscii() {
 		let strIndex;
 		for (let i = 0; i < asciiWords.length; i++) {
 			w = asciiWords[i][0];
-			
 			
 			let same = false;
 			if (text === w) {

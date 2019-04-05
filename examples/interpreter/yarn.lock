@@ -1837,7 +1837,7 @@ babel-register@^6.26.0:
     mkdirp "^0.5.1"
     source-map-support "^0.4.15"
 
-babel-runtime@^6.22.0, babel-runtime@^6.26.0:
+babel-runtime@6.x.x, babel-runtime@^6.22.0, babel-runtime@^6.26.0:
   version "6.26.0"
   resolved "https://registry.yarnpkg.com/babel-runtime/-/babel-runtime-6.26.0.tgz#965c7058668e82b55d7bfe04ff2337bc8b5647fe"
   integrity sha1-llxwWGaOgrVde/4E/yM3vItWR/4=
@@ -2426,6 +2426,11 @@ cliui@^4.0.0:
     string-width "^2.1.1"
     strip-ansi "^4.0.0"
     wrap-ansi "^2.0.0"
+
+clj-fuzzy@^0.3.2:
+  version "0.3.3"
+  resolved "https://registry.yarnpkg.com/clj-fuzzy/-/clj-fuzzy-0.3.3.tgz#b1e5343091c5202dbc52532863e1c4a78457f03d"
+  integrity sha1-seU0MJHFIC28UlMoY+HEp4RX8D0=
 
 clone-deep@^0.2.4:
   version "0.2.4"
@@ -5356,6 +5361,14 @@ istanbul-reports@^1.5.1:
   integrity sha512-+cfoZ0UXzWjhAdzosCPP3AN8vvef8XDkWtTfgaN+7L3YTpNYITnCaEkceo5SEYy644VkHka/P1FvkWvrG/rrJw==
   dependencies:
     handlebars "^4.0.3"
+
+its-set@^1.1.5:
+  version "1.2.3"
+  resolved "https://registry.yarnpkg.com/its-set/-/its-set-1.2.3.tgz#b35c79a3cedde36793b798cc2d80f0926053f7e4"
+  integrity sha512-UQc+xLLn+0a8KKRXRj3OS2kERK8G7zcayPpPULqZnPwuJ1hGWEO8+j0T5eycu7DKXYjezw3pyF8oV1fJkJxV5w==
+  dependencies:
+    babel-runtime "6.x.x"
+    lodash.get "^4.4.2"
 
 jaxcore-client@^0.0.2:
   version "0.0.2"
@@ -10065,6 +10078,15 @@ wide-align@^1.1.0:
   integrity sha512-QGkOQc8XL6Bt5PwnsExKBPuMKBxnGxWWW3fU55Xt4feHozMUhdUMaBCk290qpm/wG5u/RSKzwdAC4i51YigihA==
   dependencies:
     string-width "^1.0.2 || 2"
+
+words-to-numbers@^1.5.1:
+  version "1.5.1"
+  resolved "https://registry.yarnpkg.com/words-to-numbers/-/words-to-numbers-1.5.1.tgz#38e114393742e87620680374cffc06528c1e7e6c"
+  integrity sha512-uvz7zSCKmmA7o5f5zp4Z5l24RQhy6HSNu10URhNxQWv1I82RsFaZX3qD07RLFUMJsCV38oAuaca13AvhO+9yGw==
+  dependencies:
+    babel-runtime "6.x.x"
+    clj-fuzzy "^0.3.2"
+    its-set "^1.1.5"
 
 wordwrap@~0.0.2:
   version "0.0.3"

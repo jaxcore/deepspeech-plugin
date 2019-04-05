@@ -55,22 +55,26 @@ function loadChess() {
 			
 			console.log('found chess:', found);
 			
-			let b = chessInterpreter(before, text, strIndex, 0);
-			let a = chessInterpreter(after, text, strIndex, 1);
-
-			if (b) ret.push(b);
-
+			if (before) {
+				let b = chessInterpreter(before, text, strIndex, 0);
+				if (b) ret.push(b);
+			}
+			
 			ret.push({
 				key,
 				word: w,
 				index: strIndex
 			});
 			
-			if (a) ret.push(a);
+			if (after) {
+				let a = chessInterpreter(after, text, strIndex, 1);
+				if (a) ret.push(a);
+			}
+			
 			let r = ret.flat();
 			return r;
 		} else {
-			return [];
+			return;
 		}
 	};
 	

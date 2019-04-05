@@ -1,1 +1,864 @@
-{"0":["NUL",["null","no character","nil",null,null,null]],"1":["SOH",["start of header","start of head or","start of heather","start of hatter",null,null,null]],"2":["STX",["start of text","start a tax","start of tax",null,null,null]],"3":["ETX",["end of text","and of text","and of tax",null,null,null]],"4":["EOT",["end of transmission","and of transmission",null,null,null]],"5":["ENQ",["enquiry","and quarry","and carry","inquiry",null,null,null]],"6":["ACK",["acknowledgment",null,null,null]],"7":["BEL",["bell",null,null,null]],"8":["BS",["back space",null,null,null]],"9":["HT",["tab","horizontal tab",null,null,null]],"10":["LF",["line feed","line feet",null,null,null]],"11":["VT",["vertical tab",null,null,null]],"12":["FF",["form feed",null,null,null]],"13":["CR",["enter","return","carriage return",null,null,null]],"14":["SO",["shift out",null,null,null]],"15":["SI",["shift in",null,null,null]],"16":["DLE",["data link escape",null,null,null]],"17":["DC1",["device control one",null,null,null]],"18":["DC2",["device control two","device control to",null,null,null]],"19":["DC3",["device control three",null,null,null]],"20":["DC4",["device control four","device control for",null,null,null]],"21":["NAK",["negative acknowledgment",null,null,null]],"22":["SYN",["synchronize",null,null,null]],"23":["ETB",["end of transmission block","and of transmission block",null,null,null]],"24":["CAN",["cancel",null,null,null]],"25":["EM",["end of medium","and of medium",null,null,null]],"26":["SUB",["substitute",null,null,null]],"27":["ESC",["escape",null,null,null]],"28":["FS",["file separator",null,null,null]],"29":["GS",["group separator",null,null,null]],"30":["RS",["record separator",null,null,null]],"31":["US",["unit separator",null,null,null]],"32":[" ",["space",null,null,null]],"33":["!",["exclamation","exclamation mark","exclamation point",null,null,null]],"34":["\"",["double quote","quote","quite","quoth",null,null,null]],"35":["#",["number","hash","hush",null,null,null]],"36":["$",["dollar","dollars",null,null,null]],"37":["%",["percent","per cent",null,null,null]],"38":["&",["ampersand",null,null,null]],"39":["'",["single quote",null,null,null]],"40":["(",["left parenthesis","left brace","left perinthus",null,null,null]],"41":[")",["right parenthesis","right brace","right perinthus",null,null,null]],"42":["*",["asterisk","as rick","as struck","times","a trick",null,null,null]],"43":["+",["plus","positive",null,null,null]],"44":[",",["comma","come","camma",null,null,null]],"45":["-",["minus","negative",null,null,null]],"46":[".",["period","dot","point","full stop",null,null,null]],"47":["/",["slash",null,null,null]],"48":["0",["zero",null,null,null]],"49":["1",["one","on",null,null,null]],"50":["2",["two","to",null,null,null]],"51":["3",["three","tree","free","through",null,null,null]],"52":["4",["four","for",null,null,null]],"53":["5",["five",null,null,null]],"54":["6",["six","sex",null,null,null]],"55":["7",["seven",null,null,null]],"56":["8",["eight","each","it",null,null,null]],"57":["9",["nine",null,null,null]],"58":[":",["colon","call on","cool and","call in","coal and","colin",null,null,null]],"59":[";",["semi colon","some call",null,null,null]],"60":["<",["less than",null,null,null]],"61":["=",["equals","equal","equality","equality sign","equal sign",null,null,null]],"62":[">",["greater than",null,null,null]],"63":["?",["question","question mark",null,null,null]],"64":["@",["at","at sign",null,null,null]],"65":["A",[null,null,null]],"66":["B",[null,null,null]],"67":["C",[null,null,null]],"68":["D",[null,null,null]],"69":["E",[null,null,null]],"70":["F",[null,null,null]],"71":["G",[null,null,null]],"72":["H",[null,null,null]],"73":["I",[null,null,null]],"74":["J",[null,null,null]],"75":["K",[null,null,null]],"76":["L",[null,null,null]],"77":["M",[null,null,null]],"78":["N",[null,null,null]],"79":["O",[null,null,null]],"80":["P",[null,null,null]],"81":["Q",[null,null,null]],"82":["R",[null,null,null]],"83":["S",[null,null,null]],"84":["T",[null,null,null]],"85":["U",[null,null,null]],"86":["V",[null,null,null]],"87":["W",[null,null,null]],"88":["X",[null,null,null]],"89":["Y",[null,null,null]],"90":["Z",[null,null,null]],"91":["[",["left square bracket","left square brace",null,null,null]],"92":["\\",["backslash","back slash","back lash",null,null,null]],"93":["]",["right square bracket","right square brace",null,null,null]],"94":["^",["caret","circumflex","carrot",null,null,null]],"95":["_",["underscore","under score",null,null,null]],"96":["`",["grave","accent",null,null,null]],"97":["a",["alpha","alvar","alva",null,null,null]],"98":["b",["be","bravo",null,null,null]],"99":["c",["sea","see","charlie","charles","charley","charl",null,null,null]],"100":["d",["de","delta","dolt","dealt",null,null,null]],"101":["e",["he",null,null,null]],"102":["f",["if","ah","fox trot","fox to",null,null,null]],"103":["g",["golf","go",null,null,null]],"104":["h",["eh","age","each","hotel","potel","bach",null,null,null]],"105":["i",[null,null,null]],"106":["j",["ja",null,null,null]],"107":["k",["kay",null,null,null]],"108":["l",["ll",null,null,null]],"109":["m",["am",null,null,null]],"110":["n",["en","in","and",null,null,null]],"111":["o",["oh",null,null,null]],"112":["p",["pea",null,null,null]],"113":["q",["cue","let her cue","cute","que",null,null,null]],"114":["r",["are",null,null,null]],"115":["s",["as",null,null,null]],"116":["t",["tea",null,null,null]],"117":["u",["you",null,null,null]],"118":["v",["ve",null,null,null]],"119":["w",["double you",null,null,null]],"120":["x",["ex",null,null,null]],"121":["y",["why",null,null,null]],"122":["z",["ze","zed","said",null,null,null]],"123":["{",["left curly bracket","left curly brace",null,null,null]],"124":["|",["bar","pipe","vertical bar",null,null,null]],"125":["}",["right curly bracket","right curly brace",null,null,null]],"126":["~",["tilde","till the","till a",null,null,null]],"127":["DEL",["delete",null,null,null]],"162":["¢",["cent","cents","since","sent",null,null,null]],"163":["£",["pound","pounds",null,null,null]],"165":["¥",["yen","yuan",null,null,null]],"169":["©",["copyright","copy right",null,null,null]],"174":["®",["trademark","registered trademark","trade mark","registered trade mark",null,null,null]],"176":["°",["degree","degrees",null,null,null]],"215":["×",["multiply","multiplied","multiplication","multiplication sign","multiply by","multiplied by",null,null,null]],"247":["÷",["divide","divide by","divided","divided by","obelus",null,null,null]]}
+{
+  "0": [
+    "NUL",
+    [
+      "null",
+      "no character",
+      "nil"
+    ]
+  ],
+  "1": [
+    "SOH",
+    [
+      "start of header",
+      "start of head or",
+      "start of heather",
+      "start of hatter"
+    ]
+  ],
+  "2": [
+    "STX",
+    [
+      "start of text",
+      "start a tax",
+      "start of tax"
+    ]
+  ],
+  "3": [
+    "ETX",
+    [
+      "end of text",
+      "and of text",
+      "and of tax"
+    ]
+  ],
+  "4": [
+    "EOT",
+    [
+      "end of transmission",
+      "and of transmission"
+    ]
+  ],
+  "5": [
+    "ENQ",
+    [
+      "enquiry",
+      "and quarry",
+      "and carry",
+      "inquiry"
+    ]
+  ],
+  "6": [
+    "ACK",
+    [
+      "acknowledgment"
+    ]
+  ],
+  "7": [
+    "BEL",
+    [
+      "bell"
+    ]
+  ],
+  "8": [
+    "BS",
+    [
+      "back space"
+    ]
+  ],
+  "9": [
+    "HT",
+    [
+      "tab",
+      "horizontal tab"
+    ]
+  ],
+  "10": [
+    "LF",
+    [
+      "line feed",
+      "line feet"
+    ]
+  ],
+  "11": [
+    "VT",
+    [
+      "vertical tab"
+    ]
+  ],
+  "12": [
+    "FF",
+    [
+      "form feed"
+    ]
+  ],
+  "13": [
+    "CR",
+    [
+      "enter",
+      "return",
+      "carriage return"
+    ]
+  ],
+  "14": [
+    "SO",
+    [
+      "shift out"
+    ]
+  ],
+  "15": [
+    "SI",
+    [
+      "shift in"
+    ]
+  ],
+  "16": [
+    "DLE",
+    [
+      "data link escape"
+    ]
+  ],
+  "17": [
+    "DC1",
+    [
+      "device control one"
+    ]
+  ],
+  "18": [
+    "DC2",
+    [
+      "device control two",
+      "device control to"
+    ]
+  ],
+  "19": [
+    "DC3",
+    [
+      "device control three"
+    ]
+  ],
+  "20": [
+    "DC4",
+    [
+      "device control four",
+      "device control for"
+    ]
+  ],
+  "21": [
+    "NAK",
+    [
+      "negative acknowledgment"
+    ]
+  ],
+  "22": [
+    "SYN",
+    [
+      "synchronize"
+    ]
+  ],
+  "23": [
+    "ETB",
+    [
+      "end of transmission block",
+      "and of transmission block"
+    ]
+  ],
+  "24": [
+    "CAN",
+    [
+      "cancel"
+    ]
+  ],
+  "25": [
+    "EM",
+    [
+      "end of medium",
+      "and of medium"
+    ]
+  ],
+  "26": [
+    "SUB",
+    [
+      "substitute"
+    ]
+  ],
+  "27": [
+    "ESC",
+    [
+      "escape"
+    ]
+  ],
+  "28": [
+    "FS",
+    [
+      "file separator"
+    ]
+  ],
+  "29": [
+    "GS",
+    [
+      "group separator"
+    ]
+  ],
+  "30": [
+    "RS",
+    [
+      "record separator"
+    ]
+  ],
+  "31": [
+    "US",
+    [
+      "unit separator"
+    ]
+  ],
+  "32": [
+    " ",
+    [
+      "space"
+    ]
+  ],
+  "33": [
+    "!",
+    [
+      "exclamation",
+      "exclamation mark",
+      "exclamation point"
+    ]
+  ],
+  "34": [
+    "\"",
+    [
+      "double quote",
+      "quote",
+      "quite",
+      "quoth"
+    ]
+  ],
+  "35": [
+    "#",
+    [
+      "number",
+      "hash",
+      "hush"
+    ]
+  ],
+  "36": [
+    "$",
+    [
+      "dollar",
+      "dollars"
+    ]
+  ],
+  "37": [
+    "%",
+    [
+      "percent",
+      "per cent"
+    ]
+  ],
+  "38": [
+    "&",
+    [
+      "ampersand"
+    ]
+  ],
+  "39": [
+    "'",
+    [
+      "single quote"
+    ]
+  ],
+  "40": [
+    "(",
+    [
+      "left parenthesis",
+      "left brace",
+      "left perinthus"
+    ]
+  ],
+  "41": [
+    ")",
+    [
+      "right parenthesis",
+      "right brace",
+      "right perinthus"
+    ]
+  ],
+  "42": [
+    "*",
+    [
+      "asterisk",
+      "as rick",
+      "as struck",
+      "times",
+      "a trick"
+    ]
+  ],
+  "43": [
+    "+",
+    [
+      "plus",
+      "positive"
+    ]
+  ],
+  "44": [
+    ",",
+    [
+      "comma",
+      "come",
+      "camma"
+    ]
+  ],
+  "45": [
+    "-",
+    [
+      "minus",
+      "negative"
+    ]
+  ],
+  "46": [
+    ".",
+    [
+      "period",
+      "dot",
+      "point",
+      "full stop"
+    ]
+  ],
+  "47": [
+    "/",
+    [
+      "slash"
+    ]
+  ],
+  "48": [
+    "0",
+    [
+      "zero"
+    ]
+  ],
+  "49": [
+    "1",
+    [
+      "one",
+      "on"
+    ]
+  ],
+  "50": [
+    "2",
+    [
+      "two",
+      "to"
+    ]
+  ],
+  "51": [
+    "3",
+    [
+      "three",
+      "tree",
+      "free",
+      "through"
+    ]
+  ],
+  "52": [
+    "4",
+    [
+      "four",
+      "for"
+    ]
+  ],
+  "53": [
+    "5",
+    [
+      "five"
+    ]
+  ],
+  "54": [
+    "6",
+    [
+      "six",
+      "sex"
+    ]
+  ],
+  "55": [
+    "7",
+    [
+      "seven"
+    ]
+  ],
+  "56": [
+    "8",
+    [
+      "eight",
+      "each",
+      "it"
+    ]
+  ],
+  "57": [
+    "9",
+    [
+      "nine"
+    ]
+  ],
+  "58": [
+    ":",
+    [
+      "colon",
+      "call on",
+      "cool and",
+      "call in",
+      "coal and",
+      "colin"
+    ]
+  ],
+  "59": [
+    ";",
+    [
+      "semi colon",
+      "some call"
+    ]
+  ],
+  "60": [
+    "<",
+    [
+      "less than"
+    ]
+  ],
+  "61": [
+    "=",
+    [
+      "equals",
+      "equal",
+      "equality",
+      "equality sign",
+      "equal sign"
+    ]
+  ],
+  "62": [
+    ">",
+    [
+      "greater than"
+    ]
+  ],
+  "63": [
+    "?",
+    [
+      "question",
+      "question mark"
+    ]
+  ],
+  "64": [
+    "@",
+    [
+      "at",
+      "at sign"
+    ]
+  ],
+  "65": [
+    "A"
+  ],
+  "66": [
+    "B"
+  ],
+  "67": [
+    "C"
+  ],
+  "68": [
+    "D"
+  ],
+  "69": [
+    "E"
+  ],
+  "70": [
+    "F"
+  ],
+  "71": [
+    "G"
+  ],
+  "72": [
+    "H"
+  ],
+  "73": [
+    "I"
+  ],
+  "74": [
+    "J"
+  ],
+  "75": [
+    "K"
+  ],
+  "76": [
+    "L"
+  ],
+  "77": [
+    "M"
+  ],
+  "78": [
+    "N"
+  ],
+  "79": [
+    "O"
+  ],
+  "80": [
+    "P"
+  ],
+  "81": [
+    "Q"
+  ],
+  "82": [
+    "R"
+  ],
+  "83": [
+    "S"
+  ],
+  "84": [
+    "T"
+  ],
+  "85": [
+    "U"
+  ],
+  "86": [
+    "V"
+  ],
+  "87": [
+    "W"
+  ],
+  "88": [
+    "X"
+  ],
+  "89": [
+    "Y"
+  ],
+  "90": [
+    "Z"
+  ],
+  "91": [
+    "[",
+    [
+      "left square bracket",
+      "left square brace"
+    ]
+  ],
+  "92": [
+    "\\",
+    [
+      "backslash",
+      "back slash",
+      "back lash"
+    ]
+  ],
+  "93": [
+    "]",
+    [
+      "right square bracket",
+      "right square brace"
+    ]
+  ],
+  "94": [
+    "^",
+    [
+      "caret",
+      "circumflex",
+      "carrot"
+    ]
+  ],
+  "95": [
+    "_",
+    [
+      "underscore",
+      "under score"
+    ]
+  ],
+  "96": [
+    "`",
+    [
+      "grave",
+      "accent"
+    ]
+  ],
+  "97": [
+    "a",
+    [
+      "alpha",
+      "alvar",
+      "alva"
+    ]
+  ],
+  "98": [
+    "b",
+    [
+      "be",
+      "bravo"
+    ]
+  ],
+  "99": [
+    "c",
+    [
+      "sea",
+      "see",
+      "charlie",
+      "charles",
+      "charley",
+      "charl"
+    ]
+  ],
+  "100": [
+    "d",
+    [
+      "de",
+      "delta",
+      "dolt",
+      "dealt"
+    ]
+  ],
+  "101": [
+    "e",
+    [
+      "he"
+    ]
+  ],
+  "102": [
+    "f",
+    [
+      "if",
+      "ah",
+      "fox trot",
+      "fox to"
+    ]
+  ],
+  "103": [
+    "g",
+    [
+      "golf",
+      "go"
+    ]
+  ],
+  "104": [
+    "h",
+    [
+      "eh",
+      "age",
+      "each",
+      "hotel",
+      "potel",
+      "bach",
+      "ach"
+    ]
+  ],
+  "105": [
+    "i"
+  ],
+  "106": [
+    "j",
+    [
+      "ja"
+    ]
+  ],
+  "107": [
+    "k",
+    [
+      "kay"
+    ]
+  ],
+  "108": [
+    "l",
+    [
+      "ll"
+    ]
+  ],
+  "109": [
+    "m",
+    [
+      "am"
+    ]
+  ],
+  "110": [
+    "n",
+    [
+      "en",
+      "in",
+      "and"
+    ]
+  ],
+  "111": [
+    "o",
+    [
+      "oh"
+    ]
+  ],
+  "112": [
+    "p",
+    [
+      "pea"
+    ]
+  ],
+  "113": [
+    "q",
+    [
+      "cue",
+      "let her cue",
+      "cute",
+      "que"
+    ]
+  ],
+  "114": [
+    "r",
+    [
+      "are"
+    ]
+  ],
+  "115": [
+    "s",
+    [
+      "as"
+    ]
+  ],
+  "116": [
+    "t",
+    [
+      "tea"
+    ]
+  ],
+  "117": [
+    "u",
+    [
+      "you"
+    ]
+  ],
+  "118": [
+    "v",
+    [
+      "ve"
+    ]
+  ],
+  "119": [
+    "w",
+    [
+      "double you"
+    ]
+  ],
+  "120": [
+    "x",
+    [
+      "ex"
+    ]
+  ],
+  "121": [
+    "y",
+    [
+      "why"
+    ]
+  ],
+  "122": [
+    "z",
+    [
+      "ze",
+      "zed",
+      "said"
+    ]
+  ],
+  "123": [
+    "{",
+    [
+      "left curly bracket",
+      "left curly brace"
+    ]
+  ],
+  "124": [
+    "|",
+    [
+      "bar",
+      "pipe",
+      "vertical bar"
+    ]
+  ],
+  "125": [
+    "}",
+    [
+      "right curly bracket",
+      "right curly brace"
+    ]
+  ],
+  "126": [
+    "~",
+    [
+      "tilde",
+      "till the",
+      "till a"
+    ]
+  ],
+  "127": [
+    "DEL",
+    [
+      "delete"
+    ]
+  ],
+  "162": [
+    "¢",
+    [
+      "cent",
+      "cents",
+      "since",
+      "sent"
+    ]
+  ],
+  "163": [
+    "£",
+    [
+      "pound",
+      "pounds"
+    ]
+  ],
+  "165": [
+    "¥",
+    [
+      "yen",
+      "yuan"
+    ]
+  ],
+  "169": [
+    "©",
+    [
+      "copyright",
+      "copy right"
+    ]
+  ],
+  "174": [
+    "®",
+    [
+      "trademark",
+      "registered trademark",
+      "trade mark",
+      "registered trade mark"
+    ]
+  ],
+  "176": [
+    "°",
+    [
+      "degree",
+      "degrees"
+    ]
+  ],
+  "215": [
+    "×",
+    [
+      "multiply",
+      "multiplied",
+      "multiplication",
+      "multiplication sign",
+      "multiply by",
+      "multiplied by"
+    ]
+  ],
+  "247": [
+    "÷",
+    [
+      "divide",
+      "divide by",
+      "divided",
+      "divided by",
+      "obelus"
+    ]
+  ]
+}

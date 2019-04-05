@@ -1,9 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './App';
+import InterpreterApp from './InterpreterApp';
 
 it('renders without crashing', () => {
   const div = document.createElement('div');
-  ReactDOM.render(<App />, div);
+  ReactDOM.render(<InterpreterApp />, div);
   ReactDOM.unmountComponentAtNode(div);
 });

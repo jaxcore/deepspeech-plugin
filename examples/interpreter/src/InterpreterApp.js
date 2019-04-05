@@ -16,7 +16,7 @@ Speak.addLanguages(en);
 let voice = new Speak({language: 'en/en', profile: 'Jack'});
 global.voice = voice;
 
-class AsciiApp extends Component {
+class InterpreterApp extends Component {
 	constructor() {
 		super();
 		this.numSpins = 0;
@@ -141,24 +141,52 @@ class AsciiApp extends Component {
 	
 	receiveText(text) {
 		console.log('raw text', text);
-		let recognizedKeys = interpreters[this.state.selectedInterpreter](text);
 		
-		let recognizedChars;
+		let processorResult = interpreters[this.state.selectedInterpreter](text);
+		
+		// let recognizedChars;
+		// if (this.state.selectedInterpreter === 'ascii') {
+		// 	recognizedChars = recognizedKeys;
+		// }
+		// else if (this.state.selectedInterpreter === 'chess') {
+		// 	recognizedChars = recognizedKeys.map((k) => {
+		// 		return k.key
+		// 	});
+		// }
+		// else if (this.state.selectedInterpreter === 'datetime') {
+		//
+		// }
+		
+		let result = '';
+		
 		if (this.state.selectedInterpreter === 'ascii') {
-			recognizedChars = recognizedKeys;
+			if (processorResult) {
+				result = processorResult.map((key) => {
+					return interpreterData.ascii[key][0];
+				}).join(' ');
+			}
 		}
-		else {
-			recognizedChars = recognizedKeys.map((k) => {
-				return k.key
-			});
+		else if (this.state.selectedInterpreter === 'chess') {
+			if (processorResult) {
+				result = processorResult.map((k) => {
+					return k.key
+				}).join(' ');
+			}
+		}
+		else if (this.state.selectedInterpreter === 'datetime') {
+			if (processorResult) {
+				result = processorResult.toLocaleString();
+			}
 		}
 		
 		this.setState({
 			recognizedText: text,
-			recognizedKeys,
-			recognizedChars
+			processedResult: result
+			// recognizedKeys,
+			// recognizedChars
 		});
-		console.log('recognizedKeys', recognizedKeys);
+		
+		console.log('processorResult', processorResult);
 		
 		// if (this.state.selectedInterpreter === 'ascii') {
 		// 	let recognizedChars = interpreters.ascii(text);
@@ -180,7 +208,7 @@ class AsciiApp extends Component {
 				<div className="panel">
 					Recognized Text: {this.state.recognizedText}
 					<br/>
-					Interpreted Result: {this.renderInterpretedResult()}
+					Interpreted Result: {this.state.processedResult}
 					
 					<div className="panelOptions">
 						<div>
@@ -209,16 +237,20 @@ class AsciiApp extends Component {
 		);
 	}
 	
-	renderInterpretedResult() {
-		let interpreter = this.state.selectedInterpreter;
-		if (interpreter === 'ascii') {
-			return this.state.recognizedChars.map((key) => {
-				return interpreterData[interpreter][key][0];
-			}).join(' ');
-		}
-		else {
-			return this.state.recognizedChars.join(' ');
-		}
+	renderprocessedResult() {
+		// let interpreter = this.state.selectedInterpreter;
+		//
+		// if (interpreter === 'ascii') {
+		// 	return this.state.recognizedChars.map((key) => {
+		// 		return interpreterData[interpreter][key][0];
+		// 	}).join(' ');
+		// }
+		// else if (interpreter === 'chess') {
+		// 	return this.state.recognizedChars.join(' ');
+		// }
+		// else if (interpreter === 'datetime') {
+		// 	return this.state.recognizedResult;
+		// }
 	}
 	
 	changeInterpreter(e) {
@@ -237,7 +269,7 @@ class AsciiApp extends Component {
 	renderTable() {
 		if (this.state.selectedInterpreter === 'ascii') return this.renderAscii();
 		else {
-			let data = interpreterData.chess;
+			let data = interpreterData[this.state.selectedInterpreter];
 			let trs = [];
 			let i = 0;
 			for (let key in data) {
@@ -259,14 +291,14 @@ class AsciiApp extends Component {
 				
 				let rowi = i;
 				trs.push((<tr key={i} className={clss} onClick={e => this.clickTR(e, rowi, key)}>
-					<td key={0}>{data[key][0]}</td>
+					<td key={0}>{key}</td>
 					<td key={1}>{wordLinks}</td>
 				</tr>));
 			}
 			return (<table>
 				<tbody className="header">
 				<tr className="header">
-					<th className="dec">Chess</th>
+					<th className="dec">{this.state.selectedInterpreter}</th>
 				</tr>
 				</tbody>
 				<tbody>
@@ -294,6 +326,7 @@ class AsciiApp extends Component {
 		for (let dec in interpreterData.ascii) {
 			a = interpreterData.ascii[dec][0];
 			words = interpreterData.ascii[dec][1];
+			if (!words) words = [a];
 			
 			let clss = '';
 			if (this.state.mouseSelected === i) clss += 'mouseSelected ';
@@ -381,4 +414,4 @@ class AsciiApp extends Component {
 	}
 }
 
-export default AsciiApp;
+export default InterpreterApp;

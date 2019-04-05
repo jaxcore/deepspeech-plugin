@@ -90,7 +90,6 @@ function loadDatetime() {
 	
 	const datetimeInterpreter = function(text) {
 		let keys = replacements(text);
-		
 		console.log('orig', keys);
 		
 		// keys = keys.map(function(key) {
@@ -105,6 +104,20 @@ function loadDatetime() {
 		
 		keys = keys.map(wordsToNumbers);
 		console.log('numbers', keys);
+		
+		keys = keys.map(function(key) {
+			if (key.indexOf(' ')) {
+				return key.split(' ');
+			}
+			return key;
+		}).flat();
+		
+		keys = keys.map(function(key) {
+			if (/[0-9]+/.test(key)) {
+				return parseInt(key);
+			}
+			return key;
+		});
 		
 		keys = keys.map(function(key) {
 			if (typeof key === 'string' && key in monthMap) {

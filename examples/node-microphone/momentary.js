@@ -7,13 +7,13 @@ const readline = require('readline').createInterface({
 	output: process.stdout
 });
 
-
 function startConsoleLoop() {
 	console.log('\nPress Ctrl-C to exit at any time.');
 	
 	readline.question('\nPress ENTER to start recording.\n', (name) => {
 		
 		const onRecognize = function(text) {
+			listen.removeListener('recognize', onRecognize);
 			console.log('Recognized as:', text);
 			startConsoleLoop();
 		};
@@ -23,7 +23,9 @@ function startConsoleLoop() {
 			console.log('Stopped recording.');
 		});
 		
-		listen.start(onRecognize);
+		listen.on('recognize', onRecognize);
+		
+		listen.start();
 	});
 }
 

@@ -2,7 +2,7 @@ let Listen = require('../../lib/listen');
 
 let listen = new Listen();
 
-listen.on('recognize-continuous', function(text) {
+listen.on('recognize', function(text) {
 	console.log('Recognized Text:', text);
 });
 
@@ -20,6 +20,8 @@ const readline = require('readline').createInterface({
 });
 
 function continuousLoop() {
+	console.log('\nPress Ctrl-C to exit at any time.');
+	
 	readline.question('\nPress ENTER to start continuous recording.\n', (name) => {
 		
 		readline.question('Press ENTER to stop.\n', (name) => {

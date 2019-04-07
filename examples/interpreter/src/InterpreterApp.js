@@ -42,6 +42,17 @@ class InterpreterApp extends Component {
 		global.app = this;
 	}
 	
+	toggleContinuous() {
+		let {continuousStarted} = this.state;
+		if (!continuousStarted) {
+			Listen.startContinuous();
+		}
+		else {
+			Listen.stopContinuous();
+		}
+		this.setState({continuousStarted:!continuousStarted});
+	}
+	
 	toggleBumbleBee() {
 		if (this.state.bumbleBeeStarted) this.stopBumbleBee();
 		else this.startBumbleBee();
@@ -49,7 +60,7 @@ class InterpreterApp extends Component {
 	startBumbleBee() {
 		if (!this.state.bumbleBeeStarted) {
 			bumblebee.start(() => {
-				alert('hi');
+				this.toggleContinuous();
 			});
 			this.setState({bumbleBeeStarted:true});
 			this.soundBBStart.play();
@@ -212,10 +223,12 @@ class InterpreterApp extends Component {
 					
 					<div className="panelOptions">
 						<div>
-							<span>BumbleBee:</span>
 							<button onClick={e=>this.toggleBumbleBee()}>
-							{this.state.bumbleBeeStarted?'Stop':'Start'}
-						</button>
+								{this.state.bumbleBeeStarted?'Stop':'Start'} BumbleBee
+							</button>
+							<button onClick={e=>this.toggleContinuous()}>
+								Continuous Recognition {this.state.continuousStarted?'OFF':'ON'}
+							</button>
 						</div>
 						<div>
 							<span>Interpreter:</span>

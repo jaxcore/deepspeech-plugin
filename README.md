@@ -5,9 +5,9 @@ Jaxcore Listen
 
 A client-side JavaScript speech recognition and voice command system for the home and for the Web, based upon [DeepSpeech](https://github.com/mozilla/DeepSpeech).
 
-Jaxcore Listen conntects the DeepSpeech speech-to-text engine to Jaxcore, an open source JavaScript remote control system, which makes it easy for web developers to add voice and motion controls to web pages (like Star Trek or Jarvis)  using a simple JavaScript API that can be embedded in web pages (100% client-side) or run headless in NodeJS.
+Jaxcore Listen connects the DeepSpeech speech-to-text engine to Jaxcore, an open source JavaScript remote control system, which makes it easy for web developers to add voice and motion controls to web pages (like Star Trek or Jarvis)  using a simple JavaScript API that can be embedded in web pages (100% client-side) or run headless in NodeJS.
 
-This Git repository contains the [client-side web examples](https://github.com/jaxcore/jaxcore-listen/examples) and the NodeJS [library](https://github.com/jaxcore/jaxcore-listen/lib).  The web client connector library (what you add to web pages) is included in [jaxcore-client](https://github.com/jaxcore/jaxcore-client) which includes other capabilities you might be interested in, such as [Jaxcore Spin](https://github.com/jaxcore/jaxcore-spin) motion control, a [Text-to-Speech](https://github.com/jaxcore/jaxcore-speak) system, [BumbleBee](https://github.com/jaxcore/bumblebee-hotword) a wake-word (like Alexa), and Sound/Microphone visualizations.
+This Git repository contains the [client-side web examples](https://github.com/jaxcore/jaxcore-listen/tree/master/examples) and the NodeJS [library](https://github.com/jaxcore/jaxcore-listen/tree/master/lib).  The web client connector library (what you add to web pages) is included in [jaxcore-client](https://github.com/jaxcore/jaxcore-client) which includes other capabilities you might be interested in, such as [Jaxcore Spin](https://github.com/jaxcore/jaxcore-spin) motion control, a [Text-to-Speech](https://github.com/jaxcore/jaxcore-speak) system, [BumbleBee](https://github.com/jaxcore/bumblebee-hotword) a wake-word (like Alexa), and Sound/Microphone visualizations.
 
 ### Prerequisites
 
@@ -115,7 +115,7 @@ node generate-substitutions.js mycustomlist.csv
 
 That generates a new file `mycustomlist.json` with the first column as the key, and an array of the words.
 
-See the [interpreters](https://github.com/jaxcore/jaxcore-listen/examples/vocab-tester/src/interpreters) directory for examples of how to create a function which performs a search and replace using the json interpreter data.
+See the [interpreters](https://github.com/jaxcore/jaxcore-listen/tree/master/examples/web-vocab-tester/src/interpreters) directory for examples of how to create a function which performs a search and replace using the json interpreter data.
 
 ## NodeJS Module
 

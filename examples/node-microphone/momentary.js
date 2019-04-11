@@ -1,6 +1,8 @@
 let Listen = require('../../lib/listen');
 
-let listen = new Listen();
+let listen = new Listen({
+	path: __dirname+'/../../models'
+});
 
 const readline = require('readline').createInterface({
 	input: process.stdin,

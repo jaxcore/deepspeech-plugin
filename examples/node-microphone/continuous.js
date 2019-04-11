@@ -1,6 +1,8 @@
 let Listen = require('../../lib/listen');
 
-let listen = new Listen();
+let listen = new Listen({
+	path: __dirname+'/../../models'
+});
 
 listen.on('recognize', function(text) {
 	console.log('Recognized Text:', text);

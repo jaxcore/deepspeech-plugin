@@ -4,13 +4,15 @@
   "description": "Jaxcore voice recognition library based on Mozilla DeepSpeech",
   "main": "lib/listen.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "copy-examples": "rm -rf docs/examples/* && mv examples/web-demo/build/ docs/examples/web-demo && mv examples/web-vocab-tester/build/ docs/examples/web-vocab-tester"
   },
   "author": "Jaxcore",
   "license": "MIT",
   "dependencies": {
     "csvtojson": "^2.0.8",
     "deepspeech": "^0.4.1",
+    "memory-stream": "0.0.3",
     "node-audiorecorder": "^1.4.0",
     "node-vad": "^1.1.2"
   }

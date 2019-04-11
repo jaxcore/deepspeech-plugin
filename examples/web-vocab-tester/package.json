@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "dependencies": {
     "bumblebee-hotword": "^0.0.1",
-    "jaxcore-client": "^0.0.2",
+    "jaxcore-client": "^0.0.3",
     "jaxcore-speak": "^0.0.2",
     "react": "^16.8.4",
     "react-dom": "^16.8.4",

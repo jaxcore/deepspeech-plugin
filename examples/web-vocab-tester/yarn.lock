@@ -5370,10 +5370,10 @@ its-set@^1.1.5:
     babel-runtime "6.x.x"
     lodash.get "^4.4.2"
 
-jaxcore-client@^0.0.2:
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/jaxcore-client/-/jaxcore-client-0.0.2.tgz#e8241282d8fce5de3865373274791f89b7c2fdb6"
-  integrity sha512-SBxuG8BFNIPm9URRWoS7f8S6JvaWx21DW5DQdm0Uf/blnvrsVf+PnFnMNxz++iEllC2eBmWeafxQ5MYnHUV0Xg==
+jaxcore-client@^0.0.3:
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/jaxcore-client/-/jaxcore-client-0.0.3.tgz#95a1ba4b93dcf7820f0c358348f0a45d9d3b589e"
+  integrity sha512-aKLCB2P4YEoPjopgbn5Kdnn2a4gqvT9jkoLITRCcdpiDssQBEISJM7quISxkP2eeMRijg7+X8af4amtAl/KzLA==
   dependencies:
     jaxcore-plugin "0.0.2"
 
@@ -6399,9 +6399,9 @@ mississippi@^3.0.0:
     through2 "^2.0.0"
 
 mixin-deep@^1.2.0:
-  version "1.3.1"
-  resolved "https://registry.yarnpkg.com/mixin-deep/-/mixin-deep-1.3.1.tgz#a49e7268dce1a0d9698e45326c5626df3543d0fe"
-  integrity sha512-8ZItLHeEgaqEvd5lYBXfm4EZSFCX29Jb9K+lAHhDKzReKBQKj3R+7NOF6tjqYi9t4oI8VUfaWITJQm86wnXGNQ==
+  version "1.3.2"
+  resolved "https://registry.yarnpkg.com/mixin-deep/-/mixin-deep-1.3.2.tgz#1120b43dc359a785dce65b55b82e257ccf479566"
+  integrity sha512-WRoDn//mXBiJ1H40rqa3vH0toePwSsGb45iInWlTySa+Uu4k3tYUSxa2v1KqAiLtvlrSzaExqS1gtk96A9zvEA==
   dependencies:
     for-in "^1.0.2"
     is-extendable "^1.0.1"

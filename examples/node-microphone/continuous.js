@@ -1,18 +1,18 @@
-let Listen = require('../../lib/listen');
+let Speech = require('../../lib/speech');
 
-let listen = new Listen({
-	path: __dirname+'/../../models'
+let speech = new Speech({
+	path: __dirname+'/../../deepspeech-0.5.1-models'
 });
 
-listen.on('recognize', function(text) {
+speech.on('recognize', function(text) {
 	console.log('Recognized Text:', text);
 });
 
-listen.on('start-continuous', function() {
+speech.on('start-continuous', function() {
 	console.log('start-continuous');
 });
 
-listen.on('stop-continuous', function() {
+speech.on('stop-continuous', function() {
 	console.log('stop-continuous');
 });
 
@@ -30,14 +30,14 @@ function continuousLoop() {
 			
 			console.log('Stopping continuous recording.');
 			
-			listen.stopContinuous();
+			speech.stopContinuous();
 			
 			setTimeout(continuousLoop, 1000);
 			// process.exit();
 		});
 		
 		// todo: fix continuousRecorder already started
-		listen.startContinuous();
+		speech.startContinuous();
 		
 	});
 }
@@ -47,10 +47,10 @@ process.stdin.resume();
 continuousLoop();
 
 // setTimeout(function() {
-// 	listen.stopContinuous();
+// 	speech.stopContinuous();
 // }, 60000);
 
 // setTimeout(function() {
-// // // 	listen.stopContinuous();
+// // // 	speech.stopContinuous();
 // // // 	process.exit();
 // // // },20000);

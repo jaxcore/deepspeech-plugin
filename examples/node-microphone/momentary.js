@@ -1,7 +1,7 @@
-let Listen = require('../../lib/listen');
+let Speech = require('../../lib/speech');
 
-let listen = new Listen({
-	path: __dirname+'/../../models'
+let speech = new Speech({
+	path: __dirname+'/../../deepspeech-0.5.1-models'
 });
 
 const readline = require('readline').createInterface({
@@ -15,19 +15,19 @@ function startConsoleLoop() {
 	readline.question('\nPress ENTER to start recording.\n', (name) => {
 		
 		const onRecognize = function(text) {
-			listen.removeListener('recognize', onRecognize);
+			speech.removeListener('recognize', onRecognize);
 			console.log('Recognized as:', text);
 			startConsoleLoop();
 		};
 		
 		readline.question('Press ENTER to stop.\n', (name) => {
-			listen.stop();
+			speech.stop();
 			console.log('Stopped recording.');
 		});
 		
-		listen.on('recognize', onRecognize);
+		speech.on('recognize', onRecognize);
 		
-		listen.start();
+		speech.start();
 	});
 }
 

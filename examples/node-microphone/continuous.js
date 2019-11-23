@@ -1,18 +1,22 @@
 let Speech = require('../../lib/speech');
 
 let speech = new Speech({
-	path: __dirname+'/../../deepspeech-0.5.1-models'
+	models: {
+		english: {
+			path: __dirname + '/../../deepspeech-0.5.1-models'
+		}
+	}
 });
 
-speech.on('recognize', function(text) {
+speech.on('recognize', function (text) {
 	console.log('Recognized Text:', text);
 });
 
-speech.on('start-continuous', function() {
+speech.on('start-continuous', function () {
 	console.log('start-continuous');
 });
 
-speech.on('stop-continuous', function() {
+speech.on('stop-continuous', function () {
 	console.log('stop-continuous');
 });
 

@@ -2,7 +2,7 @@
   "name": "jaxcore-speech",
   "version": "0.0.1",
   "description": "Voice control system for Jaxcore",
-  "main": "lib/speech.js",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "copy-examples": "rm -rf docs/examples/* && mv examples/web-demo/build/ docs/examples/web-demo && mv examples/web-vocab-tester/build/ docs/examples/web-vocab-tester"

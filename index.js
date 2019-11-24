@@ -1,6 +1,9 @@
 module.exports = {
 	services: {
-		speech: require('./lib/speech')
+		speech: {
+			service: require('./lib/speech'),
+			storeType: 'service'
+		}
 	}
 	// adapters: {
 	// 	speechconsole: require('./speechconsole-adapter')

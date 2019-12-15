@@ -3,7 +3,7 @@ let Speech = require('../../lib/speech');
 let speech = new Speech({
 	models: {
 		english: {
-			path: __dirname + '/../../deepspeech-0.5.1-models'
+			path: __dirname + '/../../deepspeech-0.6.0-models'
 		}
 	}
 });
@@ -37,7 +37,6 @@ function continuousLoop() {
 			speech.stopContinuous();
 			
 			setTimeout(continuousLoop, 1000);
-			// process.exit();
 		});
 		
 		// todo: fix continuousRecorder already started
@@ -49,12 +48,3 @@ function continuousLoop() {
 process.stdin.resume();
 
 continuousLoop();
-
-// setTimeout(function() {
-// 	speech.stopContinuous();
-// }, 60000);
-
-// setTimeout(function() {
-// // // 	speech.stopContinuous();
-// // // 	process.exit();
-// // // },20000);

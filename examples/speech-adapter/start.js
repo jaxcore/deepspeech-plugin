@@ -25,7 +25,8 @@ jaxcore.on('service-connected', function(type, service) {
 jaxcore.startService('speech', null, null, {
 	models: {
 		english: {
-			path: __dirname + '/../../deepspeech-0.5.1-models'
+			// path: __dirname + '/../../deepspeech-0.5.1-models'
+			path: __dirname + '/../../deepspeech-0.6.0-models'
 		}
 	}
 }, function(err, speech) {

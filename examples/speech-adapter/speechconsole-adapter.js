@@ -15,7 +15,7 @@ class SpeechConsoleAdapter extends Adapter {
 		
 		this.addEvents(speech, {
 			recognize: function (text, stats) {
-				this.log('speech recognize', text);
+				console.log('speech recognize', text);
 			}
 		});
 		

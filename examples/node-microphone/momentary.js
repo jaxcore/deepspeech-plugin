@@ -3,7 +3,7 @@ let Speech = require('../../lib/speech');
 let speech = new Speech({
 	models: {
 		english: {
-			path: __dirname + '/../../deepspeech-0.5.1-models'
+			path: __dirname + '/../../deepspeech-0.6.0-models'
 		}
 	}
 });

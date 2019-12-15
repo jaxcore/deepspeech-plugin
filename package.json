@@ -1,7 +1,7 @@
 {
   "name": "jaxcore-speech",
   "version": "0.0.1",
-  "description": "Voice control system for Jaxcore",
+  "description": "Mozilla DeepSpeech speech recognition plugin for Jaxcore",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

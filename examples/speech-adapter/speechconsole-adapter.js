@@ -19,9 +19,11 @@ class SpeechConsoleAdapter extends Adapter {
 			}
 		});
 		
-		speech.startContinuous();
+		console.log('in 7.....');
+		setTimeout(function() {
+			speech.startContinuous();
+		}, 7000);
 	}
-	
 	
 	static getServicesConfig(adapterConfig) {
 		return {

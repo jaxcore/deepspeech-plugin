@@ -27,6 +27,45 @@ class SpeechMouseAdapter extends Adapter {
 		this.addEvents(speech, {
 			recognize: function (text, stats) {
 				this.log('speech recognize', text, stats);
+				
+				text = text.replace(/strolled|scrawled|scrawl/,'scroll');
+				text = text.replace(/most/,'mouse');
+				text = text.replace(/laughed/,'left');
+				
+				if (text === 'scroll up') {
+					console.log('scroll up');
+					scroll.scrollVertical(-5, 0);
+				}
+				if (text === 'scroll down') {
+					console.log('scroll down');
+					scroll.scrollVertical(5, 0);
+				}
+				
+				if (text === 'mouse up') {
+					let pos = mouse.getMousePos();
+					let y = pos.y - 100;
+					console.log('mouse up', y);
+					mouse.moveMouseSmooth(pos.x, y);
+				}
+				if (text === 'mouse down') {
+					let pos = mouse.getMousePos();
+					let y = pos.y + 100;
+					console.log('mouse down', y);
+					mouse.moveMouseSmooth(pos.x, y);
+				}
+				
+				if (text === 'mouse left') {
+					console.log('mouse left');
+					let pos = mouse.getMousePos();
+					let x = pos.x - 100;
+					mouse.moveMouseSmooth(x, pos.y);
+				}
+				if (text === 'mouse right') {
+					console.log('mouse right');
+					let pos = mouse.getMousePos();
+					let x = pos.x + 100;
+					mouse.moveMouseSmooth(x, pos.y);
+				}
 			},
 			start: function() {
 				this.log('on start');
@@ -53,12 +92,12 @@ class SpeechMouseAdapter extends Adapter {
 		readline.question('\nPress ENTER to start recording.\n', () => {
 			
 			readline.question('Press ENTER to stop.\n', (name) => {
-				speech.stop();
+				speech.stopContinuous();
 				console.log('Stopped recording.');
 				this.startConsoleLoop();
 			});
 			
-			speech.start();
+			speech.startContinuous();
 		});
 	}
 	

@@ -10,7 +10,6 @@
   "author": "Jaxcore",
   "license": "MIT",
   "dependencies": {
-    "jaxcore": "git+https://github.com/jaxcore/jaxcore#master",
     "csvtojson": "^2.0.8",
     "deepspeech": "^0.6.0",
     "memory-stream": "0.0.3",

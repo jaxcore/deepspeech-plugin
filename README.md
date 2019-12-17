@@ -40,37 +40,11 @@ Continuous recording example (press any key to start continuously recording, pre
 node examples/node-microphone/momentary.js
 ```
 
-## Try the mouse control adapter
+## Hello World "speech adapter"
 
-Using this test script you can control your computer mouse with your voice:
+See the [hello-world-adapter](https://github.com/jaxcore/jaxcore-speech/tree/master/examples/hello-world-adapter) for a simple voice control script which listens for "hello world" and prints to the console.  On MacOSX it uses the "say" command line to respond with synthesized speech.
 
-```
-node examples/speech-mouse-adapter/start.js
-```
-
-Mouse adapter voice commands are:
-
-- "scroll down"
-- "scroll down 100" // scrolls down 100 pixels
-- "scroll up"
-- "scroll up 100" // scrolls up 100 pixels
-- "page down" // presses page down key
-- "page up" // presses page down key
-- "up" // presses up arrow key
-- "down" // presses down arrow key
-- "left" // presses left arrow key
-- "right" // presses right arrow key
-- "mouse up 100" // moves mouse up 100 pixels
-- "mouse down 100" // moves mouse down 100 pixels
-- "mouse left 100" // moves mouse left 100 pixels
-- "mouse right 100" // moves mouse right 100 pixels
-- "left click" // clicks left mouse button
-- "right click" // clicks right mouse button
-- "middle click" // clicks middle mouse button
-
-## Create your own Jaxcore "voice adapter"
-
-See the [speech-adapter](https://github.com/jaxcore/jaxcore-speech/tree/master/examples/speech-adapter) for a simple voice control script which listens for "hello world" and prints to the console.  Copy and modify this script to use your voice to control ***anything your want***.
+Copy and modify this script to use your voice to control ***anything your want***.
 
 ```
 // import Jaxcore and create an instance
@@ -82,8 +56,18 @@ const jaxcore = new Jaxcore();
 const SpeechPlugin = require('../../index'); // or use require('jaxcore-speech');
 jaxcore.addPlugin(SpeechPlugin);
 
+// import spawn to call "say" command line on MacOSX
+const {spawn, spawnSync} = require('child_process');
+
+function say(text, sync) {
+	if (process.platform === 'darwin') {
+		if (sync) spawnSync('say', [JSON.stringify(text)]);
+		else spawn('say', [JSON.stringify(text)]);
+	}
+}
+
 // create a custom Jaxcore adapter for handling speech
-class ConsoleAdapter extends Adapter {
+class HelloWorldAdapter extends Adapter {
 	constructor(store, config, theme, devices, services) {
 		super(store, config, theme, devices, services);
 		const {speech} = devices;
@@ -95,25 +79,37 @@ class ConsoleAdapter extends Adapter {
 				/* YOUR CODE GOES HERE */
 				
 				if (text === 'hello world') {
-					console.log('hello world');
+					console.log('YOU SAID HELLO WORLD!!!');
+					
+					// stop recording before using speech synthesis
+					speech.stopContinuous();
+					
+					// use speech synthesis to respond
+					say('hello world');
+					
+					// wait 2 seconds to let "say" complete before turning on continuous recording
+					setTimeout(function() {
+						speech.startContinuous();
+					},1500);
 				}
 				
 			}
 		});
 		
 		// start recording continuously
+		say('recording is now on', true);
 		speech.startContinuous();
 	}
 }
 
 // add the adapter to Jaxcore
-jaxcore.addAdapter('speechconsole', ConsoleAdapter);
+jaxcore.addAdapter('helloworld', HelloWorldAdapter);
 
 jaxcore.on('service-connected', function(type, service) {
 	if (type === 'speech') {
 		// when the speech service is ready, launch the adapter
 		const speech = service;
-		jaxcore.launchAdapter(speech, 'speechconsole');
+		jaxcore.launchAdapter(speech, 'helloworld');
 	}
 });
 
@@ -126,45 +122,35 @@ jaxcore.startService('speech', null, null, {
 });
 ```
 
-To run the sample adapter:
+
+## Mouse Control speech adapter
+
+Using this test script you can control your computer mouse with your voice:
 
 ```
-node examples/speech-adapter/start.js 
+node examples/speech-mouse-adapter/start.js
 ```
 
-Sample output:
+Available voice commands are:
 
-````
-TensorFlow: v1.14.0-21-ge77504ac6b
-DeepSpeech: v0.6.0-0-g6d43e21
-2019-12-16 18:54:37.656109: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
-speech process connected
-speech service ready object
-message from main: start-continuous
-start-continuous
-on start { continuousStart: { stats: 'english' } }
-.      // waiting for voice detection...
-.
-.
-.
-.
-.      // still waiting...
-.
-.c
-.on    // voice activity detected, microphone recording is on
-.
-.
-.r
-.x     // silence detected
-.r
-.r
-.r
-.X     // silence threshold exceeded
-.off   // microphone recording is off
-Recognizing ...
-Stats: length: 2.3040000000000003s recog time: 1.21 s
-speech recognized: hello world
-YOU SAID HELLO WORLD!!!
-````
+- "left click" // clicks left mouse button
+- "right click" // clicks right mouse button
+- "middle click" // clicks middle mouse button
+- "mouse up 100" // moves mouse up 100 pixels
+- "mouse down 100" // moves mouse down 100 pixels
+- "mouse left 100" // moves mouse left 100 pixels
+- "mouse right 100" // moves mouse right 100 pixels
+- "page down" // presses page down key
+- "page up" // presses page down key
+- "up" // presses up arrow key
+- "down" // presses down arrow key
+- "left" // presses left arrow key
+- "right" // presses right arrow key
+- "scroll down"
+- "scroll down 100" // scrolls down 100 pixels
+- "scroll up"
+- "scroll up 100" // scrolls up 100 pixels
+
+
 
 #### TODO: get web demos working again

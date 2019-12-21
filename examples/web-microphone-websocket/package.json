@@ -6,17 +6,12 @@
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
-    "buffer-to-uint8array": "^1.1.0",
-    "get-user-media-promise": "^1.1.4",
     "memory-stream": "^1.0.0",
-    "microphone-stream": "^5.0.1",
-    "pcm-convert": "^1.6.5",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "react-scripts": "3.3.0",
     "socket.io": "^2.3.0",
-    "socket.io-client": "^2.3.0",
-    "sox-stream": "^2.0.3"
+    "socket.io-client": "^2.3.0"
   },
   "scripts": {
     "start": "react-scripts start",

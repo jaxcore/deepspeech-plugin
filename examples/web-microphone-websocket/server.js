@@ -1,53 +1,64 @@
 const http = require('http');
 const socketIO = require('socket.io');
 const MemoryStream = require('memory-stream');
-// const convert = require('pcm-convert');
-// const tou8 = require('buffer-to-uint8array');
-const sox = require('sox-stream');
-const Duplex = require('stream').Duplex;
+const DeepSpeech = require('deepspeech');
 
-let Speech = require('../../lib/speech');
+const deepSpeechDefaults = {
+	BEAM_WIDTH: 1024,
+	N_FEATURES: 26,
+	N_CONTEXT: 9,
+	LM_ALPHA: 0.75,
+	LM_BETA: 1.85
+};
 
-let speech = new Speech({
-	models: {
-		english: {
-			path: __dirname + '/../../deepspeech-0.6.0-models'
-		}
-	}
-});
+function createModel(modelDir, options) {
+	let modelPath = modelDir + '/output_graph.pbmm';
+	let lmPath = modelDir + '/lm.binary';
+	let triePath = modelDir + '/trie';
+	let settings = Object.assign({}, deepSpeechDefaults, options);
+	let model = new DeepSpeech.Model(modelPath, settings.BEAM_WIDTH);
+	model.enableDecoderWithLM(lmPath, triePath, settings.LM_ALPHA, settings.LM_BETA);
+	return model;
+}
 
-let desiredSampleRate = speech.currentModel.sampleRate();
+function recognizeMomentary(stream) {
+	let audioBuffer = stream.toBuffer();
+	const audioLength = (audioBuffer.length / 2) * (1 / 16000) * 1000;
+	
+	console.log('recognizing...');
+	let start = new Date().getTime();
+	let text = englishModel.stt(audioBuffer.slice(0, audioBuffer.length / 2));
+	let end = new Date().getTime();
+	let recogTime = end - start;
+	
+	console.log('recognized:', text);
+	console.log('audio length:', (Math.round(audioLength/100)/10)+'s');
+	console.log('recognition time:', (Math.round(recogTime/100)/10)+'s');
+	
+	return {
+		text,
+		audioLength,
+		recogTime
+	};
+}
+
+let englishModelPath = __dirname + '/../../deepspeech-0.6.0-models';
+
+let englishModel = createModel(englishModelPath);
 
 const app = http.createServer(function (req, res) {
 	res.writeHead(200);
-	res.write('jaxcore speech');
+	res.write('web-microphone-websocket');
 	res.end();
 });
 
 const io = socketIO(app, {});
-
-// function uint8tofloat32(incomingData) { // incoming data is a UInt8Array
-// 	var i, l = incomingData.length;
-// 	var outputData = new Float32Array(incomingData.length);
-// 	for (i = 0; i < l; i++) {
-// 		outputData[i] = (incomingData[i] - 128) / 128.0;
-// 	}
-// 	return outputData;
-// }
-
-function bufferToStream(buffer) {
-	let stream = new Duplex();
-	stream.push(buffer);
-	stream.push(null);
-	return stream;
-}
 
 io.on('connection', function(socket) {
 	console.log('client connected');
 	
 	socket.once('disconnect', () => {
 		console.log('socket disconnected');
-		// socket.removeListener('', this._onSpinCcommand);
 	});
 	
 	socket.on('client-ready', function(data) {
@@ -56,67 +67,20 @@ io.on('connection', function(socket) {
 	
 	let momentaryStream;
 	
-	socket.on('audio-begin', function(data) {
-		console.log('audio-begin', data);
-		
+	socket.on('momentary-begin', function(data) {
+		console.log('momentary-begin', data.length);
 		momentaryStream = new MemoryStream();
 		momentaryStream.write(data);
-		
-		// momentaryStream = new Buffer(data.toString());
-		// momentaryStream.write(data);
-		// momentaryStream.write(uint8tofloat32(data));
 	});
-	socket.on('audio-data', function(data) {
-		console.log('audio-data', data);
-		
-		if (momentaryStream) momentaryStream.write(data);
+	socket.on('momentary-data', function(data) {
+		console.log('momentary-data', data.length);
+		momentaryStream.write(data);
 	});
-	socket.on('audio-end', function() {
-		console.log('audio-end', momentaryStream);
-		console.log('desiredSampleRate', desiredSampleRate);
-		
-		/*
-			INCOMING DATA FORMAT:
-			
-			Uint8Array:
-				bitDepth: 32
-				channels: 1
-				float: true
-				sampleRate: 44100
-				signed: true
-		 */
-		
-		/*
-			OUTPUT DATA FORMAT:
-			
-			Uint8Array:
-				bits: 16,
-				channels: 1
-				float: true
-				sampleRate: 16000
-				signed: true
-		 */
-		
-		// THIS IS NOT WORKING:
-		
-		// let outputStream = new MemoryStream();
-		// bufferToStream(momentaryStream).pipe(sox({
-		// 	global: {
-		// 		'no-dither': true,
-		// 	},
-		// 	output: {
-		// 		bits: 16,
-		// 		rate: desiredSampleRate,
-		// 		channels: 1,
-		// 		encoding: 'signed-integer',
-		// 		endian: 'little',
-		// 		compression: 0.0,
-		// 		type: 'raw'
-		// 	}
-		// })).pipe(outputStream);
-		//
-		// console.log('outputStream', outputStream);
-		
+	socket.on('momentary-end', function() {
+		console.log('momentary-end');
+		momentaryStream.end();
+		let results = recognizeMomentary(momentaryStream);
+		socket.emit('recognize', results);
 	});
 	
 	socket.emit('server-ready');

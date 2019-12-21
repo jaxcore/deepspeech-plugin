@@ -1,8 +1,15 @@
 import React, {Component} from 'react';
 import io from 'socket.io-client';
 
-var getUserMedia = require('get-user-media-promise');
-var MicrophoneStream = require('microphone-stream');
+const pcmBuffer = function (data) {
+	let audio = new DataView(new ArrayBuffer(data.length * 2));
+	for (let i = 0; i < data.length; i++) {
+		let multiplier = data[i] < 0 ? 0x8000 : 0x7fff;
+		let value = (data[i] * multiplier) | 0;
+		audio.setInt16(i * 2, value, true);
+	}
+	return Buffer.from(audio.buffer);
+};
 
 class App extends Component {
 	
@@ -16,8 +23,11 @@ class App extends Component {
 			continuous: false,
 			continuousStart: 0,
 			continuousStop: 0,
-			continuousTime: 0
+			continuousTime: 0,
+			recognitionOutput: []
 		};
+		
+		let recognitionCount = 0;
 		
 		this.socket = io.connect('http://localhost:4000', {});
 		this.socket.once('connect', () => {
@@ -25,23 +35,17 @@ class App extends Component {
 			
 			this.socket.on('server-ready', () => {
 				console.log('server-ready');
-				
-				this.socket.emit('client-ready');
-				
-				let count = 0;
-				setInterval(() => {
-					count++;
-					this.socket.emit('client-ping', count);
-				},1000);
 			});
 			
-			this.socket.on('server-ping', (count) => {
-				console.log('server-ping:', count);
+			this.socket.on('recognize', (results) => {
+				console.log('recognized:', results);
+				const {recognitionOutput} = this.state;
+				results.id = recognitionCount++;
+				recognitionOutput.unshift(results);
+				this.setState({recognitionOutput});
 			});
 			
-			this.socket.on('recognize', (text) => {
-				console.log('recognized:', text);
-			});
+			this.socket.emit('client-ready');
 		});
 	}
 	
@@ -59,6 +63,7 @@ class App extends Component {
 				</div>
 				{this.renderMomentary()}
 				{this.renderContinuous()}
+				{this.renderRecognitionOutput()}
 			</div>
 		);
 	}
@@ -75,8 +80,43 @@ class App extends Component {
 		</div>);
 	}
 	
+	renderRecognitionOutput() {
+		return (<ul>
+			{this.state.recognitionOutput.map((r) => {
+				return (<li key={r.id}>{r.text}</li>);
+			})}
+		</ul>)
+	}
+	
+	createAudioProcessor(audioContext) {
+		var processor = audioContext.createScriptProcessor(512);
+		processor.onaudioprocess = (event) => {
+			var data = event.inputBuffer.getChannelData(0);
+			var buffer = pcmBuffer(data);
+
+			if (this.momentaryStarted) {
+				this.momentaryStarted = false;
+				this.socket.emit('momentary-begin', buffer);
+			}
+			else {
+				this.socket.emit('momentary-data', buffer);
+			}
+		};
+		
+		processor.shutdown = () => {
+			processor.disconnect();
+			this.onaudioprocess = null;
+			this.socket.emit('momentary-end');
+		};
+		
+		processor.connect(audioContext.destination);
+		
+		return processor;
+	}
+	
 	startMomentary = e => {
-		this.momentaryStart = true;
+		this.momentaryStarted = true;
+		
 		this.setState({
 			momentary: true,
 			momentaryStart: new Date().getTime(),
@@ -88,66 +128,50 @@ class App extends Component {
 				this.setState({momentaryTime});
 			}, 100);
 			
-			// return;
-			// note: for iOS Safari, the constructor must be called in response to a tap, or else the AudioContext will remain
-			// suspended and will not provide any audio data.
-			this.micStream = new MicrophoneStream();
-			this.micStream.on('format', function(f) {
-				console.log('mic audio format:', f);
+			const audioContext = new AudioContext({
+				sampleRate: 16000
 			});
+			this.audioContext = audioContext;
 			
-			getUserMedia({video: false, audio: true})
-			.then((stream) => {
-				this.micStream.setStream(stream);
-			}).catch((error) => {
-				console.log(error);
-			});
+			const success = (stream) => {
+				console.log('startRecording success');
+				this.mediaStreamSource = audioContext.createMediaStreamSource(stream);
+				this.processor = this.createAudioProcessor(audioContext);
+				this.mediaStreamSource.connect(this.processor);
+			};
 			
-			// get Buffers (Essentially a Uint8Array DataView of the same Float32 values)
-			this.micStream.on('data', (chunk) => {
-				// Optionally convert the Buffer back into a Float32Array
-				// (This actually just creates a new DataView - the underlying audio data is not copied or modified.)
-				// var chunk = MicrophoneStream.toRaw(chunk);
-				
-				if (this.momentaryStart) {
-					this.momentaryStart = false;
-					console.log('first-chunk', chunk);
-					this.socket.emit('audio-begin', chunk);
-				}
-				else {
-					if (!this.state.momentary) {
-						console.log('last chunk');
-						debugger;
-					}
-					console.log('other-chunk', chunk);
-					this.socket.emit('audio-data', chunk);
-				}
-				
-				//...
-				// note: if you set options.objectMode=true, the `data` event will output AudioBuffers instead of Buffers
-			});
+			const fail = (e) => {
+				console.log('startRecording fail');
+				debugger;
+			};
 			
-			this.micStream.on('close', (chunk) => {
-				this.socket.emit('audio-end');
-			});
-			
-			// or pipe it to another stream
-			// this.micStream.pipe(/*...*/);
-			
-			// It also emits a format event with various details (frequency, channels, etc)
-			this.micStream.on('format', function (format) {
-				console.log(format);
-			});
-			
+			navigator.getUserMedia(
+				{
+					video: false,
+					audio: true
+				}, success, fail);
 		});
 	};
+	
 	stopMomentary = e => {
+		if (!this.state.momentary) return;
+		
 		this.setState({
 			momentary: false,
 			momentaryStop: new Date().getTime()
 		}, () => {
 			clearInterval(this.momentaryInterval);
-			if (this.micStream) this.micStream.stop();
+			
+			if (this.mediaStreamSource && this.processor) {
+				this.mediaStreamSource.disconnect(this.processor);
+			}
+			if (this.processor) {
+				this.processor.shutdown();
+			}
+			if (this.audioContext) {
+				this.audioContext.close();
+			}
+			
 		});
 	};
 	

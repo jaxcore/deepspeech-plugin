@@ -4,22 +4,12 @@ const MemoryStream = require('memory-stream');
 const DeepSpeech = require('deepspeech');
 const VAD = require('node-vad');
 
-// const VAD_MODE = VAD.Mode.NORMAL;
+const VAD_MODE = VAD.Mode.NORMAL;
 // const VAD_MODE = VAD.Mode.LOW_BITRATE;
-const VAD_MODE = VAD.Mode.AGGRESSIVE;
+// const VAD_MODE = VAD.Mode.AGGRESSIVE;
 // const VAD_MODE = VAD.Mode.VERY_AGGRESSIVE;
 
-const vad = new VAD(VAD_MODE); //LOW_BITRATE NORMAL AGGRESSIVE VERY_AGGRESSIVE
-
-// Time in milliseconds for debouncing speech active state
-
-// Create voice activity stream
-// const VAD_STREAM = VAD.createStream({
-// 	mode: VAD_MODE,
-// 	audioFrequency: 16000,
-// 	debounceTime: 1100
-// });
-
+const vad = new VAD(VAD_MODE);
 
 function createModel(modelDir, options) {
 	let modelPath = modelDir + '/output_graph.pbmm';
@@ -42,6 +32,13 @@ const deepSpeechOptions = {
 
 let englishModel = createModel(englishModelPath, deepSpeechOptions);
 
+let modelStream;
+let recordedChunks = 0;
+let silenceStart = null;
+let recordedAudioLength = 0;
+
+let SILENCE_THRESHOLD = 100; // how many milliseconds of inactivity before processing the audio
+
 function recognizeMomentary(stream) {
 	let audioBuffer = stream.toBuffer();
 	const audioLength = (audioBuffer.length / 2) * (1 / 16000) * 1000;
@@ -63,58 +60,58 @@ function recognizeMomentary(stream) {
 	};
 }
 
-let silenceStart = null;
-
-let SILENCE_THRESHOLD = 200;
-
 function processSilence(data, callback) {
-	if (continuousFeed > 0) {
+	if (recordedChunks > 0) { // recording is on
 		feedAudioContent(data);
 		
-		if (!silenceStart) {
-			console.log('.?');
+		if (silenceStart === null) {
+			process.stdout.write('-'); // silence first detected while recording
 			silenceStart = new Date().getTime();
 		}
 		else {
 			let now = new Date().getTime();
 			if (now - silenceStart > SILENCE_THRESHOLD) {
-				console.log('1s of silence');
+				silenceStart = null;
+				console.log('[end]');
 				let results = intermediateDecode();
-				
 				if (results) {
 					if (callback) {
-						console.log('callback results');
 						callback(results);
 					}
-					else {
-						console.log('no cb');
-						process.exit();
-					}
 				}
-				else {
-					console.log('no results');
-					process.exit();
-				}
-				silenceStart = null;
+			}
+			else {
+				process.stdout.write('-'); // silence detected while recording
 			}
 		}
 	}
 	else {
-		process.stdout.write('.');
+		process.stdout.write('.'); // silence detected while not recording
 	}
+}
+
+function endContinuous(callback) {
+	let results = intermediateDecode();
+	if (results) {
+		if (callback) {
+			callback(results);
+		}
+	}
+	recordedChunks = 0;
+	silenceStart = null;
 }
 
 function processVoice(data) {
 	silenceStart = null;
 	
-	if (continuousFeed === 0) {
+	if (recordedChunks === 0) {
 		console.log('');
-		console.log('.start');
+		process.stdout.write('[start]'); // recording started
 	}
 	else {
-		console.log('.r');
+		process.stdout.write('='); // still recording
 	}
-	continuousFeed++;
+	recordedChunks++;
 	feedAudioContent(data);
 }
 
@@ -137,30 +134,29 @@ function processContinous(res, data, callback) {
 	}
 }
 
-let modelStream;
-let continuousFeed;
-
 function createStream() {
 	modelStream = englishModel.createStream();
-	continuousFeed = 0;
+	recordedChunks = 0;
+	recordedAudioLength = 0;
 }
 
 function finishStream() {
-	// const model_load_start = process.hrtime();
-	// console.error('Running inference.');
 	let start = new Date();
 	let text = englishModel.finishStream(modelStream);
-	let recogTime = new Date().getTime() - start.getTime();
-	console.log('Continuous Recognized:', text);
-	
-	// const model_load_end = process.hrtime(model_load_start);
-	// console.error('Inference took %ds for %ds audio file.', totalTime(model_load_end), audioLength.toPrecision(4));
-	// audioLength = 0;
-	console.log('returning........');
-	return {
-		text,
-		recogTime
-	};
+	if (text) {
+		if (text === 'i') {
+			// bug in DeepSpeech 0.6 causes silence to be inferred as "i"
+			return;
+		}
+		console.log('');
+		console.log('Recognized Text:', text);
+		let recogTime = new Date().getTime() - start.getTime();
+		return {
+			text,
+			recogTime,
+			audioLength: Math.round(recordedAudioLength)
+		};
+	}
 }
 
 function intermediateDecode() {
@@ -170,10 +166,9 @@ function intermediateDecode() {
 }
 
 function feedAudioContent(chunk) {
-	// audioLength += (chunk.length / 2) * ( 1 / AUDIO_SAMPLE_RATE);
+	recordedAudioLength += (chunk.length / 2) * ( 1 / 16000) * 1000;
 	englishModel.feedAudioContent(modelStream, chunk.slice(0, chunk.length / 2));
 }
-
 
 const app = http.createServer(function (req, res) {
 	res.writeHead(200);
@@ -212,61 +207,25 @@ io.on('connection', function(socket) {
 		socket.emit('recognize', results);
 	});
 	
-	
-	// let continuousStream;
-	
-	// continuousFeed = 0;
-	
 	createStream();
 	
-	// function processVad(data) {
-	// 	if (data.speech.start||data.speech.state) feedAudioContent(data.audioData)
-	// 	else if (data.speech.end) { feedAudioContent(data.audioData); intermediateDecode() }
-	// }
-	//
-	// VAD_STREAM.on('data', function(data) {
-	// 	if (data.speech.start) console.log('start');
-	// 	if (data.speech.state) console.log('state');
-	// 	if (data.speech.end) console.log('end');
-	//
-	// 	// console.log('vadstream', data);
-	// 	// if (data.speech.start || data.speech.state) feedAudioContent(data.audioData);
-	// 	// else if (data.speech.end) { feedAudioContent(data.audioData); intermediateDecode() }
-	// });
-	
-	// ffmpeg.stdout.pipe(VAD_STREAM).on('data', processVad);
-	
 	socket.on('continuous-begin', function(data) {
-		// console.log('continuous-begin', data.length);
-		
-		// VAD_STREAM.write(data);
-		
 		vad.processAudio(data, 16000).then((res) => {
 			processContinous(res, data);
 		});
-		
-		// continuousStream = new MemoryStream();
-		// momentaryStream.write(data);
 	});
 	socket.on('continuous-data', function(data) {
-		// console.log('continuous-data', data.length);
-		// momentaryStream.write(data);
-		
-		// VAD_STREAM.write(data);
-		
 		vad.processAudio(data, 16000).then((res) => {
 			processContinous(res, data, (results) => {
-				if (results.text !== 'i') {
-					socket.emit('recognize', results);
-				}
+				socket.emit('recognize', results);
 			});
 		});
 	});
 	socket.on('continuous-end', function() {
 		console.log('continuous-end');
-		// momentaryStream.end();
-		// let results = recognizeMomentary(momentaryStream);
-		// socket.emit('recognize', results);
+		endContinuous((results) => {
+			socket.emit('recognize', results);
+		});
 	});
 	
 	socket.emit('server-ready');

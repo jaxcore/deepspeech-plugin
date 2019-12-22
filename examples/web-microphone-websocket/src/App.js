@@ -162,7 +162,6 @@ class App extends Component {
 			this.audioContext.close();
 		}
 	}
-	
 }
 
 export default App;

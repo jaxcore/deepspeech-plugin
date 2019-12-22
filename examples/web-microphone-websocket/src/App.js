@@ -88,7 +88,7 @@ class App extends Component {
 		</ul>)
 	}
 	
-	createAudioProcessor(audioContext) {
+	createAudioProcessor(audioContext, eventType) {
 		var processor = audioContext.createScriptProcessor(512);
 		processor.onaudioprocess = (event) => {
 			var data = event.inputBuffer.getChannelData(0);
@@ -96,22 +96,62 @@ class App extends Component {
 
 			if (this.momentaryStarted) {
 				this.momentaryStarted = false;
-				this.socket.emit('momentary-begin', buffer);
+				this.socket.emit(eventType+'-begin', buffer);
 			}
 			else {
-				this.socket.emit('momentary-data', buffer);
+				this.socket.emit(eventType+'-data', buffer);
 			}
 		};
 		
 		processor.shutdown = () => {
 			processor.disconnect();
 			this.onaudioprocess = null;
-			this.socket.emit('momentary-end');
+			setTimeout(() => {
+				this.socket.emit(eventType+'-end');
+			},100);
 		};
 		
 		processor.connect(audioContext.destination);
 		
 		return processor;
+	}
+	
+	startRecording(eventType) {
+		const audioContext = new AudioContext({
+			sampleRate: 16000
+		});
+		
+		this.audioContext = audioContext;
+		
+		const success = (stream) => {
+			console.log('start momentary success');
+			this.mediaStreamSource = audioContext.createMediaStreamSource(stream);
+			this.processor = this.createAudioProcessor(audioContext, eventType);
+			this.mediaStreamSource.connect(this.processor);
+		};
+		
+		const fail = (e) => {
+			console.log('start momentary fail');
+			debugger;
+		};
+		
+		navigator.getUserMedia(
+			{
+				video: false,
+				audio: true
+			}, success, fail);
+	}
+	
+	stopRecording() {
+		if (this.mediaStreamSource && this.processor) {
+			this.mediaStreamSource.disconnect(this.processor);
+		}
+		if (this.processor) {
+			this.processor.shutdown();
+		}
+		if (this.audioContext) {
+			this.audioContext.close();
+		}
 	}
 	
 	startMomentary = e => {
@@ -120,7 +160,8 @@ class App extends Component {
 		this.setState({
 			momentary: true,
 			momentaryStart: new Date().getTime(),
-			momentaryTime: 0
+			momentaryTime: 0,
+			continuousTime: 0
 		}, () => {
 			
 			this.momentaryInterval = setInterval(() => {
@@ -128,28 +169,7 @@ class App extends Component {
 				this.setState({momentaryTime});
 			}, 100);
 			
-			const audioContext = new AudioContext({
-				sampleRate: 16000
-			});
-			this.audioContext = audioContext;
-			
-			const success = (stream) => {
-				console.log('startRecording success');
-				this.mediaStreamSource = audioContext.createMediaStreamSource(stream);
-				this.processor = this.createAudioProcessor(audioContext);
-				this.mediaStreamSource.connect(this.processor);
-			};
-			
-			const fail = (e) => {
-				console.log('startRecording fail');
-				debugger;
-			};
-			
-			navigator.getUserMedia(
-				{
-					video: false,
-					audio: true
-				}, success, fail);
+			this.startRecording('momentary');
 		});
 	};
 	
@@ -161,17 +181,7 @@ class App extends Component {
 			momentaryStop: new Date().getTime()
 		}, () => {
 			clearInterval(this.momentaryInterval);
-			
-			if (this.mediaStreamSource && this.processor) {
-				this.mediaStreamSource.disconnect(this.processor);
-			}
-			if (this.processor) {
-				this.processor.shutdown();
-			}
-			if (this.audioContext) {
-				this.audioContext.close();
-			}
-			
+			this.stopRecording();
 		});
 	};
 	
@@ -182,17 +192,23 @@ class App extends Component {
 		};
 		if (continuous) {
 			c.continuousStart = new Date().getTime();
+			c.momentaryTime = 0;
 			c.continuousTime = 0;
 			this.continuousInterval = setInterval(() => {
 				let continuousTime = new Date().getTime() - this.state.continuousStart;
 				this.setState({continuousTime});
 			}, 100);
+			this.setState(c, () => {
+				this.startRecording('continuous');
+			});
 		}
 		else {
 			c.continuousStop = new Date().getTime();
 			clearInterval(this.continuousInterval);
+			this.setState(c, () => {
+				this.stopRecording();
+			});
 		}
-		this.setState(c);
 	}
 }
 

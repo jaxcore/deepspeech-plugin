@@ -1,8 +1,8 @@
 ## Install
 
-'''
+```
 yarn install
-'''
+```
 
 ### Run Client
 

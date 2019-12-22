@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import io from 'socket.io-client';
 
+// convert microphone float32 audio data to a pcm16 buffer to stream over websocket
 const pcmBuffer = function (data) {
 	let audio = new DataView(new ArrayBuffer(data.length * 2));
 	for (let i = 0; i < data.length; i++) {
@@ -16,17 +17,14 @@ class App extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			momentary: false,
-			momentaryStart: 0,
-			momentaryStop: 0,
-			momentaryTime: 0,
-			continuous: false,
-			continuousStart: 0,
-			continuousStop: 0,
-			continuousTime: 0,
+			recording: false,
+			recordingStart: 0,
+			recordingTime: 0,
 			recognitionOutput: []
 		};
-		
+	}
+	
+	componentDidMount() {
 		let recognitionCount = 0;
 		
 		this.socket = io.connect('http://localhost:4000', {});
@@ -50,34 +48,26 @@ class App extends Component {
 	}
 	
 	render() {
-		return (
-			<div className="App">
-				<div>
-					<button disabled={this.state.continuous} onMouseDown={this.startMomentary}
-							onMouseUp={this.stopMomentary} onMouseOut={this.stopMomentary}>
-						Record Momentarily
-					</button>
-					<button disabled={this.state.momentary} onClick={this.clickContinuous}>
-						{this.state.continuous ? 'Stop Continuous Recording' : 'Start Continuous Recording'}
-					</button>
-				</div>
-				{this.renderMomentary()}
-				{this.renderContinuous()}
-				{this.renderRecognitionOutput()}
+		return (<div className="App">
+			<div>
+				<button disabled={this.state.recording} onClick={this.startRecording}>
+					Start Recording
+				</button>
+				
+				<button disabled={!this.state.recording} onClick={this.stopRecording}>
+					Stop Recording
+				</button>
+				
+				{this.renderTime()}
 			</div>
-		);
-	}
-	
-	renderMomentary() {
-		return (<div>
-			Momentary Recording {Math.round(this.state.momentaryTime / 100) / 10}s
+			{this.renderRecognitionOutput()}
 		</div>);
 	}
 	
-	renderContinuous() {
-		return (<div>
-			Continuous Recording {Math.round(this.state.continuousTime / 100) / 10}s
-		</div>);
+	renderTime() {
+		return (<span>
+			{(Math.round(this.state.recordingTime / 100) / 10).toFixed(1)}s
+		</span>);
 	}
 	
 	renderRecognitionOutput() {
@@ -88,27 +78,19 @@ class App extends Component {
 		</ul>)
 	}
 	
-	createAudioProcessor(audioContext, eventType) {
+	createAudioProcessor(audioContext) {
 		var processor = audioContext.createScriptProcessor(512);
 		processor.onaudioprocess = (event) => {
 			var data = event.inputBuffer.getChannelData(0);
 			var buffer = pcmBuffer(data);
-
-			if (this.momentaryStarted) {
-				this.momentaryStarted = false;
-				this.socket.emit(eventType+'-begin', buffer);
-			}
-			else {
-				this.socket.emit(eventType+'-data', buffer);
-			}
+			
+			// send microphone audio data to the server
+			this.socket.emit('microphone-data', buffer);
 		};
 		
 		processor.shutdown = () => {
 			processor.disconnect();
 			this.onaudioprocess = null;
-			setTimeout(() => {
-				this.socket.emit(eventType+'-end');
-			},100);
 		};
 		
 		processor.connect(audioContext.destination);
@@ -116,17 +98,33 @@ class App extends Component {
 		return processor;
 	}
 	
-	startRecording(eventType) {
-		const audioContext = new AudioContext({
+	startRecording = e => {
+		if (!this.state.recording) {
+			this.recordingInterval = setInterval(() => {
+				let recordingTime = new Date().getTime() - this.state.recordingStart;
+				this.setState({recordingTime});
+			}, 100);
+			
+			this.setState({
+				recording: true,
+				recordingStart: new Date().getTime(),
+				recordingTime: 0
+			}, () => {
+				this.startMicrophone();
+			});
+		}
+	};
+	
+	
+	startMicrophone() {
+		this.audioContext = new AudioContext({
 			sampleRate: 16000
 		});
 		
-		this.audioContext = audioContext;
-		
 		const success = (stream) => {
 			console.log('start momentary success');
-			this.mediaStreamSource = audioContext.createMediaStreamSource(stream);
-			this.processor = this.createAudioProcessor(audioContext, eventType);
+			this.mediaStreamSource = this.audioContext.createMediaStreamSource(stream);
+			this.processor = this.createAudioProcessor(this.audioContext);
 			this.mediaStreamSource.connect(this.processor);
 		};
 		
@@ -142,7 +140,18 @@ class App extends Component {
 			}, success, fail);
 	}
 	
-	stopRecording() {
+	stopRecording = e => {
+		if (this.state.recording) {
+			clearInterval(this.recordingInterval);
+			this.setState({
+				recording: false
+			}, () => {
+				this.stopMicrophone();
+			});
+		}
+	};
+	
+	stopMicrophone() {
 		if (this.mediaStreamSource && this.processor) {
 			this.mediaStreamSource.disconnect(this.processor);
 		}
@@ -154,62 +163,6 @@ class App extends Component {
 		}
 	}
 	
-	startMomentary = e => {
-		this.momentaryStarted = true;
-		
-		this.setState({
-			momentary: true,
-			momentaryStart: new Date().getTime(),
-			momentaryTime: 0,
-			continuousTime: 0
-		}, () => {
-			
-			this.momentaryInterval = setInterval(() => {
-				let momentaryTime = new Date().getTime() - this.state.momentaryStart;
-				this.setState({momentaryTime});
-			}, 100);
-			
-			this.startRecording('momentary');
-		});
-	};
-	
-	stopMomentary = e => {
-		if (!this.state.momentary) return;
-		
-		this.setState({
-			momentary: false,
-			momentaryStop: new Date().getTime()
-		}, () => {
-			clearInterval(this.momentaryInterval);
-			this.stopRecording();
-		});
-	};
-	
-	clickContinuous = e => {
-		let continuous = !this.state.continuous;
-		const c = {
-			continuous,
-		};
-		if (continuous) {
-			c.continuousStart = new Date().getTime();
-			c.momentaryTime = 0;
-			c.continuousTime = 0;
-			this.continuousInterval = setInterval(() => {
-				let continuousTime = new Date().getTime() - this.state.continuousStart;
-				this.setState({continuousTime});
-			}, 100);
-			this.setState(c, () => {
-				this.startRecording('continuous');
-			});
-		}
-		else {
-			c.continuousStop = new Date().getTime();
-			clearInterval(this.continuousInterval);
-			this.setState(c, () => {
-				this.stopRecording();
-			});
-		}
-	}
 }
 
 export default App;

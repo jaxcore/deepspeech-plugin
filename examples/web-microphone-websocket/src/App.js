@@ -7,6 +7,7 @@ class App extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
+			connected: false,
 			recording: false,
 			recordingStart: 0,
 			recordingTime: 0,
@@ -18,29 +19,31 @@ class App extends Component {
 		let recognitionCount = 0;
 		
 		this.socket = io.connect('http://localhost:4000', {});
-		this.socket.once('connect', () => {
+		
+		this.socket.on('connect', () => {
 			console.log('socket connected');
-			
-			this.socket.on('server-ready', () => {
-				console.log('server-ready');
-			});
-			
-			this.socket.on('recognize', (results) => {
-				console.log('recognized:', results);
-				const {recognitionOutput} = this.state;
-				results.id = recognitionCount++;
-				recognitionOutput.unshift(results);
-				this.setState({recognitionOutput});
-			});
-			
-			this.socket.emit('client-ready');
+			this.setState({connected: true});
+		});
+		
+		this.socket.on('disconnect', () => {
+			console.log('socket disconnected');
+			this.setState({connected: false});
+			this.stopRecording();
+		});
+		
+		this.socket.on('recognize', (results) => {
+			console.log('recognized:', results);
+			const {recognitionOutput} = this.state;
+			results.id = recognitionCount++;
+			recognitionOutput.unshift(results);
+			this.setState({recognitionOutput});
 		});
 	}
 	
 	render() {
 		return (<div className="App">
 			<div>
-				<button disabled={this.state.recording} onClick={this.startRecording}>
+				<button disabled={!this.state.connected || this.state.recording} onClick={this.startRecording}>
 					Start Recording
 				</button>
 				
@@ -76,7 +79,9 @@ class App extends Component {
 		let downsampler = new Worker(DOWNSAMPLING_WORKER);
 		downsampler.postMessage({command: "init", inputSampleRate: sampleRate});
 		downsampler.onmessage = (e) => {
-			this.socket.emit('microphone-data', e.data.buffer);
+			if (this.socket.connected) {
+				this.socket.emit('microphone-data', e.data.buffer);
+			}
 		};
 		
 		processor.onaudioprocess = (event) => {
@@ -116,6 +121,7 @@ class App extends Component {
 		
 		const success = (stream) => {
 			console.log('started recording');
+			this.mediaStream = stream;
 			this.mediaStreamSource = this.audioContext.createMediaStreamSource(stream);
 			this.processor = this.createAudioProcessor(this.audioContext, this.mediaStreamSource);
 			this.mediaStreamSource.connect(this.processor);
@@ -143,6 +149,9 @@ class App extends Component {
 	
 	stopRecording = e => {
 		if (this.state.recording) {
+			if (this.socket.connected) {
+				this.socket.emit('microphone-reset');
+			}
 			clearInterval(this.recordingInterval);
 			this.setState({
 				recording: false
@@ -153,8 +162,11 @@ class App extends Component {
 	};
 	
 	stopMicrophone() {
-		if (this.mediaStreamSource && this.processor) {
-			this.mediaStreamSource.disconnect(this.processor);
+		if (this.mediaStream) {
+			this.mediaStream.getTracks()[0].stop();
+		}
+		if (this.mediaStreamSource) {
+			this.mediaStreamSource.disconnect();
 		}
 		if (this.processor) {
 			this.processor.shutdown();

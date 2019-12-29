@@ -1,19 +1,20 @@
-Jaxcore Speech
+Jaxcore DeepSpeech Plugin
 =======
 
-Jaxcore Speech is an open source JavaScript voice control system, based on Mozilla
-[DeepSpeech](https://github.com/mozilla/DeepSpeech) (speech-to-text), [NodeVAD](https://github.com/snirpo/node-vad) (voice activity detection),
-and [RobotJS](https://github.com/octalmage/robotjs).
 
-Jaxcore Speech can run independently, or as a plugin for [Jaxcore](https://jaxcore.com), a cybernetic control system which provides the ability to control computers (mouse, keyboard, volume), media software (Kodi), Chromcast, Sonos and other network devices and applications.
+Jaxcore is an open source cybernetic control system with support for  
+This plugin connects [Mozilla DeepSpeech](https://github.com/mozilla/DeepSpeech) (a speech recognition engine)
+to [Jaxcore](https://jaxcore.com) (a cybernetic control system).
 
-Using Jaxcore and Jaxcore Speech it is easy to write "Alexa-like" interactive voice assistants, smart-home controls, or add science-fiction like voice/motion control to web applications and games.  Run everything privately on your local computer without any 3rd party cloud computing services required.
+Using Jaxcore with the DeepSpeech plugin it is easy to write "Alexa-like" interactive voice assistants,
+smart-home controls, and create science-fiction like voice-controlled web applications and games.  
+Run everything privately on your local computer without any 3rd party cloud computing services required.
 
 ## Install
 
 ```
-git clone https://github.com/jaxcore/jaxcore-speech
-cd jaxcore-speech
+git clone https://github.com/jaxcore/deepspeech-plugin
+cd deepspeech-plugin
 npm install
 npm install git+https://github.com/jaxcore/jaxcore#master
 ```
@@ -42,7 +43,7 @@ node examples/node-microphone/momentary.js
 
 ## Hello World "speech adapter"
 
-See the [hello-world-adapter](https://github.com/jaxcore/jaxcore-speech/tree/master/examples/hello-world-adapter) for a simple voice control script which listens for "hello world" and prints to the console.  On MacOSX it uses the "say" command line to respond with synthesized speech.
+See the [hello-world-adapter](https://github.com/jaxcore/deepspeech-plugin/tree/master/examples/hello-world-adapter) for a simple voice control script which listens for "hello world" and prints to the console.  On MacOSX it uses the "say" command line to respond with synthesized speech.
 
 Copy and modify this script to use your voice to control ***anything your want***.
 
@@ -53,7 +54,7 @@ const {Adapter} = require('jaxcore');
 const jaxcore = new Jaxcore();
 
 // import the Jaxcore Speech plugin
-const SpeechPlugin = require('../../index'); // or use require('jaxcore-speech');
+const SpeechPlugin = require('../../index'); // or use require('jaxcore-deepspeech-plugin');
 jaxcore.addPlugin(SpeechPlugin);
 
 // import spawn to call "say" command line on MacOSX

@@ -1,19 +1,9 @@
 import React, {Component} from 'react';
 import io from 'socket.io-client';
 
-// convert microphone float32 audio data to a pcm16 buffer to stream over websocket
-const pcmBuffer = function (data) {
-	let audio = new DataView(new ArrayBuffer(data.length * 2));
-	for (let i = 0; i < data.length; i++) {
-		let multiplier = data[i] < 0 ? 0x8000 : 0x7fff;
-		let value = (data[i] * multiplier) | 0;
-		audio.setInt16(i * 2, value, true);
-	}
-	return Buffer.from(audio.buffer);
-};
+const DOWNSAMPLING_WORKER = './downsampling_worker.js';
 
 class App extends Component {
-	
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -78,14 +68,20 @@ class App extends Component {
 		</ul>)
 	}
 	
-	createAudioProcessor(audioContext) {
-		var processor = audioContext.createScriptProcessor(512);
+	createAudioProcessor(audioContext, audioSource) {
+		let processor = audioContext.createScriptProcessor(4096, 1, 1);
+		
+		const sampleRate = audioSource.context.sampleRate;
+		
+		let downsampler = new Worker(DOWNSAMPLING_WORKER);
+		downsampler.postMessage({command: "init", inputSampleRate: sampleRate});
+		downsampler.onmessage = (e) => {
+			this.socket.emit('microphone-data', e.data.buffer);
+		};
+		
 		processor.onaudioprocess = (event) => {
 			var data = event.inputBuffer.getChannelData(0);
-			var buffer = pcmBuffer(data);
-			
-			// send microphone audio data to the server
-			this.socket.emit('microphone-data', buffer);
+			downsampler.postMessage({command: "process", inputFrame: data});
 		};
 		
 		processor.shutdown = () => {
@@ -115,29 +111,34 @@ class App extends Component {
 		}
 	};
 	
-	
 	startMicrophone() {
-		this.audioContext = new AudioContext({
-			sampleRate: 16000
-		});
+		this.audioContext = new AudioContext();
 		
 		const success = (stream) => {
-			console.log('start momentary success');
+			console.log('started recording');
 			this.mediaStreamSource = this.audioContext.createMediaStreamSource(stream);
-			this.processor = this.createAudioProcessor(this.audioContext);
+			this.processor = this.createAudioProcessor(this.audioContext, this.mediaStreamSource);
 			this.mediaStreamSource.connect(this.processor);
 		};
 		
 		const fail = (e) => {
-			console.log('start momentary fail');
-			debugger;
+			console.error('recording failure', e);
 		};
 		
-		navigator.getUserMedia(
-			{
+		if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+			navigator.mediaDevices.getUserMedia({
+				video: false,
+				audio: true
+			})
+			.then(success)
+			.catch(fail);
+		}
+		else {
+			navigator.getUserMedia({
 				video: false,
 				audio: true
 			}, success, fail);
+		}
 	}
 	
 	stopRecording = e => {

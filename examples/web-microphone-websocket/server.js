@@ -3,15 +3,15 @@ const socketIO = require('socket.io');
 const DeepSpeech = require('deepspeech');
 const VAD = require('node-vad');
 
-let DEEPSPEECH_MODEL = __dirname + '/../../deepspeech-0.6.0-models'; // path to deepspeech english model directory
+let DEEPSPEECH_MODEL = __dirname + '/deepspeech-0.6.0-models'; // path to deepspeech english model directory
 
-let SILENCE_THRESHOLD = 100; // how many milliseconds of inactivity before processing the audio
+let SILENCE_THRESHOLD = 200; // how many milliseconds of inactivity before processing the audio
 
 const SERVER_PORT = 4000; // websocket server port
 
-const VAD_MODE = VAD.Mode.NORMAL;
+// const VAD_MODE = VAD.Mode.NORMAL;
 // const VAD_MODE = VAD.Mode.LOW_BITRATE;
-// const VAD_MODE = VAD.Mode.AGGRESSIVE;
+const VAD_MODE = VAD.Mode.AGGRESSIVE;
 // const VAD_MODE = VAD.Mode.VERY_AGGRESSIVE;
 const vad = new VAD(VAD_MODE);
 
@@ -158,6 +158,7 @@ const app = http.createServer(function (req, res) {
 });
 
 const io = socketIO(app, {});
+io.set('origins', '*:*');
 
 io.on('connection', function(socket) {
 	console.log('client connected');
@@ -168,6 +169,7 @@ io.on('connection', function(socket) {
 	
 	socket.on('client-ready', function(data) {
 		console.log('client-ready', data);
+		socket.emit('server-ready');
 	});
 	
 	createStream();
@@ -177,11 +179,10 @@ io.on('connection', function(socket) {
 			socket.emit('recognize', results);
 		});
 	});
-	
-	socket.emit('server-ready');
 });
 
 app.listen(SERVER_PORT, 'localhost', () => {
 	console.log('Socket server listening on:', SERVER_PORT);
 });
 
+module.exports = app;

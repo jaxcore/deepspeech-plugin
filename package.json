@@ -2,7 +2,7 @@
   "name": "jaxcore-deepspeech-plugin",
   "version": "0.0.3",
   "description": "Mozilla DeepSpeech speech recognition plugin for Jaxcore",
-  "main": "index.js",
+  "main": "lib/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "copy-examples": "rm -rf docs/examples/* && mv examples/web-demo/build/ docs/examples/web-demo && mv examples/web-vocab-tester/build/ docs/examples/web-vocab-tester"

@@ -1,7 +1,8 @@
-module.exports = require('./lib/speech');
-module.exports.services = {
-	speech: {
-		service: require('./lib/speech-service'),
-		storeType: 'service'
+module.exports = {
+	services: {
+		deepspeech: {
+			service: require('./lib/deepspeech-service'),
+			storeType: 'service'
+		}
 	}
 };

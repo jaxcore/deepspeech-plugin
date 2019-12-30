@@ -1,12 +1,11 @@
 Jaxcore DeepSpeech Plugin
 =======
 
+Jaxcore is an open source cybernetic control system.
+This plugin connects [Mozilla DeepSpeech](https://github.com/mozilla/DeepSpeech)
+to [Jaxcore](https://jaxcore.com) to enable speech recognition support.
 
-Jaxcore is an open source cybernetic control system with support for  
-This plugin connects [Mozilla DeepSpeech](https://github.com/mozilla/DeepSpeech) (a speech recognition engine)
-to [Jaxcore](https://jaxcore.com) (a cybernetic control system).
-
-Using Jaxcore with the DeepSpeech plugin it is easy to write "Alexa-like" interactive voice assistants,
+Using Jaxcore with this DeepSpeech plugin it is easy to write "Alexa-like" interactive voice assistants,
 smart-home controls, and create science-fiction like voice-controlled web applications and games.  
 Run everything privately on your local computer without any 3rd party cloud computing services required.
 
@@ -26,6 +25,8 @@ wget https://github.com/mozilla/DeepSpeech/releases/download/v0.6.0/deepspeech-0
 tar xfvz deepspeech-0.6.0-models.tar.gz
 rm deepspeech-0.6.0-models.tar.gz
 ```
+
+All the examples require the DeepSpeech model to be at the root of the project.
 
 ## Run the microphone test examples:
 

@@ -1,11 +1,13 @@
-let MODEL_NAME = process.argv[2];
-let DEEPSPEECH_MODEL = process.argv[3];
-console.log('DEEPSPEECH_MODEL', MODEL_NAME, DEEPSPEECH_MODEL);
-
+const http = require('http');
+const socketIO = require('socket.io');
 const DeepSpeech = require('deepspeech');
 const VAD = require('node-vad');
 
+let DEEPSPEECH_MODEL = __dirname + '/deepspeech-0.6.0-models'; // path to deepspeech english model directory
+
 let SILENCE_THRESHOLD = 200; // how many milliseconds of inactivity before processing the audio
+
+const SERVER_PORT = 4000; // websocket server port
 
 // const VAD_MODE = VAD.Mode.NORMAL;
 // const VAD_MODE = VAD.Mode.LOW_BITRATE;
@@ -28,16 +30,14 @@ let englishModel = createModel(DEEPSPEECH_MODEL, {
 	LM_BETA: 1.85
 });
 
-let modelStream = null;
+let modelStream;
 let recordedChunks = 0;
 let silenceStart = null;
 let recordedAudioLength = 0;
 let endTimeout = null;
 let silenceBuffers = [];
 
-function processAudioStream(data, callback) {
-	// if (!modelStream) createStream();
-	// timeout after 1s of inactivity
+function processMicrophone(data, callback) {
 	vad.processAudio(data, 16000).then((res) => {
 		switch (res) {
 			case VAD.Event.ERROR:
@@ -54,15 +54,15 @@ function processAudioStream(data, callback) {
 				break;
 		}
 	});
+	
+	// timeout after 1s of inactivity
 	clearTimeout(endTimeout);
 	endTimeout = setTimeout(function() {
-		console.log('timeout');
-		resetAudioStream();
+		resetMicrophone();
 	},1000);
 }
 
-function endAudioStream(callback) {
-	clearTimeout(endTimeout);
+function endMicrophone(callback) {
 	let results = intermediateDecode();
 	if (results) {
 		if (callback) {
@@ -71,7 +71,7 @@ function endAudioStream(callback) {
 	}
 }
 
-function resetAudioStream() {
+function resetMicrophone() {
 	clearTimeout(endTimeout);
 	console.log('[reset]');
 	intermediateDecode(); // ignore results
@@ -83,7 +83,7 @@ function processSilence(data, callback) {
 	if (recordedChunks > 0) { // recording is on
 		process.stdout.write('-'); // silence detected while recording
 		
-		if (data) feedAudioContent(data);
+		feedAudioContent(data);
 		
 		if (silenceStart === null) {
 			silenceStart = new Date().getTime();
@@ -104,7 +104,7 @@ function processSilence(data, callback) {
 	}
 	else {
 		process.stdout.write('.'); // silence detected while not recording
-		if (data) bufferSilence(data);
+		bufferSilence(data);
 	}
 }
 
@@ -148,11 +148,6 @@ function processVoice(data) {
 }
 
 function createStream() {
-	if (modelStream) {
-		console.error('modelStream exists');
-		process.exit();
-		return;
-	}
 	modelStream = englishModel.createStream();
 	recordedChunks = 0;
 	recordedAudioLength = 0;
@@ -183,13 +178,6 @@ function finishStream() {
 
 function intermediateDecode() {
 	let results = finishStream();
-	if (modelStream) {
-		modelStream = null;
-		if (modelStream) {
-			console.log('what');
-			process.exit();
-		}
-	}
 	createStream();
 	return results;
 }
@@ -199,51 +187,45 @@ function feedAudioContent(chunk) {
 	englishModel.feedAudioContent(modelStream, chunk.slice(0, chunk.length / 2));
 }
 
-createStream();
-
-process.on('message', function (data) {
-	if (data.data.length === 1) {
-		let msg = new Buffer.from([data.data[0]]).toString('ascii');
-		if (msg === 'B') {
-			console.log('begin recording');
-		}
-		else if (msg === 'E') {
-			console.log('end recording');
-		}
-		else if (msg === 'X') {
-			resetAudioStream();
-		}
-		else if (msg === 'Z') {
-			// console.log('end stream');
-			endAudioStream((results) => {
-				console.log('results', results);
-			});
-		}
-	}
-	else if (data.data.length > 1) {
-		let audio = Buffer.from(data);
-		processAudioStream(audio, (results) => {
-			process.send({
-				recognize: {
-					text: results.text,
-					stats: {
-						recogTime: results.recogTime,
-						audioLength: results.audioLength,
-						model: MODEL_NAME
-					}
-				}
-			});
-		});
-	}
+const app = http.createServer(function (req, res) {
+	res.writeHead(200);
+	res.write('web-microphone-websocket');
+	res.end();
 });
 
-try {
-	console.log('deepspeech-process ready...');
-	process.send({
-		ready: true
+const io = socketIO(app, {});
+io.set('origins', '*:*');
+
+io.on('connection', function(socket) {
+	console.log('client connected');
+	
+	socket.once('disconnect', () => {
+		console.log('client disconnected');
 	});
-}
-catch(e) {
-	console.log('error', e);
-	process.exit();
-}
+	
+	createStream();
+	
+	socket.on('microphone-data', function(data) {
+		system.out.println('microphone-data:', data);
+		// processMicrophone(data, (results) => {
+		// 	socket.emit('recognize', results);
+		// });
+	});
+	
+	socket.on('microphone-end', function() {
+		system.out.println('microphone-end');
+		// endMicrophone((results) => {
+		// 	socket.emit('recognize', results);
+		// });
+	});
+	
+	socket.on('microphone-reset', function() {
+		resetMicrophone();
+	});
+});
+
+app.listen(SERVER_PORT, 'localhost', () => {
+	console.log('Socket server listening on:', SERVER_PORT);
+});
+
+module.exports = app;

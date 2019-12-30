@@ -113,7 +113,6 @@ class App extends Component {
 			this.setState({
 				recording: false
 			}, () => {
-				// this.stopMicrophone();
 				bumblebee.stop();
 			});
 		}

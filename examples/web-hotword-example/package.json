@@ -2,7 +2,7 @@
   "name": "bumblebee-deepspeech-example",
   "version": "0.0.4",
   "dependencies": {
-    "bumblebee-hotword": "0.0.4",
+    "bumblebee-hotword": "0.0.5",
     "deepspeech": "^0.6.0",
     "jaxcore-say": "^0.0.4",
     "node-vad": "^1.1.4",

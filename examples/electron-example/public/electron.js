@@ -10,15 +10,37 @@ const isDev = require('electron-is-dev');
 
 const Jaxcore = require('jaxcore');
 const jaxcore = new Jaxcore();
-// const DeepSpeechPlugin = require('../../');
 const DeepSpeechPlugin = require('jaxcore-deepspeech-plugin');
 jaxcore.addPlugin(DeepSpeechPlugin);
 
-const MODEL_PATH = __dirname + '/../../../deepspeech-0.6.0-models'; // path to deepspeech model is relative to the /public directory
+// path to deepspeech model is relative to the /public directory
+const MODEL_PATH = __dirname + '/../../../deepspeech-0.6.0-models';
 
 if (isDev) process.env.NODE_ENV = 'dev';
 
 let mainWindow;
+
+const executeJavaScript = (win, codeStr, callback) => {
+	// BEWARE:
+	// executing "codeStr" is potentially harmful
+	// it is recommented to only call functions with parameters encoded as JSON using JSON.stringify()
+	if (win.webContents && win.webContents.executeJavaScript) {
+		try {
+			win.webContents.executeJavaScript(codeStr).then((result) => {
+				callback(result);
+			}).catch((e) => {
+				console.error('executeJavaScript', e);
+			});
+		} catch (e) {
+			console.error(e);
+			process.exit();
+		}
+	}
+	else {
+		console.error('no webContents');
+		process.exit();
+	}
+};
 
 function createWindow() {
 	mainWindow = new BrowserWindow({
@@ -28,7 +50,7 @@ function createWindow() {
 			// allow code inside this window to use use native window.open()
 			nativeWindowOpen: true,
 			nodeIntegrationInWorker: true,
-			preload: __dirname+'/preload.js'
+			preload: __dirname + '/preload.js'
 		}
 	});
 	
@@ -36,8 +58,8 @@ function createWindow() {
 	
 	if (isDev) {
 		// Open the DevTools.
-		//BrowserWindow.addDevToolsExtension('<location to your react chrome extension>');
-		mainWindow.webContents.openDevTools();
+		// BrowserWindow.addDevToolsExtension('<location to your react chrome extension>');
+		// mainWindow.webContents.openDevTools();
 	}
 	
 	mainWindow.on('closed', () => mainWindow = null);
@@ -48,12 +70,6 @@ function createWindow() {
 		mainWindow.hide();
 	});
 	
-	// ipcMain.on('stream-data', (event, data) => {
-	// 	// console.log('stream-data', data);
-	// 	// event.returnValue = true;
-	//
-	// });
-	
 	ipcMain.on('client-ready', (event, arg) => {
 		event.reply('electron-ready');
 	});
@@ -62,23 +78,29 @@ function createWindow() {
 	jaxcore.startService('deepspeech', {
 		modelName: 'english',
 		modelPath: MODEL_PATH,
-	}, function(err, deepspeech) {
+	}, function (err, deepspeech) {
 		console.log('deepspeech service ready');
 		
-		deepspeech.on('recognize', function(text, stats) {
+		deepspeech.on('recognize', function (text, stats) {
 			console.log('recognize', text, stats);
+			
+			// encode deepspeech results as JSON to be sent to the mainWindow
+			let code = 'deepspeechResults(' + JSON.stringify(text) + ',' + JSON.stringify(stats) + ')';
+			
+			executeJavaScript(mainWindow, code, function () {
+				console.log('exec code complete');
+			});
 		});
 		
 		ipcMain.on('stream-data', (event, data) => {
 			deepspeech.streamData(data);
 		});
 		
-		// startSocketServer(deepspeech);
 	});
 	
 }
 
-app.on('ready', function() {
+app.on('ready', function () {
 	createWindow();
 });
 
@@ -87,10 +109,3 @@ app.on('window-all-closed', () => {
 		app.quit();
 	}
 });
-
-// app.on('activate', () => {
-// 	if (mainWindow === null) {
-// 		console.log('ACTIVATE?')
-// 		// createWindow();
-// 	}
-// });

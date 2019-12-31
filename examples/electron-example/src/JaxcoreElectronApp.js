@@ -1,90 +1,65 @@
 import React, {Component} from 'react';
 import BumbleBee, {SpectrumAnalyser} from 'bumblebee-hotword';
-// import Say from 'jaxcore-say';
 
 const ipcRenderer = window.ipcRenderer;
 
 let bumblebee = new BumbleBee();
 bumblebee.setWorkersPath('./bumblebee-workers');
-bumblebee.addHotword('bumblebee', require('bumblebee-hotword/hotwords/bumblebee'));
+bumblebee.addHotword('bumblebee');
+bumblebee.addHotword('grasshopper');
+bumblebee.addHotword('hey_edison');
+bumblebee.addHotword('porcupine');
+bumblebee.addHotword('terminator');
 
-// Say.setWorkers({
-// 	'espeak': 'webworkers/espeak-all-worker.js',
-// 	'sam': 'webworkers/sam-worker.js'
-// });
-//
-// const voices = {
-// 	jack: new Say({
-// 		language: 'en',
-// 		profile: 'Jack'
-// 	})
-// };
+window.deepspeechResults = function () {};
 
 class JaxcoreDeepSpeechElectronApp extends Component {
 	constructor() {
 		super();
-		
 		this.state = {
-			started: false
+			started: false,
+			output: []
 		};
-		
-		// window.jaxcoreStarted = () => {
-		// 	console.log('received window.jaxcoreStarted()');
-		// 	this.setState({
-		// 		appStarted: true
-		// 	}, () => {
-		// 		// debugger;
-		// 		ipcRenderer.send('ui-ready');
-		// 		// this.start();
-		// 	});
-		// 	// debugger;
-		// 	return 'acknowledged';
-		// };
-		
-		// ipcRenderer.on('ui-begin', (arg) => {
-		// 	console.log('ui begin', arg);
-		// 	this.setState({
-		// 		appStarted: true
-		// 	}, () => {
-		// 		// debugger;
-		// 		this.start();
-		//
-		// 	});
-		// });
-		
-	}
-	
-	componentWillMount() {
 	}
 	
 	componentDidMount() {
 		// ensure electron IPC is working:
-		// let readyInterval = setInterval(() => {
 		setTimeout(() => {
 			console.log('send client-ready');
 			window.ipcRenderer.send('client-ready');
 		}, 1);
 		ipcRenderer.on('electron-ready', () => {
-			// clearInterval(readyInterval);
 			console.log('electron ready');
-			
 			this.start();
 		});
+		
+		// receive speech recognition result by a synchronous message from public/electron.js
+		window.deepspeechResults = (text, stats) => {
+			console.log('deepspeech results', text, stats);
+			// debugger;
+			const {output} = this.state;
+			output.unshift({
+				text
+			});
+			this.setState({output});
+		};
 	}
 	
 	start() {
-		
 		bumblebee.on('hotword', (hotword) => {
 			console.log('hotword', hotword);
-			// debugger;
-			// this.recognizeHotword(hotword);
+			const {output} = this.state;
+			output.unshift({
+				hotword
+			});
+			this.setState({output});
 		});
-
+		
 		bumblebee.on('data', (data) => {
 			// console.log('data', data.buffer);
 			ipcRenderer.send('stream-data', data);
 		});
-
+		
 		bumblebee.on('analyser', (analyser) => {
 			console.log('analyser', analyser);
 			var canvas = document.getElementById('oscilloscope');
@@ -93,26 +68,44 @@ class JaxcoreDeepSpeechElectronApp extends Component {
 			// this.analyser.setBackgroundColor('#222');
 			this.analyser.start();
 		});
-
+		
 		bumblebee.start();
 		
 		this.setState({started: true});
 	}
 	
-	
 	render() {
 		if (!this.state.started) {
-			return 'starting....';
+			return 'loading...';
 		}
 		return (<div className="App">
-			<h3>Jaxcore Electron Example</h3>
+			<h3>DeepSpeech Electron Example</h3>
 			
 			<div>
-				<canvas id="oscilloscope" width="800" height="100" />
+				Active Hotwords: "bumblebee", "grasshopper", "hey edison", "porcupine", "terminator"
 			</div>
 			
+			<div>
+				<canvas id="oscilloscope" width="480" height="100"/>
+			</div>
 			
+			<ul>
+				{
+					this.state.output.map((line, id) => {
+						return this.renderOutputLine(line, id)
+					})
+				}
+			</ul>
 		</div>);
+	}
+	
+	renderOutputLine(line, id) {
+		if (line.hotword) {
+			return (<li key={id}><strong>HOTWORD:</strong> {line.hotword}</li>);
+		}
+		else {
+			return (<li key={id}><strong>SPEECH:</strong> {line.text}</li>);
+		}
 	}
 }
 

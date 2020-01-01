@@ -33,15 +33,15 @@ rm deepspeech-0.6.0-models.tar.gz
 
 The examples provided will demonstrate the capabilities and limitations of the system, and provide a good place to start when writing your own "voice apps".  They come in 4 forms:
 
-#### 1) Headless NodeJS Examples
+#### 1) NodeJS Microphone Example (Headless)
 
-These listen to the system microphone directly (via the command line `sox` utility) and have no user interface:
+These examples run directly in NodeJS and have no user interfaces:
 
-- todo: need to get them working again
+- [node-microphone](https://github.com/jaxcore/deepspeech-plugin/tree/master/examples/node-microphone) - basic example of recording a microphone and streaming to DeepSpeech
 
 #### 2) Client-Server Examples
 
-These use a ReactJS client and NodeJS server to stream microphone audio from the browser to NodeJS:
+These use a ReactJS client to stream microphone audio from the browser to a NodeJS server running DeepSpeech:
 
 - [web-basic-example](https://github.com/jaxcore/deepspeech-plugin/tree/master/examples/web-basic-example) simple example of recording and speech recognition
 
@@ -69,7 +69,9 @@ const jaxcore = new Jaxcore();
 
 jaxcore.addPlugin(require('jaxcore-deepspeech-plugin'));
 
-// start the speech adapter (pay attention to the deepspeech modelPath location)
+// specify the DeepSpeech model location
+const MODEL_PATH = __dirname + "../../path/to/deepspeech/model";
+
 jaxcore.startService('deepspeech', {
 	modelName: 'english',
 	modelPath: MODEL_PATH,
@@ -82,13 +84,13 @@ jaxcore.startService('deepspeech', {
 });
 ```
 
-#### Microphone Stream Methods
+#### Microphone Recording Methods
 
 These methods are used to record a stream from the desktop system microphone (requires the `sox` command line tool):
 
 ```
-deepspeech.startRecording();  // todo
-deepspeech.stopRecording();   // todo
+deepspeech.startMicrophone();
+deepspeech.stopMicrophone();
 ```
 
 #### Audio Stream Methods

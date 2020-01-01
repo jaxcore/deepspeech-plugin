@@ -14,7 +14,6 @@ Run everything privately on your local computer without any 3rd party cloud comp
 git clone https://github.com/jaxcore/deepspeech-plugin
 cd deepspeech-plugin
 npm install
-npm install git+https://github.com/jaxcore/jaxcore#master
 ```
 
 ## Download DeepSpeech Pre-Trained english model:
@@ -59,3 +58,55 @@ These require running the [Jaxcore Desktop Server]() and [web browser extension]
 
 - todo
 
+
+## API
+
+#### Jaxcore Setup
+
+```
+const Jaxcore = require('jaxcore');
+const jaxcore = new Jaxcore();
+
+jaxcore.addPlugin(require('jaxcore-deepspeech-plugin'));
+
+// start the speech adapter (pay attention to the deepspeech modelPath location)
+jaxcore.startService('deepspeech', {
+	modelName: 'english',
+	modelPath: MODEL_PATH,
+}, function(err, deepspeech) {
+
+	/* the "deepspeech" object is a forked NodeJS process that runs DeepSpeech */
+
+	console.log('deepspeech ready', deepspeech);
+
+});
+```
+
+#### Microphone Stream Methods
+
+These methods are used to record a stream from the desktop system microphone (requires the `sox` command line tool):
+
+```
+deepspeech.startRecording();  // todo
+deepspeech.stopRecording();   // todo
+```
+
+#### Audio Stream Methods
+
+These methods are used to receive audio data from the browser or from an ElectronJS window:
+
+```
+deepspeech.streamData(data);  // stream audio buffer to deepspeech
+deepspeech.streamEnd();       // end the stream
+deepspeech.streamReset();     // end the stream and ignore deepspeech results
+```
+
+#### Events
+
+To receive the `speech-to-text` results from DeepSpeech:
+
+```
+deepspeech.on('recognize', (text, stats) => {
+    console('recognize', text, stats);
+});
+```

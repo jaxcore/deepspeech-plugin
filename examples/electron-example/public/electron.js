@@ -10,8 +10,7 @@ const isDev = require('electron-is-dev');
 
 const Jaxcore = require('jaxcore');
 const jaxcore = new Jaxcore();
-const DeepSpeechPlugin = require('jaxcore-deepspeech-plugin');
-jaxcore.addPlugin(DeepSpeechPlugin);
+jaxcore.addPlugin(require('jaxcore-deepspeech-plugin'));
 
 // path to deepspeech model is relative to the /public directory
 const MODEL_PATH = __dirname + '/../../../deepspeech-0.6.0-models';

@@ -4,9 +4,7 @@ const socketIO = require('socket.io');
 const Jaxcore = require('jaxcore');
 const jaxcore = new Jaxcore();
 
-// const DeepSpeechPlugin = require('jaxcore-deepspeech-plugin');
-const DeepSpeechPlugin = require('../../');
-jaxcore.addPlugin(DeepSpeechPlugin);
+jaxcore.addPlugin(require('jaxcore-deepspeech-plugin'));
 
 const SERVER_PORT = 4000; // websocket server port
 const MODEL_PATH = __dirname + '/../../deepspeech-0.6.0-models'; // path to deepspeech model

@@ -8,6 +8,7 @@
     "deepspeech": "^0.6.0",
     "electron-is-dev": "^1.1.0",
     "jaxcore": "0.0.1",
+    "jaxcore-deepspeech-plugin": "0.0.1",
     "lodash": "^4.17.15",
     "node-abi": "^2.12.0",
     "node-vad": "^1.1.4",

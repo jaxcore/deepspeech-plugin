@@ -11,10 +11,10 @@
   "license": "MIT",
   "dependencies": {
     "csvtojson": "^2.0.8",
-    "deepspeech": "^0.6.0",
     "memory-stream": "0.0.3",
     "node-audiorecorder": "^1.4.0",
     "node-vad": "^1.1.4",
-    "words-to-numbers": "^1.5.1"
+    "words-to-numbers": "^1.5.1",
+    "deepspeech": "^0.6.0"
   }
 }

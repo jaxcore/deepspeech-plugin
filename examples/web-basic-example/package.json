@@ -10,7 +10,7 @@
     "chai-http": "^4.3.0",
     "deepspeech": "^0.6.0",
     "defaults": "^1.0.3",
-    "jaxcore": "git+https://github.com/jaxcore/jaxcore.git#master",
+    "jaxcore": "0.0.1",
     "mocha": "^6.1.4",
     "node-vad": "^1.1.4",
     "react": "^16.12.0",

@@ -32,7 +32,7 @@ rm deepspeech-0.6.0-models.tar.gz
 
 ## Examples
 
-The examples provided will demonstrate the capabilities and limitations of the system, and provide a good place to start when writing your own "voice apps".  They come in 3 forms:
+The examples provided will demonstrate the capabilities and limitations of the system, and provide a good place to start when writing your own "voice apps".  They come in 4 forms:
 
 #### 1) Headless NodeJS Examples
 
@@ -49,7 +49,11 @@ These use a ReactJS client and NodeJS server to stream microphone audio from the
 
 - [web-hotword-example](https://github.com/jaxcore/deepspeech-plugin/tree/master/examples/web-hotword-example) advanced example using [BumbleBee-Hotword]() for hotword activation, audio visualization, and voice activated menus
 
-#### 3) Jaxcore Browser Extension Examples
+#### 3) Electron Example
+
+- [electron-example](https://github.com/jaxcore/deepspeech-plugin/tree/master/examples/electron-example) runs DeepSpeech and BumbleBee inside an ElectronJS desktop application
+
+#### 4) Jaxcore Browser Extension Examples
 
 These require running the [Jaxcore Desktop Server]() and [web browser extension]().  This method allows developers to write voice-enabled web applications using only client-side JavaScript.  The Jaxcore application provides the speech recognition support from outside the browser.
 

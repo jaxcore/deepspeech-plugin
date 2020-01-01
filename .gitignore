@@ -28,3 +28,6 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .~lock*
+
+old-readme.md
+lib/old-speech.js

@@ -56,7 +56,7 @@ class JaxcoreDeepSpeechElectronApp extends Component {
 		});
 		
 		bumblebee.on('data', (data) => {
-			// console.log('data', data.buffer);
+			// stream microphone audio to electron, which streams it to jaxcore-deepspeech-plugin, see public/electron.js
 			ipcRenderer.send('stream-data', data);
 		});
 		
@@ -64,8 +64,8 @@ class JaxcoreDeepSpeechElectronApp extends Component {
 			console.log('analyser', analyser);
 			var canvas = document.getElementById('oscilloscope');
 			this.analyser = new SpectrumAnalyser(analyser, canvas);
-			// this.analyser.setLineColor('#fff');
-			// this.analyser.setBackgroundColor('#222');
+			this.analyser.setLineColor('#fff');
+			this.analyser.setBackgroundColor('#222');
 			this.analyser.start();
 		});
 		

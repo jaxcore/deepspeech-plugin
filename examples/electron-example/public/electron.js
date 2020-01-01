@@ -92,7 +92,9 @@ function createWindow() {
 			});
 		});
 		
+		// receive microphone audio stream from browser window
 		ipcMain.on('stream-data', (event, data) => {
+			// stream to the data to the DeepSpeech forked process
 			deepspeech.streamData(data);
 		});
 		

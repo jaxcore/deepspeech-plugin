@@ -52,12 +52,7 @@ function startSocketServer(deepspeech) {
 jaxcore.startService('deepspeech', {
 	modelName: 'english',
 	modelPath: MODEL_PATH,
-	modelOptions: {
-		BEAM_WIDTH: 1023,
-		LM_ALPHA: 0.74,
-		LM_BETA: 1.84
-	},
 }, function(err, deepspeech) {
-	console.log('deepspeech service ready');
+	console.log('deepspeech service ready', typeof deepspeech);
 	startSocketServer(deepspeech);
 });

@@ -1,6 +1,6 @@
 {
   "name": "jaxcore-deepspeech-plugin",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Mozilla DeepSpeech speech recognition plugin for Jaxcore",
   "main": "lib/index.js",
   "scripts": {
@@ -13,9 +13,6 @@
     "csvtojson": "^2.0.8",
     "deepspeech": "^0.6.0",
     "jaxcore": "0.0.1",
-    "memory-stream": "0.0.3",
-    "node-audiorecorder": "^1.4.2",
-    "node-vad": "^1.1.4",
-    "words-to-numbers": "^1.5.1"
+    "node-vad": "^1.1.4"
   }
 }

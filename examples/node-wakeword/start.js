@@ -4,7 +4,6 @@ jaxcore.addPlugin(require('jaxcore-deepspeech-plugin'));
 
 const BumbleBee = require('bumblebee-hotword-node');
 const bumblebee = new BumbleBee();
-bumblebee.setSensitivity(0.5);
 bumblebee.addHotword('bumblebee');
 
 const {playOn, playOff} = require('./sounds');
@@ -50,4 +49,3 @@ jaxcore.startService('deepspeech', {
 	
 	console.log('\nStart speech recognition by saying:', Object.keys(bumblebee.hotwords));
 });
-

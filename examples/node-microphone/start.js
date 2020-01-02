@@ -1,8 +1,10 @@
 const Jaxcore = require('jaxcore');
 const jaxcore = new Jaxcore();
+jaxcore.addPlugin(require('jaxcore-deepspeech-plugin'));
 
-const DeepSpeechPlugin = require('../../');
-jaxcore.addPlugin(DeepSpeechPlugin);
+const BumbleBee = require('bumblebee-hotword-node');
+const bumblebee = new BumbleBee();
+bumblebee.addHotword('bumblebee');
 
 const MODEL_PATH = __dirname + '/../../deepspeech-0.6.0-models'; // path to deepspeech model
 
@@ -17,5 +19,11 @@ jaxcore.startService('deepspeech', {
 		console.log('recognize:', text, stats);
 	});
 	
-	deepspeech.startMicrophone();
+	bumblebee.on('data', function(data) {
+		// stream microphone data to deepspeech
+		deepspeech.streamData(data);
+	});
+	
+	// bumblebee start the microphone
+	bumblebee.start();
 });

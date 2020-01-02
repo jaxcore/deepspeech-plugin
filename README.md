@@ -38,6 +38,7 @@ The examples provided will demonstrate the capabilities and limitations of the s
 These examples run directly in NodeJS and have no user interfaces:
 
 - [node-microphone](https://github.com/jaxcore/deepspeech-plugin/tree/master/examples/node-microphone) - basic example of recording a microphone and streaming to DeepSpeech
+- [node-wakeword](https://github.com/jaxcore/deepspeech-plugin/tree/master/examples/node-wakeword) - records in NodeJS and uses [BumbleBee](https://github.com/jaxcore/bumblebee-hotword-node) (node version) to activate DeepSpeech
 
 #### 2) Client-Server Examples
 
@@ -46,11 +47,11 @@ These use a ReactJS client to stream microphone audio from the browser to a Node
 - [web-basic-example](https://github.com/jaxcore/deepspeech-plugin/tree/master/examples/web-basic-example) simple example of recording and speech recognition
 
 
-- [web-hotword-example](https://github.com/jaxcore/deepspeech-plugin/tree/master/examples/web-hotword-example) advanced example using [BumbleBee-Hotword]() for hotword activation, audio visualization, and voice activated menus
+- [web-hotword-example](https://github.com/jaxcore/deepspeech-plugin/tree/master/examples/web-hotword-example) advanced example using [BumbleBee](https://github.com/jaxcore/bumblebee-hotword) (web version) for hotword activation, audio visualization, and voice activated menus
 
 #### 3) Electron Example
 
-- [electron-example](https://github.com/jaxcore/deepspeech-plugin/tree/master/examples/electron-example) runs DeepSpeech and BumbleBee inside an ElectronJS desktop application
+- [electron-example](https://github.com/jaxcore/deepspeech-plugin/tree/master/examples/electron-example) runs DeepSpeech and [BumbleBee](https://github.com/jaxcore/bumblebee-hotword) (web version) inside an ElectronJS desktop application
 
 #### 4) Jaxcore Browser Extension Examples
 

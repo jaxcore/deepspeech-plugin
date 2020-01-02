@@ -1,6 +1,6 @@
 {
   "name": "web-basic-example",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^4.2.4",
@@ -11,7 +11,7 @@
     "deepspeech": "^0.6.0",
     "defaults": "^1.0.3",
     "jaxcore": "0.0.1",
-    "jaxcore-deepspeech-plugin": "0.0.1",
+    "jaxcore-deepspeech-plugin": "0.0.2",
     "mocha": "^6.1.4",
     "node-vad": "^1.1.4",
     "react": "^16.12.0",

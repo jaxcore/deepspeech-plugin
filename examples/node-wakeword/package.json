@@ -1,0 +1,15 @@
+{
+  "name": "wakeword-example",
+  "version": "0.0.1",
+  "description": "uses bumblebee as wake word to activate deepspeech",
+  "main": "start.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bumblebee-hotword-node": "0.0.2",
+    "wav": "^1.0.2"
+  }
+}

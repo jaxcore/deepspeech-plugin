@@ -1,6 +1,6 @@
 {
   "name": "node-wakeword-example",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "uses bumblebee as wake word to activate deepspeech",
   "main": "start.js",
   "scripts": {
@@ -11,7 +11,7 @@
   "dependencies": {
     "jaxcore-deepspeech-plugin": "0.0.3",
     "bumblebee-hotword-node": "0.0.2",
-    "jaxcore-say-node": "0.0.2",
+    "jaxcore-say-node": "0.0.3",
     "wav": "^1.0.2"
   }
 }

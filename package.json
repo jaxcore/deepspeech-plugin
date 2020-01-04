@@ -1,6 +1,6 @@
 {
   "name": "jaxcore-deepspeech-plugin",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Mozilla DeepSpeech speech recognition plugin for Jaxcore",
   "main": "lib/index.js",
   "scripts": {

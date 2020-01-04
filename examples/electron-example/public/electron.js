@@ -77,6 +77,7 @@ function createWindow() {
 	jaxcore.startService('deepspeech', {
 		modelName: 'english',
 		modelPath: MODEL_PATH,
+		debug: 'true'
 	}, function (err, deepspeech) {
 		console.log('deepspeech service ready');
 		

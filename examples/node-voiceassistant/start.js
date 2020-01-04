@@ -13,6 +13,8 @@ bumblebee.addHotword('bumblebee');
 
 // load text-to-speech module (jaxcore-say-node)
 const Say = require('jaxcore-say-node');
+Say.speaker = require('speaker');
+
 var voice = new Say({ language: 'en-us', profile: 'Jack' });
 
 // path to deepspeech model

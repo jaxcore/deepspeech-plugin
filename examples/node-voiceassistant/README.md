@@ -2,10 +2,18 @@
 
 This is a NodeJS example which combines all the key speech technologies necessary to write a voice assistant in JavaScript.
 
+Make sure a microphone is active on the computer and speakers are turned on.  Attempt to activate speech recognition by saying "BumbleBee".  You should hear a "speech recognition enabled" from the speakers.  Any words spoken will be processed to text, then spoken back using speech synthesis.
+
+This is a simple example that can be modified extensively to make a voice assistant of nearly any sort.  Control devices in your home or build speech-based utilities and applications.  And it's all open source with 100% privacy.
+
+Have Fun!
+
+---
+
 The libraries used are:
 
 - Specch Recognition:
-	- [DeepSpeech](https://github.com/mozilla/DeepSpeech) TensorFlow based speech-to-text engine
+	- [DeepSpeech](https://github.com/mozilla/DeepSpeech) - TensorFlow based speech-to-text engine
 	- [Jaxcore DeepSpeech Plugin](https://github.com/jaxcore/deepspeech-plugin) - deepspeech background process launcher
 	- [Node VAD](https://github.com/snirpo/node-vad) - voice activity detection
 - Wake Word Detection:
@@ -41,9 +49,10 @@ Install:
 
 ```
 npm install
+npm install speaker
 ```
 
-Mac OSX users will have to also install:
+Mac OSX users will have to install an alternative speaker backend:
 
 ```
 npm install speaker --mpg123-backend=openal --no-save
@@ -54,12 +63,6 @@ Start the server:
 ```
 node start.js
 ```
-
-Make sure a microphone is active on the computer and speakers are turned on.  Attempt to activate speech recognition by saying "BumbleBee".  You should hear a "speech recognition enabled" from the speakers.  Any words spoken will be processed to text, then spoken back using speech synthesis.
-
-This is a simple example that can be modified extensively to make a voice assistant of nearly any sort.  Control devices in your home or build speech-based utilities and applications.
-
-Have Fun!
 
 #### Alternative deepspeech model directory
 

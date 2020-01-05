@@ -15,7 +15,7 @@ bumblebee.addHotword('bumblebee');
 const Say = require('jaxcore-say-node');
 Say.speaker = require('speaker');
 
-var voice = new Say({ language: 'en-us', profile: 'Jack' });
+const voice = new Say({ language: 'en-us', profile: 'Jack' });
 
 // path to deepspeech model
 const MODEL_PATH = process.env.DEEPSPEECH_MODEL || __dirname + '/../../deepspeech-0.6.0-models';

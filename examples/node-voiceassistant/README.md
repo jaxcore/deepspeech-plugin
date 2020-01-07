@@ -2,7 +2,7 @@
 
 This is a NodeJS example which combines all the key speech technologies necessary to write a voice assistant in JavaScript.
 
-To create a voice assistant, the following components are required:
+To create a voice assistant, the following speech technologies are required:
 
 - speech-to-text
 - text-to-speech

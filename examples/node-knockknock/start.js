@@ -16,7 +16,7 @@ DeepSpeech.start({
 	modelPath: MODEL_PATH,      // path to deepspeech model
 	silenceThreshold: 200,      // how many milliseconds of silence before processing the audio
 	vadMode: 'VERY_AGGRESSIVE', // options are: 'NORMAL', 'LOW_BITRATE', 'AGGRESSIVE', 'VERY_AGGRESSIVE'
-	debug: 'false'               // show recording state
+	debug: 'true'               // show recording state
 })
 .then(startKnockKnock)
 .catch(e => {
@@ -35,6 +35,8 @@ let speechSynthesisActive = false;
 let deepspeech = null;
 
 function startKnockKnock(deepspeechService) {
+	console.log('startKnockKnock');
+	
 	deepspeech = deepspeechService;
 	
 	deepspeech.on('recording', function (recordingState) {
@@ -70,19 +72,30 @@ function startKnockKnock(deepspeechService) {
 	
 	bumblebee.on('data', function (data) {
 		if (speechRecognitionActive && !speechSynthesisActive) {
+			process.stdout.write(',,');
 			deepspeech.streamData(data);
+		}
+		else {
+			process.stdout.write('_');
 		}
 	});
 	
-	bumblebee.start();
-	
-	startRecognition().then(() => {
-		// 	// nextJoke();
+	bumblebee.on('connect', function() {
+		// console.log('Say', ['Bumble Bee'], 'to begin');
+		// startRecognition().then(() => {
+		// 	// 	// nextJoke();
+		// });
+		bumblebee.start();
+		
+		magicWord();
 	});
+	// console.log('bumblebee sstart');
+	bumblebee.connect();
+	
 }
 
 function onHotword(hotword) {
-	console.log('HOTWORD DETECTED');
+	console.log('\n['+hotword+']');
 	if (speechRecognitionActive) {
 		stopRecognition();
 	}
@@ -136,13 +149,13 @@ function onRecognize(text, stats) {
 	let expectedResponse = jokes[jokeIndex][lineIndex + 1];
 	expectedResponse = expectedResponse.toLowerCase().replace(/\?|\!/, '')
 	
-	console.log('Expected Response:', expectedResponse);
-	console.log('Actual Response:', text);
-	
 	if (text === expectedResponse) {
+		console.log('Correct Response:', text);
 		nextLine();
 	}
 	else {
+		console.log('Expected Response:', expectedResponse);
+		console.log('Actual Response:', text);
 		errorCount++;
 		let response;
 		let repeatLine = false;
@@ -170,7 +183,9 @@ function onRecognize(text, stats) {
 	}
 }
 
+let jokeCount = 0;
 function nextJoke() {
+	jokeCount++;
 	jokeIndex++;
 	lineIndex = null;
 	nextLine();
@@ -178,12 +193,16 @@ function nextJoke() {
 
 function nextLine() {
 	errorCount = 0;
-	if (lineIndex === null) lineIndex = 0;
-	else lineIndex += 2;
-	sayLine();
-	
+	console.log('nextLine', lineIndex);
 	if (lineIndex >= jokes[jokeIndex].length) {
 		console.log('JOKE DONE');
+		process.exit();
+	}
+	else {
+		if (lineIndex === null) lineIndex = 0;
+		else lineIndex += 2;
+		sayLine();
+		
 	}
 }
 
@@ -193,13 +212,14 @@ function sayLine() {
 }
 
 function say(text) {
-	console.log('say', text);
 	return new Promise((resolve) => {
 		speechSynthesisActive = true;  // disable recognition while using text-to-speech
 		console.log('\nCOMPUTER Says:', text);
+		bumblebee.stop();
 		voice.say(text).then(() => {
 			// delay a bit and reset the deepspeech buffer before re-enabling recognition
 			setTimeout(function () {
+				bumblebee.start();
 				deepspeech.streamReset();
 				speechSynthesisActive = false;
 				resolve();
@@ -219,16 +239,21 @@ function stopRecognition() {
 	console.log('\nStart speech recognition by saying:', Object.keys(bumblebee.hotwords));
 	console.log('Speech recognition disabled');
 	speechRecognitionActive = false;
-	return say("Alright. To wake me up just say the magic word... bumble bee");
+	return say("Alright.").then(() => {
+		magicWord();
+	});
+}
+
+function magicWord() {
+	return say("To wake me up just say the magic word... bumble bee");
 }
 
 function intro() {
 	console.log('intro()');
-	return new Promise((resolve, reject) => {
+	return new Promise((resolve) => {
 		let another = jokeCount === 0 ? 'a' : 'another';
-		console.log('yo!')
-		// resolve();
-		return say("Would you like to hear "+another+" knock knock joke?").then(() => {
+		console.log('jokeCount = ', jokeCount)
+		say("Would you like to hear "+another+" knock knock joke?").then(() => {
 			console.log('Say: YES or NO');
 			resolve();
 		});
@@ -240,7 +265,7 @@ function startRecognition() {
 	return new Promise((resolve, reject) => {
 		speechRecognitionActive = false;
 		console.log('??');
-		return intro().then(() => {
+		intro().then(() => {
 			console.log('then??');
 			speechRecognitionActive = true;
 			resolve();

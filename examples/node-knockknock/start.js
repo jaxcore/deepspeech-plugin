@@ -16,7 +16,7 @@ DeepSpeech.start({
 	modelPath: MODEL_PATH,      // path to deepspeech model
 	silenceThreshold: 200,      // how many milliseconds of silence before processing the audio
 	vadMode: 'VERY_AGGRESSIVE', // options are: 'NORMAL', 'LOW_BITRATE', 'AGGRESSIVE', 'VERY_AGGRESSIVE'
-	debug: 'true'               // show recording state
+	debug: 'false'               // show recording state
 })
 .then(startKnockKnock)
 .catch(e => {
@@ -27,6 +27,7 @@ DeepSpeech.start({
 const jokes = require('fs').readFileSync('./jokes.txt', 'utf-8').split(/\n\n/).map(line => {
 	return line.split(/\n/);
 });
+
 let jokeIndex = null;
 let lineIndex = null;
 let errorCount = 0;
@@ -35,18 +36,16 @@ let speechSynthesisActive = false;
 let deepspeech = null;
 
 function startKnockKnock(deepspeechService) {
-	console.log('startKnockKnock');
-	
 	deepspeech = deepspeechService;
 	
 	deepspeech.on('recording', function (recordingState) {
 		switch (recordingState) {
 			case DeepSpeech.recordingStates.ON:
 				process.stdout.write('\n');
-				process.stdout.write('[ON]');
+				process.stdout.write('[start]');
 				break;
 			case DeepSpeech.recordingStates.OFF:
-				process.stdout.write('[OFF]');
+				process.stdout.write('[stop]');
 				process.stdout.write('\n');
 				break;
 		}
@@ -72,7 +71,7 @@ function startKnockKnock(deepspeechService) {
 	
 	bumblebee.on('data', function (data) {
 		if (speechRecognitionActive && !speechSynthesisActive) {
-			process.stdout.write(',,');
+			// process.stdout.write('+');
 			deepspeech.streamData(data);
 		}
 		else {
@@ -80,22 +79,21 @@ function startKnockKnock(deepspeechService) {
 		}
 	});
 	
+	bumblebee.on('muted', function (data) {
+		process.stdout.write('~');
+	});
+	
 	bumblebee.on('connect', function() {
-		// console.log('Say', ['Bumble Bee'], 'to begin');
-		// startRecognition().then(() => {
-		// 	// 	// nextJoke();
-		// });
 		bumblebee.start();
 		
-		magicWord();
+		speechRecognitionActive = true;
+		nextJoke();
 	});
-	// console.log('bumblebee sstart');
 	bumblebee.connect();
-	
 }
 
 function onHotword(hotword) {
-	console.log('\n['+hotword+']');
+	console.log('\nHotword Detected: ['+hotword+']');
 	if (speechRecognitionActive) {
 		stopRecognition();
 	}
@@ -108,54 +106,80 @@ function onHotword(hotword) {
 // deepspeech usually doesn't quite get these words right, so let's correct them using substitution
 const corrections = {
 	'banana': 'the nana who|the nana|by nana|but nana|but nanna',
-	'who\'s there': 'whose there|who is there|is there|who are',
-	'dishes who': 'dish is who|tish is who'
+	'who\'s there': 'whose there|who is there|is there|who are|whose hair|who there',
+	'dishes who': 'dish is who|tish is who|this is who',
+	'who': 'whom',
+	'boo': 'bo|boom|booth',
+	'boo who': 'but who'
 };
 
-
 function onRecognize(text, stats) {
-	// if (!text) {
-	// 	console.log('recognize', text);
-	// 	process.exit();
-	// 	return;
-	// }
-	
-	if (jokeIndex === null) {
-		console.log('Speech recognition result:', text);
-		// main menu
-		if (/yes|okay|sure/.test(text)) {
-			nextJoke();
-		}
-		else if (/no|nope|quit|exit/.test(text)) {
-			console.log('GOT NOPE');
-			sleep();
-		}
-		else {
-			errorCount++;
-			if (errorCount > 1) {
-				say("yes or no will do").then(intro);
-				errorCount = 0;
-			}
-		}
-		return;
+	if (text === "exit") {
+		sleep();
 	}
-	
-	// make corrections using sstring substitutions
-	for (let key in corrections) {
-		// console.log('correct', key);
-		text = text.replace(new RegExp(corrections[key], 'i'), key)
+	else if (jokeIndex === null || isJokeDone()) {
+		processMainMenuResponse(text);
 	}
-	
-	let expectedResponse = jokes[jokeIndex][lineIndex + 1];
+	else {
+		processJokeResponse(text);
+	}
+}
+
+function processMainMenuResponse(text) {
+	console.log('Speech recognition result:', text);
+	if (text === 'yes') {
+		nextJoke();
+	}
+	else if (text === 'no') {
+		sleep();
+	}
+	else {
+		errorCount++;
+		if (errorCount > 1) {
+			say("I require a yes or no answer").then(intro);
+		}
+	}
+}
+
+function getLastLine() {
+	return jokes[jokeIndex][lineIndex-1];
+}
+function getExpectedResponse() {
+	let expectedResponse;
+	if (jokes[jokeIndex]) expectedResponse = jokes[jokeIndex][lineIndex];
 	expectedResponse = expectedResponse.toLowerCase().replace(/\?|\!/, '')
+	return expectedResponse;
+}
+
+function makeCorrections(text, corrections) {
+	// make corrections using string substitutions
+	for (let key in corrections) {
+		let r = '(?<=\s|^)('+corrections[key]+')(?=\s|$)';
+		let regex = new RegExp(r, 'i');
+		let match = regex.test(text);
+		if (match) {
+			text = text.replace(new RegExp(r, 'i'), function (m, a) {
+				console.log(m);
+				return key;
+			});
+		}
+	}
+	return text;
+}
+
+function processJokeResponse(text) {
+	text = makeCorrections(text, corrections);
+	
+	let lastLine = getLastLine();
+	let expectedResponse = getExpectedResponse();
 	
 	if (text === expectedResponse) {
-		console.log('Correct Response:', text);
+		console.log('HUMAN Says:', text);
 		nextLine();
 	}
 	else {
-		console.log('Expected Response:', expectedResponse);
-		console.log('Actual Response:', text);
+		console.log('HUMAN Says:', '"'+text+'"');
+		console.log('Expected Response Was:', expectedResponse);
 		errorCount++;
 		let response;
 		let repeatLine = false;
@@ -163,21 +187,22 @@ function onRecognize(text, stats) {
 			case 1:
 				return;
 			case 2:
-				response = "no";
-				break;
-			case 3:
-				response = "try again";
+				response = "Try again";
 				repeatLine = true;
 				break;
+			case 3:
+				response = "You're supposed to say. " + expectedResponse;
+				break;
 			case 4:
-				response = "no, you're supposed to say. " + expectedResponse;
+				response = "You can stop at any time by saying ... exit";
 				errorCount = 0;
+				repeatLine = true;
 				break;
 		}
 		
 		say(response).then(() => {
 			if (repeatLine) {
-				sayLine()
+				say(lastLine)
 			}
 		})
 	}
@@ -186,40 +211,66 @@ function onRecognize(text, stats) {
 let jokeCount = 0;
 function nextJoke() {
 	jokeCount++;
-	jokeIndex++;
+	if (jokeIndex === null) {
+		jokeIndex = 0;
+	}
+	else jokeIndex++;
 	lineIndex = null;
 	nextLine();
 }
 
 function nextLine() {
 	errorCount = 0;
-	console.log('nextLine', lineIndex);
-	if (lineIndex >= jokes[jokeIndex].length) {
-		console.log('JOKE DONE');
-		process.exit();
+	
+	if (isJokeDone()) {
+		jokeDone();
 	}
 	else {
-		if (lineIndex === null) lineIndex = 0;
-		else lineIndex += 2;
-		sayLine();
+		if (lineIndex === null) {
+			lineIndex = 0;
+		}
+		else {
+			lineIndex += 1;
+		}
 		
+		if (isJokeDone()) {
+			jokeDone();
+			return;
+		}
+		
+		let isComputerLine = (lineIndex % 2 === 0);
+		
+		if (isComputerLine) {
+			sayLine().then(() => {
+				nextLine();
+			});
+		}
 	}
+}
+
+function isJokeDone() {
+	if (!jokes[jokeIndex]) return true;
+	return jokeIndex !== null && lineIndex >= (jokes[jokeIndex].length);
+}
+
+function jokeDone() {
+	say("Ha ha ha... I hope you liked that one").then(intro);
 }
 
 function sayLine() {
 	let line = jokes[jokeIndex][lineIndex];
-	say(line);
+	return say(line);
 }
 
 function say(text) {
 	return new Promise((resolve) => {
-		speechSynthesisActive = true;  // disable recognition while using text-to-speech
 		console.log('\nCOMPUTER Says:', text);
-		bumblebee.stop();
+		speechSynthesisActive = true;  // disable deepspeech while using text-to-speech
+		bumblebee.setMuted(true);  // disable bumblebee while using text-to-speech
 		voice.say(text).then(() => {
 			// delay a bit and reset the deepspeech buffer before re-enabling recognition
 			setTimeout(function () {
-				bumblebee.start();
+				bumblebee.setMuted(false);
 				deepspeech.streamReset();
 				speechSynthesisActive = false;
 				resolve();
@@ -235,9 +286,6 @@ function sleep() {
 }
 
 function stopRecognition() {
-	console.log('stopRecognition');
-	console.log('\nStart speech recognition by saying:', Object.keys(bumblebee.hotwords));
-	console.log('Speech recognition disabled');
 	speechRecognitionActive = false;
 	return say("Alright.").then(() => {
 		magicWord();
@@ -249,10 +297,14 @@ function magicWord() {
 }
 
 function intro() {
-	console.log('intro()');
 	return new Promise((resolve) => {
+		if (jokeIndex === jokes.length - 1) {
+			console.log('Returning to first joke');
+			jokeIndex = null;
+			lineIndex = null;
+		}
+		
 		let another = jokeCount === 0 ? 'a' : 'another';
-		console.log('jokeCount = ', jokeCount)
 		say("Would you like to hear "+another+" knock knock joke?").then(() => {
 			console.log('Say: YES or NO');
 			resolve();
@@ -261,12 +313,9 @@ function intro() {
 }
 
 function startRecognition() {
-	console.log(' x Stop speech recognition by saying:', Object.keys(bumblebee.hotwords));
 	return new Promise((resolve, reject) => {
 		speechRecognitionActive = false;
-		console.log('??');
 		intro().then(() => {
-			console.log('then??');
 			speechRecognitionActive = true;
 			resolve();
 		});

@@ -5,7 +5,7 @@
     "bumblebee-hotword": "0.0.6",
     "deepspeech": "^0.6.0",
     "jaxcore": "0.0.1",
-    "jaxcore-deepspeecch-plugin": "0.0.4",
+    "jaxcore-deepspeech-plugin": "0.0.4",
     "jaxcore-say": "^0.0.4",
     "node-vad": "^1.1.4",
     "react": "^16.12.0",

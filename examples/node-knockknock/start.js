@@ -45,7 +45,6 @@ function start(deepspeechService) {
 	
 	bumblebee.on('data', function (data) {
 		if (speechRecognitionActive && !speechSynthesisActive) {
-			// process.stdout.write('+');
 			deepspeech.streamData(data);
 		}
 		else {
@@ -53,7 +52,7 @@ function start(deepspeechService) {
 		}
 	});
 	
-	bumblebee.on('muted', function (data) {
+	bumblebee.on('muted', function () {
 		process.stdout.write('~');
 	});
 	

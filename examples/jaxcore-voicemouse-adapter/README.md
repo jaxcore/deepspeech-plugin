@@ -41,7 +41,7 @@ rm deepspeech-0.6.0-models.tar.gz
 Go do the example directory:
 
 ```
-cd examples/jaxcore-voicemouse-example
+cd examples/jaxcore-voicemouse-adapter
 ```
 
 Install:

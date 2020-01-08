@@ -9,7 +9,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "bumblebee-hotword-node": "0.0.2",
-
+    "bumblebee-hotword-node": "0.0.3",
   }
 }

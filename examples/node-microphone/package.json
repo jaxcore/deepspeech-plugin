@@ -10,5 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "bumblebee-hotword-node": "0.0.3",
+    "jaxcore": "0.0.1",
+    "jaxcore-deepspeech-plugin": "0.0.4"
   }
 }

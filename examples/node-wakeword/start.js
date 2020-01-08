@@ -8,7 +8,7 @@ bumblebee.addHotword('bumblebee');
 
 const {playOn, playOff} = require('./sounds');
 
-const MODEL_PATH = __dirname + '/../../deepspeech-0.6.0-models'; // path to deepspeech model
+const MODEL_PATH = process.env.DEEPSPEECH_MODEL || __dirname + '/../../deepspeech-0.6.0-models'; // path to deepspeech model
 
 let speechRecognitionActive = false;
 

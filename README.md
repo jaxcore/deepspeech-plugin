@@ -48,9 +48,9 @@ ln -s /path/to/deepspeech/models
 
 ## Examples
 
-The examples provided will demonstrate the capabilities and limitations of the system, and provide a good place to start when writing your own "voice apps".  They come in 4 forms:
+The examples provided will demonstrate the capabilities and limitations of the system, and provide a good place to start when writing your own "voice apps".
 
-#### 1) NodeJS Microphone Examples
+#### NodeJS Examples
 
 These examples run directly in NodeJS:
 
@@ -59,18 +59,24 @@ These examples run directly in NodeJS:
 - [Voice Assistant example](https://github.com/jaxcore/deepspeech-plugin/tree/master/examples/node-voiceassistant) - a voice assistant example which uses hotword detection, text-to-speech, and speech-to-text all working at the same time
 - [Knock, Knock Jokes example](https://github.com/jaxcore/deepspeech-plugin/tree/master/examples/node-knockknock) - an interactive voice chatbot that tells knock, knock jokes
 
-#### 2) Web Examples
+#### Jaxcore Control Examples
+
+These are more advanced NodeJS examples which use [Jaxcore](https://github.com/jaxcore/jaxcore) to control other devices and network services:
+
+- [Mouse Control Example](https://github.com/jaxcore/deepspeech-plugin/tree/master/examples/jaxcore-voicemouse-adapter) - uses voice commands to control the mouse (eg. mouse up 100, left click, scroll down...)
+
+#### Web Examples
 
 These use a ReactJS client to stream microphone audio from the browser to a NodeJS server running DeepSpeech:
 
 - [Web Basic example](https://github.com/jaxcore/deepspeech-plugin/tree/master/examples/web-basic-example) simple example of recording and speech recognition
 - [Web Hotword example](https://github.com/jaxcore/deepspeech-plugin/tree/master/examples/web-hotword-example) advanced example using hotword detection, audio visualization, and voice activated menus
 
-#### 3) Electron Example
+#### Electron Example
 
 - [Electron example](https://github.com/jaxcore/deepspeech-plugin/tree/master/examples/electron-example) runs DeepSpeech and BumbleBee inside an ElectronJS desktop application
 
-#### 4) Jaxcore Browser Extension Examples
+#### Jaxcore Browser Extension Examples
 
 These require running the [Jaxcore Desktop Server]() and [web browser extension]().  This method allows developers to write voice-enabled web applications using only client-side JavaScript.  The Jaxcore application provides the speech recognition support from outside the browser.
 
@@ -148,7 +154,7 @@ const BumbleBee = require('bumblebee-hotword-node');
 const bumblebee = new BumbleBee();
 bumblebee.addHotword('bumblebee');
 
-const MODEL_PATH = __dirname + '/../../deepspeech-0.6.0-models'; // path to deepspeech model
+const MODEL_PATH = process.env.DEEPSPEECH_MODEL || __dirname + '/../../deepspeech-0.6.0-models'; // path to deepspeech model
 
 jaxcore.startService('deepspeech', {
 	modelName: 'english',

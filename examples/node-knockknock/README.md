@@ -1,25 +1,8 @@
-# JavaScript Voice Assistant Example
+# Knock, Knock Jokes Example
 
-This is a NodeJS example which combines all the key speech technologies necessary to write a voice assistant in JavaScript.
-
-Make sure a microphone is active on the computer and speakers are turned on.  Attempt to activate speech recognition by saying "BumbleBee".  You should hear a "speech recognition enabled" from the speakers.  Any words spoken will be processed to text, then spoken back using speech synthesis.
-
-This is a simple example that can be modified extensively to make a voice assistant of nearly any sort.  Control devices in your home or build speech-based utilities and applications.  And it's all open source with 100% privacy.
-
-Have Fun!
+This is a NodeJS example which create a Knock, Knock joke telling chatbot.
 
 ---
-
-The libraries used are:
-
-- Specch Recognition:
-	- [DeepSpeech](https://github.com/mozilla/DeepSpeech) - TensorFlow based speech-to-text engine
-	- [Jaxcore DeepSpeech Plugin](https://github.com/jaxcore/deepspeech-plugin) - deepspeech background process launcher
-	- [Node VAD](https://github.com/snirpo/node-vad) - voice activity detection
-- Wake Word Detection:
-	- [BumbleBee Hotword](https://github.com/jaxcore/bumblebee-hotword-node) - hotword detection based on [Porcupine](https://github.com/Picovoice/porcupine)
-- Speech Synthesis:
-	- [Jaxcore Say](https://github.com/jaxcore/jaxcore-say-node) - text-to-speech based on [mEspeak.js](https://www.masswerk.at/mespeak/)
 
 ### Installation
 
@@ -39,10 +22,10 @@ tar xfvz deepspeech-0.6.0-models.tar.gz
 rm deepspeech-0.6.0-models.tar.gz
 ```
 
-Go do the voice assistant example directory:
+Go do the knock, knock example directory:
 
 ```
-cd examples/node-voiceassistant
+cd examples/node-knockknock
 ```
 
 Install:

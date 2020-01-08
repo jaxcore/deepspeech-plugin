@@ -57,14 +57,13 @@ These examples run directly in NodeJS:
 - [Microphone example](https://github.com/jaxcore/deepspeech-plugin/tree/master/examples/node-microphone) - basic example of recording a microphone and streaming to DeepSpeech
 - [Wake Word example](https://github.com/jaxcore/deepspeech-plugin/tree/master/examples/node-wakeword) - uses hotword detection to activate/deactivate DeepSpeech
 - [Voice Assistant example](https://github.com/jaxcore/deepspeech-plugin/tree/master/examples/node-voiceassistant) - a voice assistant example which uses hotword detection, text-to-speech, and speech-to-text all working at the same time
+- [Knock, Knock Jokes example](https://github.com/jaxcore/deepspeech-plugin/tree/master/examples/node-knockknock) - an interactive voice chatbot that tells knock, knock jokes
 
 #### 2) Web Examples
 
 These use a ReactJS client to stream microphone audio from the browser to a NodeJS server running DeepSpeech:
 
 - [Web Basic example](https://github.com/jaxcore/deepspeech-plugin/tree/master/examples/web-basic-example) simple example of recording and speech recognition
-
-
 - [Web Hotword example](https://github.com/jaxcore/deepspeech-plugin/tree/master/examples/web-hotword-example) advanced example using hotword detection, audio visualization, and voice activated menus
 
 #### 3) Electron Example
@@ -108,7 +107,7 @@ jaxcore.startService('deepspeech', SERVICE_OPTIONS, function(err, deepspeech) {
 });
 ```
 
-#### Audio Stream Methods
+#### Methods
 
 These methods are used to receive audio data from the browser or from an ElectronJS window:
 

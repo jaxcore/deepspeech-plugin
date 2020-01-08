@@ -11,6 +11,7 @@
   "dependencies": {
     "bumblebee-hotword-node": "0.0.3",
     "jaxcore": "0.0.1",
-    "jaxcore-deepspeech-plugin": "0.0.4"
+    "jaxcore-deepspeech-plugin": "0.0.4",
+    "words-to-numbers": "^1.5.1"
   }
 }

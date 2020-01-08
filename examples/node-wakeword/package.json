@@ -12,6 +12,7 @@
     "bumblebee-hotword-node": "0.0.3",
     "jaxcore": "0.0.1",
     "jaxcore-deepspeech-plugin": "0.0.4",
+    "speaker": "^0.5.1",
     "wav": "^1.0.2"
   }
 }

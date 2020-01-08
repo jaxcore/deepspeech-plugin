@@ -8,7 +8,7 @@ to [Jaxcore](https://github.com/jaxcore/jaxcore) to enable speech recognition su
 Related projects:
 
 - [BumbleBee-Hotword](https://github.com/jaxcore/bumblebee-hotword) provides hotword detection and microphone stream recording support
-- [Jaxcore Say](https://github.com/jaxcore/jaxcore-say) provides hotword detection and microphone stream recording support
+- [Jaxcore Say](https://github.com/jaxcore/jaxcore-say) provides text-to-speech (speech synthesis) support
 
 Together, these tools provide JavaScript developers an easy and straightforward way write "Alexa-like" interactive voice assistants, smart-home controls, and create science-fiction like voice-controlled web applications and games.
 Run everything privately on your local computer without any 3rd party cloud computing services required.

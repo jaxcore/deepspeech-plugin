@@ -1,0 +1,17 @@
+{
+  "name": "node-voice-mouse",
+  "version": "0.0.0",
+  "description": "",
+  "main": "start.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bumblebee-hotword-node": "0.0.3",
+    "jaxcore": "0.0.1",
+    "jaxcore-deepspeech-plugin": "0.0.4",
+    "words-to-numbers": "^1.5.1"
+  }
+}

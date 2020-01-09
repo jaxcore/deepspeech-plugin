@@ -1,22 +1,20 @@
-# Jaxcore Voice Mouse Example
+# Jaxcore Kodi Speech Example
 
-This is a NodeJS example that connects DeepSpeech to the [Jaxcore](https://github.com/jaxcore/jaxcore) Mouse Service.  It uses voice commands to control the computer mouse.
+This is a NodeJS example that uses DeepSpeech to control [Kodi Media Center](https://kodi.tv/).
 
-The voice commands are:
+The voice commands to control Kodi implemented (so far) are
 
-- mouse left `N`  // moves mouse `N` pixels to the left
-- mouse right `N`  // moves mouse `N` pixels to the right
-- mouse up `N`  // moves mouse `N` pixels to the right
-- mouse down `N`  // moves mouse `N` pixels to the right
-- scroll left
-- scroll right
-- scroll up
-- scroll down
+- up
+- down
+- left
+- right
+- select
+- back
+- pause
+- play
+- stop
 - page up
 - page down
-- left click
-- right click
-- middle click
 
 ---
 
@@ -41,7 +39,7 @@ rm deepspeech-0.6.0-models.tar.gz
 Go do the example directory:
 
 ```
-cd examples/jaxcore-voicemouse-adapter
+cd examples/jaxcore-kodi-speech-adapter
 ```
 
 Install:
@@ -54,6 +52,14 @@ Start the server:
 
 ```
 node start.js
+```
+
+By default it connects to Kodi running on `localhost` port 9090 (you must configure Kodi remote control settings to allow access).
+
+To connect to Kodi running on other computers on your home network use the `KODI_HOST` environment vaariable:
+
+```
+KODI_HOST=192.168.1.100 node start
 ```
 
 #### Alternative deepspeech model directory

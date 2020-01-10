@@ -54,9 +54,9 @@ Start the server:
 node start.js
 ```
 
-By default it connects to Kodi running on `localhost` port 9090 (you must configure Kodi remote control settings to allow access).
+By default it connects to Kodi running on `localhost` port 9090 (you must configure Kodi remote control settings to [allow access](https://yatse.tv/img/wiki/kodi-configuration/04.jpg)).
 
-To connect to Kodi running on other computers on your home network use the `KODI_HOST` environment vaariable:
+To connect to Kodi running on other computers on your home network use the `KODI_HOST` environment variable to set the hostname or IP Address of the computer running Kodi:
 
 ```
 KODI_HOST=192.168.1.100 node start
@@ -68,4 +68,10 @@ The example expect deepspeech-0.6-models to be located at the root of the `deeps
 
 ```
 DEEPSPEECH_MODEL=/path/to/deepspeech/models node start.js
+```
+
+It is possible to use both `DEEPSPEECH_MODEL` and `KODI_HOST` variables if necessary:
+
+```
+DEEPSPEECH_MODEL=/path/to/deepspeech/models KODI_HOST=192.168.1.100 node start.js
 ```

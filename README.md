@@ -64,6 +64,8 @@ These examples run directly in NodeJS:
 These are more advanced NodeJS examples which use [Jaxcore](https://github.com/jaxcore/jaxcore) to control other devices and network services:
 
 - [Mouse Control Example](https://github.com/jaxcore/deepspeech-plugin/tree/master/examples/jaxcore-voicemouse-adapter) - uses voice commands to control the mouse (eg. mouse up 100, left click, scroll down...)
+- [Kodi Control Example](https://github.com/jaxcore/deepspeech-plugin/tree/master/examples/jaxcore-kodi-speech-adapter) - uses voice commands to control [Kodi Media Center](https://kodi.tv/) navigation and playback (eg. play, pause, select, back, up, down, page up, page down...)
+
 
 #### Web Examples
 

@@ -1,16 +1,30 @@
-const Jaxcore = require('jaxcore');
-const {Adapter} = require('jaxcore');
 const {wordsToNumbers} = require('words-to-numbers');
-
+const Jaxcore = require('jaxcore');
 const jaxcore = new Jaxcore();
+
+// PLUGINS
+
 jaxcore.addPlugin(require('jaxcore/plugins/keyboard'));
 jaxcore.addPlugin(require('jaxcore/plugins/mouse'));
 jaxcore.addPlugin(require('jaxcore/plugins/scroll'));
+jaxcore.addPlugin(require('bumblebee-hotword-node'));
 jaxcore.addPlugin(require('jaxcore-deepspeech-plugin'));
 
-const BumbleBee = require('bumblebee-hotword-node');
-const bumblebee = new BumbleBee();
-bumblebee.addHotword('bumblebee');
+// SERVICES
+
+jaxcore.defineService('Keyboard', 'keyboard', {});
+jaxcore.defineService('Mouse', 'mouse', {});
+jaxcore.defineService('Scroll', 'scroll', {});
+jaxcore.defineService('Bumblebee Node', 'bumblebeeNode', {});
+jaxcore.defineService('Deepspeech English', 'deepspeech', {
+	modelName: 'english',
+	modelPath: process.env.DEEPSPEECH_MODEL || __dirname + '/../../deepspeech-0.6.0-models', // path to deepspeech model
+	silenceThreshold: 200,
+	vadMode: 'VERY_AGGRESSIVE',
+	debug: 'true'
+});
+
+// ADAPTER
 
 function numberize(text) {
 	text = text.replace(/^to /,'two ').replace(/ to$/,' two').replace(/ to /,' two ');
@@ -22,24 +36,26 @@ function numberize(text) {
 	return num;
 }
 
-class VoiceMouseAdapter extends Adapter {
-	static getDefaultState() {
-		return {
-		};
-	}
+class VoiceMouseAdapter extends Jaxcore.Adapter {
 	
 	constructor(store, config, theme, devices, services) {
 		super(store, config, theme, devices, services);
-		const {speech} = devices;
-		const {keyboard, mouse, scroll} = services;
+		const {bumblebeeNode, deepspeech, keyboard, mouse, scroll} = services;
 		
-		this.addEvents(speech, {
+		bumblebeeNode.setHotword('bumblebee');
+		
+		this.addEvents(deepspeech, {
 			recognize: function (text, stats) {
 				this.log('speech recognize', text);
 				
+				text = text.replace(/rose/,'mouse');
+				text = text.replace(/when/,'one');
+				text = text.replace(/most of|mouth of/,'mouse up');
+				text = text.replace(/most of/,'mouse up');
 				text = text.replace(/stroll |strolled |scrawled |scrawl /,'scroll ');
-				text = text.replace(/most |mollie |mos |malise |morison|mouth /,'mouse ');
-				text = text.replace(/laughed/,'left ');
+				text = text.replace(/nose |mount |most |mollie |mos |mose |malise |morison|mouth /,'mouse ');
+				text = text.replace(/laughed /,'left ');
+				text = text.replace(/write |rated |rate |rat /,'right ');
 				text = text.trim();
 				
 				console.log('Speech Recognized:', text);
@@ -126,6 +142,16 @@ class VoiceMouseAdapter extends Adapter {
 			}
 		});
 		
+		this.addEvents(bumblebeeNode, {
+			hotword: function(hotword) {
+				console.log('\n[hotword detected:', hotword, ']');
+			},
+			data: function (data) {
+				deepspeech.streamData(data);
+			}
+		});
+		
+		bumblebeeNode.start();
 	}
 	
 	moveMouse(dir, num) {
@@ -152,35 +178,21 @@ class VoiceMouseAdapter extends Adapter {
 		this.log('scroll mouse '+dir, num);
 		mouse.scroll(x, y);
 	}
-	
-	static getServicesConfig(adapterConfig) {
-		console.log('getServicesConfig', adapterConfig);
-		return {
-			keyboard: true,
-			mouse: true,
-			scroll: true
-		};
-	}
 }
 
 jaxcore.addAdapter('voice-mouse', VoiceMouseAdapter);
 
-const MODEL_PATH = process.env.DEEPSPEECH_MODEL || __dirname + '/../../deepspeech-0.6.0-models'; // path to deepspeech model
+// CONNECT THE "voice-mouse" ADAPTER TO THE SERVICES
 
-jaxcore.startService('deepspeech', {
-	modelName: 'english',
-	modelPath: MODEL_PATH,
-	silenceThreshold: 200, // how many milliseconds of silence before processing the audio
-	vadMode: 'VERY_AGGRESSIVE', // options are: 'NORMAL', 'LOW_BITRATE', 'AGGRESSIVE', 'VERY_AGGRESSIVE'
-	debug: 'true'
-}, function(err, deepspeech) {
-	
-	bumblebee.on('data', function(data) {
-		// stream microphone data to deepspeech
-		deepspeech.streamData(data);
-	});
-	
-	bumblebee.start();
-	
-	jaxcore.launchAdapter(deepspeech, 'voice-mouse');
+jaxcore.defineAdapter('Voice Mouse', {
+	adapterType: 'voice-mouse',
+	serviceProfiles: [
+		'Bumblebee Node',
+		'Deepspeech English',
+		'Keyboard',
+		'Mouse',
+		'Scroll'
+	]
 });
+
+jaxcore.connectAdapter(null, 'Voice Mouse');

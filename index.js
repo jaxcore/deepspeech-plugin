@@ -6,7 +6,7 @@ const plugin = {
 	services: {
 		deepspeech: {
 			service: DeepSpeechService,
-			storeType: 'service'
+			storeType: 'client'
 		}
 	}
 };

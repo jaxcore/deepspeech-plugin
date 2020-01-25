@@ -9,9 +9,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "bumblebee-hotword-node": "0.0.3",
-    "jaxcore": "0.0.1",
-    "jaxcore-deepspeech-plugin": "0.0.4",
+    "bumblebee-hotword-node": "0.0.4",
+    "deepspeech": "^0.6.1",
+    "jaxcore": "0.0.2",
+    "jaxcore-deepspeech-plugin": "0.0.5",
     "words-to-numbers": "^1.5.1"
   }
 }

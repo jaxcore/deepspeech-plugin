@@ -64,11 +64,11 @@ function getExpectedResponse() {
 function makeCorrections(text, corrections) {
 	// make corrections using string substitutions
 	for (let key in corrections) {
-		let r = '(?<=\s|^)('+corrections[key]+')(?=\s|$)';
+		let r = '(?<=\\s|^)('+corrections[key]+')(?=\\s|$)';
 		let regex = new RegExp(r, 'i');
 		let match = regex.test(text);
 		if (match) {
-			text = text.replace(new RegExp(r, 'i'), function (m, a) {
+			text = text.replace(new RegExp(r, 'gi'), function (m, a) {
 				console.log(m);
 				return key;
 			});

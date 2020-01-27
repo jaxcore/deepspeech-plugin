@@ -10,7 +10,7 @@ jaxcore.addPlugin(require('bumblebee-hotword-node'));
 jaxcore.addPlugin(require('jaxcore-deepspeech-plugin'));
 jaxcore.addPlugin(require('jaxcore-say-node'));
 
-// this is a hack to make sure this all works on Mac OSX
+// this is a hack to make sure the 'speaker' npm module works on Mac OSX
 // tell sayNode to use the speaker module we've installed using `npm install speaker --mpg123-backend=openal --no-save`
 require('jaxcore-say-node').speaker = require('speaker');
 
@@ -252,7 +252,6 @@ function processComboWords(keys, text) {
 
 function parseKeys(text) {
 	let keys = [];
-	// console.log('original text ='+text);
 	text = makeExactReplacements(text, exactReplacements);
 	text = parseNumbers(text);
 	text = makeReplacements(text, directionReplacements);
@@ -311,10 +310,6 @@ class JaxcoreNumberTyper extends Jaxcore.Adapter {
 		});
 		
 		bumblebeeNode.start();
-		
-		// setTimeout(() => {
-		// 	deepspeech.destroy();
-		// }, 10000);
 	}
 	
 	processText(text) {

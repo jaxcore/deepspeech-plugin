@@ -112,15 +112,18 @@ const commandComboWords = {
 	},
 	'select all': {
 		key: 'a',
-		modifiers: ['command']
+		modifiers: ['control'],
+		modifiersDarwin: ['command']
 	},
 	'copy': {
 		key: 'c',
-		modifiers: ['command']
+		modifiers: ['control'],
+		modifiersDarwin: ['command']
 	},
 	'paste': {
 		key: 'v',
-		modifiers: ['command']
+		modifiers: ['control'],
+		modifiersDarwin: ['command']
 	},
 	'shift option left': {
 		key: 'left',
@@ -261,6 +264,10 @@ function parseKeys(text) {
 	return keys;
 }
 
+function isMac() {
+	return process.platform === 'darwin';
+}
+
 class JaxcoreNumberTyper extends Jaxcore.Adapter {
 	static getDefaultState() {
 		return {
@@ -319,7 +326,8 @@ class JaxcoreNumberTyper extends Jaxcore.Adapter {
 		keys.forEach(key => {
 			if (key.key) {
 				if (key.modifiers) {
-					keyboard.keyPress(key.key, key.modifiers);
+					if (key.modifiersDarwin && isMac()) keyboard.keyPress(key.key, key.modifiersDarwin);
+					else keyboard.keyPress(key.key, key.modifiers);
 					this.setState({  // eg. release shift after paste
 						modifierHold: null
 					});

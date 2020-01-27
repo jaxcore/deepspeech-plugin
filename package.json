@@ -12,8 +12,7 @@
   "dependencies": {
     "csvtojson": "^2.0.8",
     "deepspeech": "^0.6.1",
-    "jaxcore": "0.0.2",
     "node-vad": "^1.1.4",
-    "words-to-numbers": "^1.5.1"
+    "words-to-numbers": "git+https://github.com/dsteinman/words-to-numbers.git"
   }
 }

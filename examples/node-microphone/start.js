@@ -13,11 +13,11 @@ jaxcore.startService('deepspeech', {
 	modelPath: MODEL_PATH,
 	silenceThreshold: 200, // how many milliseconds of silence before processing the audio
 	vadMode: 'VERY_AGGRESSIVE', // options are: 'NORMAL', 'LOW_BITRATE', 'AGGRESSIVE', 'VERY_AGGRESSIVE'
-	debug: 'true'
+	debug: true
 }, function(err, deepspeech) {
 	
 	deepspeech.on('recognize', (text, stats) => {
-		console.log('recognize:', text, stats);
+		console.log('\nrecognize:', text, stats);
 	});
 	
 	bumblebee.on('data', function(data) {

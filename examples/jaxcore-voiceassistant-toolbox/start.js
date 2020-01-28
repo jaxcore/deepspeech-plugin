@@ -71,11 +71,6 @@ class VoiceAssistantToolbox extends Jaxcore.Adapter {
 		});
 		
 		bumblebeeNode.start();
-		
-		
-		// setTimeout(() => {
-		// 	deepspeech.destroy();
-		// }, 10000);
 	}
 	
 	say(text) {

@@ -1,3 +1,26 @@
+const chai = require('chai');
+const expect = chai.expect;
+const NumbersDatesNLP = require('../lib/numbers-nlp');
+
+let numberParser = new NumbersDatesNLP({
+	numbers: true
+});
+
+// let dateParser = new NumbersDatesNLP({
+// 	dates: true
+// });
+//
+// let numbersAndDatesParser = new NumbersDatesNLP({
+// 	numbers: true,
+// 	dates: true
+// });
+
+describe('Color class constructor', function() {
+	it('accepts strings', function(done) {
+		expect(numberParser.parse("one")).to.be.equal('1');
+		done();
+	});
+});
 
 // let keys = parseKeys('one space to select all delete five option right nine greater than semi colon');
 // let keys = parseKeys('one space to back space five dot dash nine greater than semi colon select all copy right enter paste shift option left shift option left shift option left');
@@ -22,3 +45,7 @@
 //
 // // process.exit();
 // }, 2000);
+
+// console.log('\nnumbers:', wordsToNumbers("twenty four million", { impliedHundreds: true }));
+// console.log('\nnumbers:', parseKeys("negative one fifty", { impliedHundreds: true }));
+// process.exit();

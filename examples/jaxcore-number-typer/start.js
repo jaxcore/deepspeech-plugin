@@ -1,7 +1,6 @@
 const Jaxcore = require('jaxcore');
 const jaxcore = new Jaxcore();
-
-const {wordsToNumbers} = require('words-to-numbers');
+const numerizer = require('numerizer');
 
 // PLUGINS
 
@@ -59,7 +58,7 @@ const numberReplacements = {
 	')': 'right bracket',
 	'=': 'equals',
 	'+': 'plus',
-	'-': 'dash|minus',
+	'-': 'negative|dash|minus',
 	'*': 'times|multiplied by',
 	'/': 'divide by|divided by',
 	';': 'semi colon',
@@ -67,13 +66,14 @@ const numberReplacements = {
 	',': 'comma',
 	'escape': 'clear',
 	'backspace': 'back space',
+	'tab': 'tom|tad',
 	'>': 'greater than',
 	'<': 'less than',
 };
 
 function parseNumbers(text) {
 	text = makeReplacements(text, numberReplacements);
-	text = wordsToNumbers(text).toString();
+	text = numerizer(text).toString();
 	return text;
 }
 
@@ -255,10 +255,11 @@ function processComboWords(keys, text) {
 
 function parseKeys(text) {
 	let keys = [];
+	console.log('\nRaw text:', text);
 	text = makeExactReplacements(text, exactReplacements);
 	text = parseNumbers(text);
 	text = makeReplacements(text, directionReplacements);
-	console.log('\nProcessed text:', text);
+	console.log('Processed text:', text);
 	processComboWords(keys, text);
 	console.log('Processed keys:', keys);
 	return keys;

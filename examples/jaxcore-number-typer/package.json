@@ -13,8 +13,7 @@
     "jaxcore": "0.0.2",
     "jaxcore-deepspeech-plugin": "0.0.5",
     "jaxcore-say-node": "0.0.6",
-    "speaker": "^0.5.1",
-    "wav": "^1.0.2",
-    "words-to-numbers": "git+https://github.com/dsteinman/words-to-numbers.git"
+    "numerizer": "0.0.4",
+    "wav": "^1.0.2"
   }
 }

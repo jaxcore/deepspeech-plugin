@@ -1,10 +1,8 @@
 # Number Typer
 
-This is a NodeJS example which uses [DeepSpeech](https://github.com/mozilla/DeepSpeech) and [robotjs]() to type numbers on a desktop computer using your voice.
+This is a NodeJS example that connects [DeepSpeech](https://github.com/mozilla/DeepSpeech) to the [Jaxcore](https://github.com/jaxcore/jaxcore) Keyboard Service.  It uses speech recognition to type numbers keys (and more) on the computer.  This works system-wide - use it for a Calculator or Spreadsheet application, terminal commands, or anything else.  You'll never have to type another number with your hands again.
 
 For more information about the Jaxcore DeepSpeech plugin see [here](https://github.com/jaxcore/deepspeech-plugin).
-
-
 
 ## Voice Commands
 
@@ -13,6 +11,9 @@ Supported words / commands.  Saying these words presses the corresponding key(s)
 - all numbers:
 	- "one" `1`
 	- "fifty" `50`
+	- "negative one fifty" `-150`
+	- "five hundred" `500`
+	- "five thousand and five" `5005`
 	- "twenty four million and five" `24000005`
 - floating point numbers:
 	- "one point five" `1.5`

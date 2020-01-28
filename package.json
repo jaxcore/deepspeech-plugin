@@ -13,7 +13,6 @@
     "jaxcore": "0.0.2",
     "csvtojson": "^2.0.8",
     "deepspeech": "^0.6.1",
-    "node-vad": "^1.1.4",
-    "words-to-numbers": "git+https://github.com/dsteinman/words-to-numbers.git"
+    "node-vad": "^1.1.4"
   }
 }

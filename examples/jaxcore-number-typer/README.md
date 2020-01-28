@@ -90,10 +90,9 @@ npm install speaker
 Mac OSX users will have to install an alternative speaker backend:
 
 ```
+rm package-lock.json
 npm install speaker --mpg123-backend=openal --no-save
 ```
-
-If there is an npm error, try deleting `package-lock.js` and try again.
 
 Start the server:
 

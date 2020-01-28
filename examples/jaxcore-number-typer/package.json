@@ -13,7 +13,7 @@
     "jaxcore": "0.0.2",
     "jaxcore-deepspeech-plugin": "0.0.5",
     "jaxcore-say-node": "0.0.6",
-    "numerizer": "0.0.4",
+    "numerizer": "git+https://github.com/dsteinman/numerizerJS.git",
     "wav": "^1.0.2"
   }
 }

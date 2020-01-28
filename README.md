@@ -7,11 +7,11 @@ to [Jaxcore](https://github.com/jaxcore/jaxcore) to enable speech recognition su
 
 Related projects:
 
-- [BumbleBee-Hotword](https://github.com/jaxcore/bumblebee-hotword) provides hotword detection and microphone stream recording support
-- [Jaxcore Say](https://github.com/jaxcore/jaxcore-say) provides text-to-speech (speech synthesis) support
 - [Jaxcore](https://github.com/jaxcore/jaxcore) a cybernetic control library that manages services and devices, and connects them together using adapters
+- [BumbleBee-Hotword](https://github.com/jaxcore/bumblebee-hotword) provides microphone recording support and hotword detection
+- [Jaxcore Say](https://github.com/jaxcore/jaxcore-say) provides text-to-speech (speech synthesis) support
 - [Jaxcore Desktop Server](https://github.com/jaxcore/jaxcore-desktop-server) - desktop application server for Windows/MacOS/Linux that runs Jaxcore and makes all services and adapters available through a simple UI
-- [Jaxcore Browser Extension](https://github.com/jaxcore/jaxcore-browser-extension) a web browser extension that allows Jaxcore devices (and DeepSpeech) to connect to web pages
+- [Jaxcore Browser Extension](https://github.com/jaxcore/jaxcore-browser-extension) a web browser extension that allows the DeepSpeech plugin to connect to and control web pages
 
 Together, these tools provide JavaScript developers an easy way write "Alexa-like" interactive voice assistants, smart-home controls, and create science-fiction like voice-controlled web applications and games.
 Run everything privately on your local computer without any 3rd party cloud computing services required.
@@ -68,6 +68,7 @@ These are more advanced NodeJS examples which use [Jaxcore](https://github.com/j
 - [Voice Assistant Toolbox](https://github.com/jaxcore/deepspeech-plugin/tree/master/examples/jaxcore-voiceassistant-toolbox) - a collection of tools needed to create a voice assistant of your own, includes hotword detection, text-to-speech, and speech-to-text all working at the same time
 - [Mouse Control Example](https://github.com/jaxcore/deepspeech-plugin/tree/master/examples/jaxcore-voicemouse-adapter) - uses voice commands to control the mouse (eg. mouse up 100, left click, scroll down...)
 - [Kodi Control Example](https://github.com/jaxcore/deepspeech-plugin/tree/master/examples/jaxcore-kodi-speech-adapter) - uses voice commands to control [Kodi Media Center](https://kodi.tv/) navigation and playback (eg. play, pause, select, back, up, down, page up, page down...)
+- [Number Typer](https://github.com/jaxcore/deepspeech-plugin/tree/master/examples/jaxcore-number-typer) - types numbers and symbols that you speak on the keyboard
 
 
 #### Web Examples

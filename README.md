@@ -68,7 +68,7 @@ These are more advanced NodeJS examples which use [Jaxcore](https://github.com/j
 - [Voice Assistant Toolbox](https://github.com/jaxcore/deepspeech-plugin/tree/master/examples/jaxcore-voiceassistant-toolbox) - a collection of tools needed to create a voice assistant of your own, includes hotword detection, text-to-speech, and speech-to-text all working at the same time
 - [Mouse Control Example](https://github.com/jaxcore/deepspeech-plugin/tree/master/examples/jaxcore-voicemouse-adapter) - uses voice commands to control the mouse (eg. mouse up 100, left click, scroll down...)
 - [Kodi Control Example](https://github.com/jaxcore/deepspeech-plugin/tree/master/examples/jaxcore-kodi-speech-adapter) - uses voice commands to control [Kodi Media Center](https://kodi.tv/) navigation and playback (eg. play, pause, select, back, up, down, page up, page down...)
-- [Number Typer](https://github.com/jaxcore/deepspeech-plugin/tree/master/examples/jaxcore-number-typer) - types numbers and symbols that you speak on the keyboard
+- [Number Typer](https://github.com/jaxcore/deepspeech-plugin/tree/master/examples/jaxcore-number-typer) - numbers and symbols that you speak will be typed on the keyboard
 
 
 #### Web Examples
@@ -84,16 +84,16 @@ These use a ReactJS client to stream microphone audio from the browser to a Node
 
 #### Jaxcore Browser Extension Examples
 
-These require running the [Jaxcore Desktop Server]() and [web browser extension]().  This method allows developers to write voice-enabled web applications using only client-side JavaScript.  The Jaxcore application provides the speech recognition support from outside the browser.
+These require running the [Jaxcore Desktop Server](https://github.com/jaxcore/jaxcore-desktop-server) and [web browser extension](https://github.com/jaxcore/jaxcore-browser-extension).  This method allows developers to write voice-enabled web applications using only client-side JavaScript.  The Jaxcore application provides the speech recognition support from outside the browser.
 
 - coming soon
 
 
 ## API
 
-This DeepSpeech plugin does not provide any audio recording functionality of it's own.  The purpose of this library is to use VAD (voice activity detection) to stream audio data to an instance of DeepSpeech running in a background (forked) process in the most efficient/accurate way possible.
+This DeepSpeech plugin does not provide any audio recording functionality of it's own.  The purpose of this library is to use VAD (voice activity detection) to stream audio data to an instance of DeepSpeech running in a background thread (fork) in the best way possible.
 
-It is recommended to use [BumbleBee Hotword]() or the [NodeJS version of BumbleBee]() to provide record the microphone audio.  These libraries have been tweaked specifically to work with DeepSpeech and has [Porcupine](https://github.com/Picovoice/Porcupine) hotword detection built-in for wake-word support.
+It is recommended to use [BumbleBee Hotword](https://github.com/jaxcore/bumblebee-hotword) or the [NodeJS version of BumbleBee](https://github.com/jaxcore/bumblebee-hotword-node) to provide record the microphone audio.  These libraries have been tweaked specifically to work with DeepSpeech and has [Porcupine](https://github.com/Picovoice/Porcupine) hotword detection built-in for wake-word support.
 
 The examples above demonstrate different ways to run BumbleBee to record and stream microphone audio into DeepSpeech.
 
@@ -133,7 +133,7 @@ jaxcore.startService('deepspeech', {
 });
 ```
 
-`deepspeech.streamData(data);` Does not specifically have to be from a microphone, the data can be `PCM integer 16 bit 16khz` from any source.
+The audio data streamed to DeepSpeech using `deepspeech.streamData(data);` Does not specifically have to be from a microphone using BumbleBee, the data can be any `PCM integer 16 bit 16khz` stream from any source.
 
 To receive microphone audio from the browser through a websocket server, see the [Web Basic example](https://github.com/jaxcore/deepspeech-plugin/tree/master/examples/web-basic-example).
 
@@ -174,32 +174,12 @@ deepspeech.on('recognize', (text, stats) => {
 
 ## License
 
-The MIT License (MIT)
-
-Copyright (c) 2019 Jaxcore Software Inc.
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+[MIT License](https://github.com/jaxcore/deepspeech-plugin/blob/master/LICENSE)
 
 ## Change Log
 
 0.0.6:
 
 - refactored VAD logic out of the DeepSpeech process, this improves accuracy during short pauses between words
-- add the Number Typer keyboard example
+- added the Number Typer keyboard example
 - update the voice assistant and mouse examples to the newest Jaxcore API

@@ -49,7 +49,7 @@ const numberReplacements = {
 	'two': 'to',
 	'four': 'for',
 	'six': 'sex',
-	'.': 'dot',
+	'.': 'point|dot|decimal|dismal',
 	'[': 'left brace',
 	']': 'right brace',
 	'{': 'left curly brace',

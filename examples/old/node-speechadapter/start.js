@@ -7,7 +7,7 @@ jaxcore.addPlugin(require('bumblebee-hotword-node'));
 
 // const BumbleBee = require('bumblebee-hotword-node');
 // const bumblebee = new BumbleBee();
-// bumblebee.addHotword('bumblebee');
+// bumblebee.setHotword('bumblebee');
 
 const MODEL_PATH = process.env.DEEPSPEECH_MODEL || __dirname + '/../../deepspeech-0.6.0-models'; // path to deepspeech model
 

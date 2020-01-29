@@ -16,7 +16,7 @@ jaxcore.defineService('Deepspeech English', 'deepspeech', {
 	modelPath: process.env.DEEPSPEECH_MODEL || __dirname + '/../../deepspeech-0.6.0-models', // path to deepspeech model
 	silenceThreshold: 200,
 	vadMode: 'VERY_AGGRESSIVE',
-	debug: 'true'
+	debug: true
 });
 
 // ADAPTER

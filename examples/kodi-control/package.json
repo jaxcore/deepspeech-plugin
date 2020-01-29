@@ -1,5 +1,5 @@
 {
-  "name": "node-voice-mouse",
+  "name": "kodi-control-example",
   "version": "0.0.0",
   "description": "",
   "main": "start.js",
@@ -10,9 +10,8 @@
   "license": "ISC",
   "dependencies": {
     "bumblebee-hotword-node": "0.0.4",
-    "deepspeech": "^0.6.1",
     "jaxcore": "0.0.2",
-    "jaxcore-deepspeech-plugin": "0.0.5",
-    "words-to-numbers": "^1.5.1"
+    "jaxcore-deepspeech-plugin": "0.0.6",
+    "jaxcore-kodi-plugin": "git+https://github.com/jaxcore/kodi-plugin.git"
   }
 }

@@ -9,17 +9,17 @@ jaxcore.addPlugin(require('jaxcore-deepspeech-plugin'));
 
 // SERVICES
 
+jaxcore.defineService('Kodi', 'kodi', {
+	host: process.env.KODI_HOST || 'localhost',
+	port: 9090
+});
 jaxcore.defineService('Bumblebee Node', 'bumblebeeNode', {});
 jaxcore.defineService('Deepspeech English', 'deepspeech', {
 	modelName: 'english',
 	modelPath: process.env.DEEPSPEECH_MODEL || __dirname + '/../../deepspeech-0.6.0-models', // path to deepspeech model
 	silenceThreshold: 200,
 	vadMode: 'VERY_AGGRESSIVE',
-	debug: 'true'
-});
-jaxcore.defineService('Kodi', 'deepspeech', {
-	host: process.env.KODI_HOST || 'localhost',
-	port: 9090
+	debug: true
 });
 
 // ADAPTER

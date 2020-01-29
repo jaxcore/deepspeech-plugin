@@ -11,7 +11,7 @@
   "dependencies": {
     "bumblebee-hotword-node": "0.0.4",
     "jaxcore": "0.0.2",
-    "jaxcore-deepspeech-plugin": "0.0.5",
+    "jaxcore-deepspeech-plugin": "0.0.6",
     "jaxcore-say-node": "0.0.6",
     "speaker": "^0.5.1",
     "wav": "^1.0.2"

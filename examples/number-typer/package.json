@@ -1,7 +1,7 @@
 {
-  "name": "node-wakeword-example",
-  "version": "0.0.2",
-  "description": "uses bumblebee as wake word to activate deepspeech",
+  "name": "number-typer",
+  "version": "0.0.0",
+  "description": "uses deepspeech to type numbers on the keyboard",
   "main": "start.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -11,9 +11,9 @@
   "dependencies": {
     "bumblebee-hotword-node": "0.0.4",
     "jaxcore": "0.0.2",
-    "jaxcore-deepspeech-plugin": "0.0.5",
+    "jaxcore-deepspeech-plugin": "0.0.6",
     "jaxcore-say-node": "0.0.6",
-    "speaker": "^0.5.1",
+    "numerizer": "git+https://github.com/dsteinman/numerizerJS.git",
     "wav": "^1.0.2"
   }
 }

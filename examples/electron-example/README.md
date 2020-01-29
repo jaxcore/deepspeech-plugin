@@ -2,6 +2,7 @@
 
 ```
 yarn
+yarn run rebuild
 yarn run dev
 ```
 

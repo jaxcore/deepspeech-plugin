@@ -1,4 +1,4 @@
-const {wordsToNumbers} = require('words-to-numbers');
+const numerizer = require('numerizer');
 const Jaxcore = require('jaxcore');
 const jaxcore = new Jaxcore();
 
@@ -21,14 +21,14 @@ jaxcore.defineService('Deepspeech English', 'deepspeech', {
 	modelPath: process.env.DEEPSPEECH_MODEL || __dirname + '/../../deepspeech-0.6.0-models', // path to deepspeech model
 	silenceThreshold: 200,
 	vadMode: 'VERY_AGGRESSIVE',
-	debug: 'true'
+	debug: true
 });
 
 // ADAPTER
 
 function numberize(text) {
 	text = text.replace(/^to /,'two ').replace(/ to$/,' two').replace(/ to /,' two ');
-	let nums = wordsToNumbers(text).toString();
+	let nums = numerizer(text).toString();
 	console.log('nums', nums);
 	nums = nums.replace(/ /g,'');
 	let num = parseInt(nums);
@@ -152,6 +152,21 @@ class VoiceMouseAdapter extends Jaxcore.Adapter {
 		});
 		
 		bumblebeeNode.start();
+		
+		console.log('TRY ONE OF THE VOICE COMMANDS:');
+		console.log('mouse left 100\n' +
+			'mouse right 100\n' +
+			'mouse up 100\n' +
+			'mouse down 100\n' +
+			'scroll left\n' +
+			'scroll right\n' +
+			'scroll up\n' +
+			'scroll down\n' +
+			'page up\n' +
+			'page down\n' +
+			'left click\n' +
+			'right click\n' +
+			'middle click');
 	}
 	
 	moveMouse(dir, num) {

@@ -10,6 +10,7 @@ bumblebee.addHotword('grasshopper');
 bumblebee.addHotword('hey_edison');
 bumblebee.addHotword('porcupine');
 bumblebee.addHotword('terminator');
+bumblebee.setHotword('bumblebee');
 
 window.deepspeechResults = function () {};
 

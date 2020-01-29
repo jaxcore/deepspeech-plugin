@@ -75,3 +75,5 @@ It is possible to use both `DEEPSPEECH_MODEL` and `KODI_HOST` variables if neces
 ```
 DEEPSPEECH_MODEL=/path/to/deepspeech/models KODI_HOST=192.168.1.100 node start.js
 ```
+
+If you haven't installed the deepspeech models, see the instructions [here](https://github.com/jaxcore/deepspeech-plugin)

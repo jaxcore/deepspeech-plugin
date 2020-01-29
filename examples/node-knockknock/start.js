@@ -1,7 +1,7 @@
 // load hotword detection
 const BumbleBee = require('bumblebee-hotword-node');
 const bumblebee = new BumbleBee();
-bumblebee.addHotword('bumblebee');
+bumblebee.setHotword('bumblebee');
 
 // load speech synthesis
 const Say = require('jaxcore-say-node');

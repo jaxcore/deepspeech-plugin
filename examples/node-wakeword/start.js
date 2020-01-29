@@ -4,7 +4,7 @@ jaxcore.addPlugin(require('jaxcore-deepspeech-plugin'));
 
 const BumbleBee = require('bumblebee-hotword-node');
 const bumblebee = new BumbleBee();
-bumblebee.addHotword('bumblebee');
+bumblebee.setHotword('bumblebee');
 
 const {playOn, playOff} = require('./sounds');
 
@@ -27,13 +27,13 @@ jaxcore.startService('deepspeech', {
 	bumblebee.on('hotword', function(hotword) {
 		if (speechRecognitionActive) {
 			console.log('\nSPEECH RECOGNITION OFF');
-			console.log('\nStart speech recognition by saying:', Object.keys(bumblebee.hotwords));
+			console.log('\nStart speech recognition by saying:', 'BUMBLEBEE');
 			playOff();
 			speechRecognitionActive = false;
 		}
 		else if (!speechRecognitionActive) {
 			console.log('\nSPEECH RECOGNITION ON');
-			console.log('Stop speech recognition by saying:', Object.keys(bumblebee.hotwords));
+			console.log('Stop speech recognition by saying:', 'BUMBLEBEE');
 			playOn();
 			speechRecognitionActive = true;
 		}
@@ -48,5 +48,5 @@ jaxcore.startService('deepspeech', {
 	
 	bumblebee.start();
 	
-	console.log('\nStart speech recognition by saying:', Object.keys(bumblebee.hotwords));
+	console.log('\nStart speech recognition by saying:', 'BUMBLEBEE');
 });

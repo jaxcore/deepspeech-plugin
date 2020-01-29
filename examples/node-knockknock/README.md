@@ -54,3 +54,5 @@ The example expect deepspeech-0.6-models to be located at the root of the `deeps
 ```
 DEEPSPEECH_MODEL=/path/to/deepspeech/models node start.js
 ```
+
+If you haven't installed the deepspeech models, see the instructions [here](https://github.com/jaxcore/deepspeech-plugin)

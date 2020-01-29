@@ -7,7 +7,6 @@ const jaxcore = new Jaxcore();
 jaxcore.addPlugin(require('jaxcore-deepspeech-plugin'));
 
 const SERVER_PORT = 4000; // websocket server port
-const MODEL_PATH = process.env.DEEPSPEECH_MODEL || __dirname + '/../../deepspeech-0.6.0-models'; // path to deepspeech model
 
 function startSocketServer(deepspeech) {
 	const app = http.createServer(function (req, res) {
@@ -49,8 +48,10 @@ function startSocketServer(deepspeech) {
 // start the speech adapter (pay attention to the deepspeech modelPath location)
 jaxcore.startService('deepspeech', {
 	modelName: 'english',
-	modelPath: MODEL_PATH,
-	debug: 'true'
+	modelPath: process.env.DEEPSPEECH_MODEL || __dirname + '/../../deepspeech-0.6.0-models', // path to deepspeech model
+	silenceThreshold: 200,
+	vadMode: 'VERY_AGGRESSIVE',
+	debug: true
 }, function(err, deepspeech) {
 	console.log('deepspeech service ready', typeof deepspeech);
 	startSocketServer(deepspeech);

@@ -5,13 +5,20 @@ Jaxcore DeepSpeech Plugin
 This plugin connects [Mozilla DeepSpeech](https://github.com/mozilla/DeepSpeech)
 to [Jaxcore](https://github.com/jaxcore/jaxcore) to enable speech recognition support and voice control of any device or service that is connected.
 
+This DeepSpeech library combined with a set of other speech related tools provides developers with all the key speech technologies necessary to write a voice assistant in JavaScript.
+
+- Speech-to-Text and Voice Activity Detection
+    - [Jaxcore DeepSpeech Plugin](https://github.com/jaxcore/deepspeech-plugin) - based on [DeepSpeech](https://github.com/mozilla/DeepSpeech) and [Node VAD](https://github.com/snirpo/node-vad)
+- Text-to-Speech
+    - [Jaxcore Say](https://github.com/jaxcore/jaxcore-say-node) - based on [mEspeak.js](https://www.masswerk.at/mespeak/)
+- Microphone Recording + hotword detection
+    - [BumbleBee Hotword](https://github.com/jaxcore/bumblebee-hotword-node) - based on [Porcupine](https://github.com/Picovoice/porcupine)
+
 Related projects:
 
 - [Jaxcore](https://github.com/jaxcore/jaxcore) a cybernetic control library that manages services and devices, and connects them together using adapters
-- [BumbleBee-Hotword](https://github.com/jaxcore/bumblebee-hotword) provides microphone recording support and hotword detection
-- [Jaxcore Say](https://github.com/jaxcore/jaxcore-say) provides text-to-speech (speech synthesis) support
 - [Jaxcore Desktop Server](https://github.com/jaxcore/jaxcore-desktop-server) - desktop application server for Windows/MacOS/Linux that runs Jaxcore and makes all services and adapters available through a simple UI
-- [Jaxcore Browser Extension](https://github.com/jaxcore/jaxcore-browser-extension) a web browser extension that allows the DeepSpeech plugin to connect to and control web pages
+- [Jaxcore Browser Extension](https://github.com/jaxcore/jaxcore-browser-extension) a web browser extension that allows the DeepSpeech plugin to connect to and control web pages using client-side JavaScript technologies
 
 Together, these tools provide JavaScript developers an easy way write "Alexa-like" interactive voice assistants, smart-home controls, and create science-fiction like voice-controlled web applications and games.
 Run everything privately on your local computer without any 3rd party cloud computing services required.
@@ -65,10 +72,10 @@ These examples run directly in NodeJS:
 
 These are more advanced NodeJS examples which use [Jaxcore](https://github.com/jaxcore/jaxcore) to control other devices and network services:
 
-- [Voice Assistant Toolbox](https://github.com/jaxcore/deepspeech-plugin/tree/master/examples/jaxcore-voiceassistant-toolbox) - a collection of tools needed to create a voice assistant of your own, includes hotword detection, text-to-speech, and speech-to-text all working at the same time
-- [Mouse Control Example](https://github.com/jaxcore/deepspeech-plugin/tree/master/examples/jaxcore-voicemouse-adapter) - uses voice commands to control the mouse (eg. mouse up 100, left click, scroll down...)
-- [Kodi Control Example](https://github.com/jaxcore/deepspeech-plugin/tree/master/examples/jaxcore-kodi-speech-adapter) - uses voice commands to control [Kodi Media Center](https://kodi.tv/) navigation and playback (eg. play, pause, select, back, up, down, page up, page down...)
-- [Number Typer](https://github.com/jaxcore/deepspeech-plugin/tree/master/examples/jaxcore-number-typer) - numbers and symbols that you speak will be typed on the keyboard
+- [Voice Assistant Toolbox](https://github.com/jaxcore/deepspeech-plugin/tree/master/examples/voice-assistant-toolbox) - a collection of tools needed to create a voice assistant of your own, includes hotword detection, text-to-speech, and speech-to-text all working at the same time
+- [Mouse Control example](https://github.com/jaxcore/deepspeech-plugin/tree/master/examples/mouse-control) - uses voice commands to control the mouse (eg. mouse up 100, left click, scroll down...)
+- [Kodi Control example](https://github.com/jaxcore/deepspeech-plugin/tree/master/examples/kodi-control) - uses voice commands to control [Kodi Media Center](https://kodi.tv/) navigation and playback (eg. play, pause, select, back, up, down, page up, page down...)
+- [Number Typer](https://github.com/jaxcore/deepspeech-plugin/tree/master/examples/number-typer) - numbers and symbols that you speak will be typed on the keyboard
 
 
 #### Web Examples
@@ -97,29 +104,26 @@ It is recommended to use [BumbleBee Hotword](https://github.com/jaxcore/bumblebe
 
 The examples above demonstrate different ways to run BumbleBee to record and stream microphone audio into DeepSpeech.
 
-For NodeJS, this is a basic way:
+For NodeJS, this is the basic way:
 
 ```
-const Jaxcore = require('jaxcore');
-const jaxcore = new Jaxcore();
-jaxcore.addPlugin(require('jaxcore-deepspeech-plugin'));
+const DeepSpeechPlugin = require('jaxcore-deepspeech-plugin');
+const BumbleBeeNode = require('bumblebee-hotword-node');
 
-const BumbleBee = require('bumblebee-hotword-node');
-const bumblebee = new BumbleBee();
-bumblebee.addHotword('bumblebee');
+const bumblebee = new BumbleBeeNode();
+bumblebee.setHotword('bumblebee');
 
-const MODEL_PATH = process.env.DEEPSPEECH_MODEL || __dirname + '/../../deepspeech-0.6.0-models'; // path to deepspeech model
-
-jaxcore.startService('deepspeech', {
+DeepSpeechPlugin.start({
 	modelName: 'english',
-	modelPath: MODEL_PATH,
-	silencThreshold: 200, // delay for this long before processing the audio
-	vadMode: 'VERY_AGGRESSIVE', // 'AGGRESSIVE' or 'VERY_AGGRESSIVE' is recommended
-}, function(err, deepspeech) {
-	
+	modelPath: process.env.DEEPSPEECH_MODEL || __dirname + '/../../deepspeech-0.6.0-models', // path to deepspeech model,
+	silenceThreshold: 200, // delay for this long before processing the audio
+	vadMode: 'VERY_AGGRESSIVE', // options are: 'NORMAL', 'LOW_BITRATE', 'AGGRESSIVE', 'VERY_AGGRESSIVE'
+	debug: true
+})
+.then(deepspeech => {
 	// receive the speech recognition results
 	deepspeech.on('recognize', (text, stats) => {
-		console.log('recognize:', text, stats);
+		console.log('\nrecognize:', text, stats);
 	});
 	
 	// bumblebee emits a "data" event for every 8192 bytes of audio it records from the microphone
@@ -127,20 +131,56 @@ jaxcore.startService('deepspeech', {
 		// stream the data to the deepspeech plugin
 		deepspeech.streamData(data);
 	});
-	
+
 	// bumblebee start the microphone
 	bumblebee.start();
-});
+})
+.catch(console.error);
 ```
 
-The audio data streamed to DeepSpeech using `deepspeech.streamData(data);` Does not specifically have to be from a microphone using BumbleBee, the data can be any `PCM integer 16 bit 16khz` stream from any source.
+The audio data streamed to DeepSpeech using `deepspeech.streamData(data);` does not specifically have to be from a microphone using BumbleBee, the data can be any `PCM integer 16 bit 16khz` stream from any source.
 
 To receive microphone audio from the browser through a websocket server, see the [Web Basic example](https://github.com/jaxcore/deepspeech-plugin/tree/master/examples/web-basic-example).
 
+### API Constructor
+
+There are 2 ways to instantiate the deepspeech plugin:
+
+**1) DeepSpeechPlugin.start()**
+
+```
+const DeepSpeechPlugin = require('jaxcore-deepspeech-plugin');
+
+DeepSpeechPlugin.start({
+	// deepspeech options
+})
+.then(deepspeech => {
+	// deepspeech process instance
+})
+.catch(e => {
+	// catch error
+})
+```
+
+**2) Jaxcore Service**
+
+[Jaxcore](https://github.com/jaxcore/jaxcore) uses an alternative syntax to define and launch the deepspeech service.
+
+```
+const Jaxcore = require('jaxcore');
+const jaxcore = new Jaxcore();
+jaxcore.addPlugin(require('jaxcore-deepspeech-plugin'));
+
+jaxcore.startService('deepspeech', {
+	// deepspeech options
+}, function(err, deepspeech) {
+	// deepspeech process
+});
+```
+
+Jaxcore adapters use a slightly different API to associate adapters ("programs") with a set of services.  When the adapter is connected, the associated services are launched automatically.  See the [deepspeech adapter example](https://github.com/jaxcore/deepspeech-plugin/tree/master/examples/jaxcore-deepspeech-adapter).
+
 ### API Methods
-
-These methods are used to receive audio data from the browser or from an ElectronJS window:
-
 
 Stream an audio buffer to the deepspeech plugin:
 
@@ -154,7 +194,7 @@ End the stream:
 deepspeech.streamEnd();
 ```
 
-End the stream and ignore deepspeech results;
+End the stream, and any audio data that has been streamed but not yet processed will be ignored:
 
 ```
 deepspeech.streamReset();
@@ -182,4 +222,4 @@ deepspeech.on('recognize', (text, stats) => {
 
 - refactored VAD logic out of the DeepSpeech process, this improves accuracy during short pauses between words
 - added the Number Typer keyboard example
-- update the voice assistant and mouse examples to the newest Jaxcore API
+- updated the voice assistant and mouse examples to the newest Jaxcore API

@@ -1,14 +1,10 @@
 import React, {Component} from 'react';
 import io from 'socket.io-client';
-import wordsToNumbers from 'words-to-numbers';
+import numerizer from 'numerizer';
 import Say from 'jaxcore-say';
 
 import BumbleBee, {SpectrumAnalyser} from 'bumblebee-hotword';
-
 const bumblebee = new BumbleBee();
-global.bumblebee = bumblebee;
-
-global.wordsToNumbers = wordsToNumbers;
 
 bumblebee.setSensitivity(0.5);
 bumblebee.setWorkersPath('./bumblebee-workers');
@@ -148,10 +144,10 @@ class BumbleBeeDeepSpeechApp extends Component {
 				}
 				return r;
 			}).join(' ');
-			let numText = wordsToNumbers(t);
+			let numText = numerizer(t);
 			if (numText) {
 				if (typeof numText === 'string') {
-					console.log('wordsToNumbers', numText);
+					console.log('numerizer', numText);
 					numText = numText.replace(/[^0-9. ]/g, "").replace(/ +/g, ' ').trim();
 					if (numText) {
 						console.log('numText', numText);

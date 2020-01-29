@@ -15,9 +15,6 @@ Supported words / commands.  Saying these words presses the corresponding key(s)
 	- "five hundred" `500`
 	- "five thousand and five" `5005`
 	- "twenty four million and five" `24000005`
-- floating point numbers:
-	- "one point five" `1.5`
-	- "sixteen decminal zero one" `16.01`
 - all math-related symbols:
 	- "plus" `+`
 	- "minus" `-`

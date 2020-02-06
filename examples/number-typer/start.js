@@ -273,7 +273,8 @@ class JaxcoreNumberTyper extends Jaxcore.Adapter {
 	static getDefaultState() {
 		return {
 			speechRecognitionActive: false,
-			sayActive: false
+			sayActive: false,
+			modifierHold: null
 		};
 	}
 	
@@ -322,7 +323,6 @@ class JaxcoreNumberTyper extends Jaxcore.Adapter {
 	
 	processText(text) {
 		const {keyboard} = this.services;
-		let modifierHold = null;
 		let keys = parseKeys(text);
 		keys.forEach(key => {
 			if (key.key) {
@@ -333,8 +333,8 @@ class JaxcoreNumberTyper extends Jaxcore.Adapter {
 						modifierHold: null
 					});
 				}
-				else if (modifierHold) {
-					keyboard.keyPress(key.key, [modifierHold]);
+				else if (this.state.modifierHold) {
+					keyboard.keyPress(key.key, [this.state.modifierHold]);
 				}
 				else {
 					keyboard.keyPress(key.key);

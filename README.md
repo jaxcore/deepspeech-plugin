@@ -10,9 +10,9 @@ This DeepSpeech library combined with a set of other speech related tools provid
 - Speech-to-Text and Voice Activity Detection
     - [Jaxcore DeepSpeech Plugin](https://github.com/jaxcore/deepspeech-plugin) - based on [DeepSpeech](https://github.com/mozilla/DeepSpeech) and [Node VAD](https://github.com/snirpo/node-vad)
 - Text-to-Speech
-    - [Jaxcore Say](https://github.com/jaxcore/jaxcore-say-node) - based on [mEspeak.js](https://www.masswerk.at/mespeak/)
+    - [Jaxcore Say](https://github.com/jaxcore/jaxcore-say) - based on [mEspeak.js](https://www.masswerk.at/mespeak/)
 - Microphone Recording + hotword detection
-    - [BumbleBee Hotword](https://github.com/jaxcore/bumblebee-hotword-node) - based on [Porcupine](https://github.com/Picovoice/porcupine)
+    - [BumbleBee Hotword](https://github.com/jaxcore/bumblebee-hotword) - based on [Porcupine](https://github.com/Picovoice/porcupine)
 
 Related projects:
 

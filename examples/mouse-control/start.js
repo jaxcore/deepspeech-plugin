@@ -36,6 +36,28 @@ function numberize(text) {
 	return num;
 }
 
+function makeReplacements(text, corrections) {
+	for (let key in corrections) {
+		let r = '(?<=\\s|^)('+corrections[key]+')(?=\\s|$)';
+		let regex = new RegExp(r, 'i');
+		let match = regex.test(text);
+		if (match) {
+			text = text.replace(new RegExp(r, 'gi'), function (m, a) {
+				return key;
+			});
+		}
+	}
+	return text.trim();
+}
+
+const textReplacements = {
+	'mouse': 'rose|nose|mount|most|mollie|mos|mose|malise|morison|mouth',
+	'mouse up': 'mouse of',
+	'scroll': 'rolled|scrolled|stroll|strolled|scrawled|scrawl',
+	'left': 'laughed',
+	'right': 'write|rated|rate|rat'
+};
+
 class VoiceMouseAdapter extends Jaxcore.Adapter {
 	
 	constructor(store, config, theme, devices, services) {
@@ -46,17 +68,9 @@ class VoiceMouseAdapter extends Jaxcore.Adapter {
 		
 		this.addEvents(deepspeech, {
 			recognize: function (text, stats) {
-				this.log('speech recognize', text);
+				console.log('speech recognize', text);
 				
-				text = text.replace(/rose/,'mouse');
-				text = text.replace(/when/,'one');
-				text = text.replace(/most of|mouth of/,'mouse up');
-				text = text.replace(/most of/,'mouse up');
-				text = text.replace(/stroll |strolled |scrawled |scrawl /,'scroll ');
-				text = text.replace(/nose |mount |most |mollie |mos |mose |malise |morison|mouth /,'mouse ');
-				text = text.replace(/laughed /,'left ');
-				text = text.replace(/write |rated |rate |rat /,'right ');
-				text = text.trim();
+				text = makeReplacements(text, textReplacements);
 				
 				console.log('Speech Recognized:', text);
 				

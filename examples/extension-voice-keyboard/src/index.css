@@ -1,0 +1,144 @@
+body {
+  /*margin: 0;*/
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1 {
+  /*width: 1010px;*/
+  width: 100%;
+  text-align: center;
+  margin: auto;
+  /*margin-bottom: -50px;*/
+}
+
+#keyboard-hover {
+  position: absolute;
+  min-width: 100px;
+  background: #eee;
+  visibility: hidden;
+  text-align: center;
+  padding: 10px;
+}
+#keyboard {
+  width: 1010px;
+  margin: auto;
+}
+#keyboard div.row {
+  white-space: nowrap;
+}
+#keyboard a.key {
+  display: inline-block;
+  width:50px;
+  height:50px;
+  border: 1px solid black;
+  border-radius: 5px;
+  margin: 2px;
+  position: relative;
+  color: black;
+}
+
+#keyboard a.key:hover {
+  background: #eee;
+}
+
+#keyboard div.display {
+  position: absolute;
+  font-size: 13pt;
+  text-align: center;
+  width:inherit;
+  top: 13px;
+}
+#keyboard div.displayWithShift {
+  position: absolute;
+  font-size: 13pt;
+  top: 21px;
+  text-align: center;
+  width:inherit;
+}
+#keyboard div.shiftDisplay {
+  position: absolute;
+  top: 1px;
+  font-size: 11pt;
+  text-align: center;
+  width:inherit;
+}
+
+#keyboard div.key-empty {
+  display: inline-block;
+  width:52px;
+  height:52px;
+  margin: 2px;
+}
+
+#keyboard a.key.key-escape,
+#keyboard a.key.key-f1,
+#keyboard a.key.key-f2,
+#keyboard a.key.key-f3,
+#keyboard a.key.key-f4,
+#keyboard a.key.key-f5,
+#keyboard a.key.key-f6,
+#keyboard a.key.key-f7,
+#keyboard a.key.key-f8,
+#keyboard a.key.key-f9,
+#keyboard a.key.key-f10,
+#keyboard a.key.key-f11,
+#keyboard a.key.key-f12 {
+  height: 25px;
+}
+#keyboard a.key.key-escape div.display,
+#keyboard a.key.key-f1 div.display,
+#keyboard a.key.key-f2 div.display,
+#keyboard a.key.key-f3 div.display,
+#keyboard a.key.key-f4 div.display,
+#keyboard a.key.key-f5 div.display,
+#keyboard a.key.key-f6 div.display,
+#keyboard a.key.key-f7 div.display,
+#keyboard a.key.key-f8 div.display,
+#keyboard a.key.key-f9 div.display,
+#keyboard a.key.key-f10 div.display,
+#keyboard a.key.key-f11 div.display,
+#keyboard a.key.key-f12 div.display {
+  top: 1px;
+}
+
+#keyboard a.key.key-tab {
+  width:75px;
+}
+#keyboard a.key.key-backslash {
+  width:75px;
+}
+#keyboard a.key.key-backspace {
+  width:100px;
+}
+
+#keyboard a.key.key-return {
+  width:103px;
+}
+#keyboard a.key.key-capslock {
+  width:103px;
+}
+
+#keyboard a.key.key-shift,
+#keyboard a.key.key-right-shift {
+  width: 131px;
+}
+
+#keyboard a.key.key-command,
+#keyboard a.key.key-right-command {
+  width: 70px;
+}
+
+#keyboard a.key.key-space {
+  width: 452px;
+}
+
+#keyboard a.key.key-up,
+#keyboard a.key.key-insert,
+#keyboard a.key.key-delete,
+#keyboard a.key.key-left {
+  margin-left: 10px;
+}

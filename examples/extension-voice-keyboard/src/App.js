@@ -29,6 +29,7 @@ const keys = {
 		display: '`',
 		words: 'back tick',
 		shiftKey: {
+			key: 'tilde',
 			display: '~',
 			words: 'tilde|tilda||till the|till a',
 		},
@@ -36,6 +37,7 @@ const keys = {
 	'1': {
 		words: 'one',
 		shiftKey: {
+			key: 'exclamation-mark',
 			display: '!',
 			words: 'exclamation mark|exclamation|bang|nation mark'
 		}
@@ -43,6 +45,7 @@ const keys = {
 	'2': {
 		words: 'two|to',
 		shiftKey: {
+			key: 'at',
 			display: '@',
 			words: 'at'
 		}
@@ -50,6 +53,7 @@ const keys = {
 	'3': {
 		words: 'three',
 		shiftKey: {
+			key: 'number-sign',
 			display: '#',
 			words: 'hash|pound|number sign'
 		}
@@ -57,6 +61,7 @@ const keys = {
 	'4': {
 		words: 'four|for',
 		shiftKey: {
+			key: 'dollars',
 			display: '$',
 			words: 'dollar sign|dollar|dollars'
 		}
@@ -64,6 +69,7 @@ const keys = {
 	'5': {
 		words: 'five',
 		shiftKey: {
+			key: 'percent',
 			display: '%',
 			words: 'per cent|per centage|percent|percentage|percent sign|percentage sign|modulus|he sent'
 		}
@@ -71,20 +77,23 @@ const keys = {
 	'6': {
 		words: 'six|sex',
 		shiftKey: {
+			key: 'caret',
 			display: '^',
-			words: 'carrot|accent'
+			words: 'carrot|accent|caret'
 		}
 	},
 	'7': {
 		words: 'seven',
 		shiftKey: {
+			key: 'ampersand',
 			display: '&',
-			words: 'ampersand|and'
+			words: 'ampersand'
 		}
 	},
 	'8': {
 		words: 'eight',
 		shiftKey: {
+			key: 'asterisk',
 			display: '*',
 			words: 'star|asterisk|times|time|multiply|multiply by|multiplied by'
 		}
@@ -92,6 +101,7 @@ const keys = {
 	'9': {
 		words: 'nine',
 		shiftKey: {
+			key: 'left-bracket',
 			display: '(',
 			words: 'left bracket'
 		}
@@ -99,14 +109,16 @@ const keys = {
 	'0': {
 		words: 'zero',
 		shiftKey: {
+			key: 'right-bracket',
 			display: ')',
 			words: 'right bracket'
 		}
 	},
 	'minus': {
 		display: '-',
-		words: 'minus|dash|negative|subtract|subtracked by',
+		words: 'minus|mines|dash|negative|subtract|subtracked by',
 		shiftKey: {
+			key: 'underscore',
 			display: '_',
 			words: 'underscore|under score'
 		}
@@ -115,6 +127,7 @@ const keys = {
 		display: '=',
 		words: 'equals|equal',
 		shiftKey: {
+			key: 'plus',
 			display: '+',
 			words: 'plus|add|positive'
 		}
@@ -175,6 +188,7 @@ const keys = {
 		display: '[',
 		words: 'left brace',
 		shiftKey: {
+			key: 'left-curly-bracket',
 			display: '{',
 			words: 'left curly brace|left curly bracket'
 		}
@@ -183,6 +197,7 @@ const keys = {
 		display: ']',
 		words: 'right brace',
 		shiftKey: {
+			key: 'right-curly-bracket',
 			display: '}',
 			words: 'right curly brace|right curly bracket'
 		}
@@ -191,8 +206,9 @@ const keys = {
 		display: '\\',
 		words: 'back slash|backslash',
 		shiftKey: {
+			key: 'vertical-bar',
 			display: '|',
-			words: 'pipe|bar'
+			words: 'pipe|vertical bar|bar'
 		}
 	},
 	'delete': {
@@ -213,10 +229,10 @@ const keys = {
 		words: 'caps lock'
 	},
 	'a': {
-		words: 'a|ah'
+		words: 'ah'
 	},
 	's': {
-		words: 'es'
+		words: 'es|as'
 	},
 	'd': {
 		words: 'de'
@@ -228,7 +244,7 @@ const keys = {
 		words: 'gee'
 	},
 	'h': {
-		words: 'ach|each'
+		words: 'ach|each|aged|age'
 	},
 	'j': {
 		words: 'jay|gay'
@@ -243,6 +259,7 @@ const keys = {
 		display: ';',
 		words: 'semi colon|semi collin|semi colin',
 		shiftKey: {
+			key: 'colon',
 			display: ':',
 			words: 'colon|collin|colin|cool and|coal and|call and',
 		}
@@ -251,6 +268,7 @@ const keys = {
 		display: '\'',
 		words: 'quote|apostrophe',
 		shiftKey: {
+			key: 'double-quote',
 			display: '"',
 			words: 'double \'',
 		}
@@ -289,6 +307,7 @@ const keys = {
 		display: ',',
 		words: 'comma',
 		shiftKey: {
+			key: 'less-than',
 			display: '<',
 			words: 'less than|left angle bracket'
 		}
@@ -297,6 +316,7 @@ const keys = {
 		display: '.',
 		words: 'period|point|dot|decimal',
 		shiftKey: {
+			key: 'period',
 			display: '>',
 			words: 'greater than|right angle bracket'
 		}
@@ -305,6 +325,7 @@ const keys = {
 		display: '/',
 		words: 'forward slash|slash',
 		shiftKey: {
+			key: 'question-mark',
 			display: '?',
 			words: 'question mark'
 		}
@@ -314,7 +335,7 @@ const keys = {
 		display: 'shift'
 	},
 	'up': {
-		words: 'arrow up|up',
+		words: 'arrow up|up arrow|up',
 		display: '↑'
 	},
 	
@@ -358,11 +379,11 @@ const keys = {
 		display: '←'
 	},
 	'down': {
-		words: 'arrow down|down',
+		words: 'arrow down|down arrow|down',
 		display: '↓'
 	},
 	'right': {
-		words: 'arrow right|right',
+		words: 'arrow right|right arrow|right',
 		display: '→'
 	}
 };
@@ -375,23 +396,71 @@ for (let f = 1; f <= 9; f++) {
 	};
 }
 
+const keyReplacements = {
+	'left': 'laugh|laughed|lacked',
+};
+
+const keyMap = {};
+
 for (let k in keys) {
+	let key = keys[k];
+	
+	keyMap[k] = k;
+	
 	if (/^[a-z]$/.test(k)) {
-		let words = '';
-		keys[k].words = k+'|'+keys[k].words;
-		keys[k].words.split('|').forEach((w, i) => {
-			if (i > 0) words += '|';
-			words += w + '|' +
-				'letter ' + w + '|' +
-				'let er ' + w + '|' +
-				'letters ' + w + '|' +
-				'capital ' + w + '|' +
-				'lower case ' + w + '|' +
-				'upper case ' + w;
+		// let words = '';
+		keyReplacements[k.toUpperCase()] = '';
+		keyReplacements[k] = '';
+		
+		// keys[k].words += '|'+k;
+		let ws = keys[k].words.split('|');
+		ws.forEach((w, i) => {
+			if (i > 0 && i<ws.length) {
+				keyReplacements[k] += '|';
+				keyReplacements[k.toUpperCase()] += '|';
+			}
+			
+			keyReplacements[k.toUpperCase()] += 'upper case '+w+'|capital '+w;
+			keyReplacements[k] += 'letter '+w+'|let er '+w+'|letters '+w+'|lower case '+w+'|'+w;
+			
+			// keyReplacements[k.toUpperCase()] += '|upper case '+w+'|capital '+w;
+			//
+			// words += w + '|' +
+			// 	'letter ' + w + '|' +
+			// 	'let er ' + w + '|' +
+			// 	'letters ' + w + '|' +
+			// 	// 'capital ' + w + '|' +
+			// 	'lower case ' + w + '|';
+			// 	// 'upper case ' + w;
 		});
-		keys[k].words = words;
+		
+		keyReplacements[k.toUpperCase()] += '|upper case '+k+'|capital '+k;
+		
+		//keys[k].words = words;
+		keyMap[k.toUpperCase()] = k;
+	}
+	else {
+		keyReplacements[k] = '';
+		keys[k].words.split('|').forEach((w, i) => {
+			if (!keyReplacements[k]) keyReplacements[k] = '';
+			if (i>0) keyReplacements[k] += '|';
+			keyReplacements[k] += w;
+		});
+	}
+	
+	if (key.shiftKey) {
+		keyReplacements[key.shiftKey.key] = key.shiftKey.words;
+		keyMap[key.shiftKey.key] = k;
+	}
+	
+	if (keyReplacements[k] === k) {
+		delete keyReplacements[k];
 	}
 }
+
+console.log(keyReplacements);
+// console.log(keyMap);
+debugger;
 
 const keylayout = [
 	['escape', 'f1', 'f2', 'f3', 'f4', 'f5', 'f6', 'f7', 'f8', 'f9', 'f10', 'f11', 'f12'],
@@ -402,18 +471,19 @@ const keylayout = [
 	['control', 'alt', 'command', 'space', 'right-command', 'right-alt', 'right-control', 'left', 'down', 'right']
 ];
 
-const keyReplacements = {
-	'left': 'laugh|laughed|lacked',
-};
-
-for (let k in keys) {
-	let key = keys[k];
-	let d = key.display || k;
-	keyReplacements[d] = k+'|'+key.words;
-	if (key.shiftKey) {
-		keyReplacements[key.shiftKey.display] = key.shiftKey.words;
-	}
-}
+// for (let k in keys) {
+// 	let key = keys[k];
+// 	// let d = key.display || k;
+// 	// if (/^[a-z]$/.test(k)) {
+//
+// 	// keyReplacements[k] = key.words; //k+'|'+key.words;
+//
+// 	keyMap[k] = k;
+// 	if (key.shiftKey) {
+// 		keyReplacements[key.shiftKey.display] = key.shiftKey.words;
+// 		keyMap[key.shiftKey.display.toLowerCase()] = k;
+// 	}
+// }
 
 function makeReplacements(text, corrections) {
 	for (let key in corrections) {
@@ -442,7 +512,12 @@ class App extends Component {
 			tabActive: false,
 			jaxcoreTimeout: false,
 			spokenText: null,
-			processedText: []
+			processedText: [],
+			highlightedKeys: {
+				'left-curly-bracket': true,
+				'shift': true,
+				'tilde': true
+			}
 		};
 		
 		this.keyboardRef = React.createRef();
@@ -581,12 +656,26 @@ class App extends Component {
 			// hoverText = this.state.hoverKey.toUpperCase();
 			let key = keys[this.state.hoverKey];
 			hoverText = key.display ? key.display.toUpperCase() : this.state.hoverKey.toUpperCase();
-			key.words.split('|').forEach((word, key) => {
+			
+			if (/^[a-z]$/.test(this.state.hoverKey)) {
+				keyReplacements[this.state.hoverKey].split('|').forEach((word, key) => {
+					lines.push((<div key={'uw' + key}>
+						{word}
+					</div>));
+				});
+				keyReplacements[this.state.hoverKey.toUpperCase()].split('|').forEach((word, key) => {
+					lines.push((<div key={'xw' + key}>
+						{word}
+					</div>));
+				});
+			}
+			else key.words.split('|').forEach((word, key) => {
 				// if (word === this.state.hoverKey) return;
 				lines.push((<div key={'w' + key}>
 					{word}
 				</div>));
 			});
+			
 			if (key.shiftKey) {
 				lines.push((<strong key="s">{key.shiftKey.display}</strong>));
 				key.shiftKey.words.split('|').forEach((word, key) => {
@@ -615,10 +704,10 @@ class App extends Component {
 							return (<div className="key-empty" key={kindex}></div>);
 						}
 						let k = keys[key];
-						if (!k) {
-							debugger;
-							return;
-						}
+						// if (!k) {
+						// 	debugger;
+						// 	return;
+						// }
 						// let displayKey = (k.display) ? k.display : k.key;
 						let displayKey = k.display || key;
 						
@@ -626,6 +715,8 @@ class App extends Component {
 						
 						let displayShiftKey = (k.shiftKey) ? (
 							<div className="shiftDisplay">{k.shiftKey.display}</div>) : null;
+						
+						let highlight = (key in this.state.highlightedKeys) || (k.shiftKey && k.shiftKey.key in this.state.highlightedKeys);
 						
 						let outHandler = e => {
 							this.hoverTimeout = setTimeout(() => {
@@ -654,8 +745,11 @@ class App extends Component {
 						let handler = e => {
 							e.preventDefault();
 						};
+						
+						let highlightClass = highlight? ' highlighted':'';
+						
 						return (<a href="/" onMouseOver={hoverHandler} onMouseOut={outHandler} onClick={handler}
-								   className={"key key-" + key} key={kindex}>
+								   className={"key key-" + key+highlightClass} key={kindex}>
 							{displayShiftKey}
 							<div className={displayShiftKey ? "displayWithShift" : "display"}>{displayKey}</div>
 						</a>);

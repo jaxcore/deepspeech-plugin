@@ -41,8 +41,17 @@ h1 {
   color: black;
 }
 
+#keyboard a.key.highlighted {
+  background: blue;
+  color: white;
+}
+
 #keyboard a.key:hover {
   background: #eee;
+}
+
+#keyboard a.key.highlighted:hover {
+  background: black;
 }
 
 #keyboard div.display {

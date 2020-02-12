@@ -401,6 +401,7 @@ const keyReplacements = {
 };
 
 const keyMap = {};
+const keyMapDisplay = {};
 
 for (let k in keys) {
 	let key = keys[k];
@@ -451,6 +452,10 @@ for (let k in keys) {
 	if (key.shiftKey) {
 		keyReplacements[key.shiftKey.key] = key.shiftKey.words;
 		keyMap[key.shiftKey.key] = k;
+		keyMapDisplay[key.shiftKey.display] = key.shiftKey.key;
+	}
+	else {
+		if (key.display) keyMapDisplay[key.display] = k;
 	}
 	
 	if (keyReplacements[k] === k) {
@@ -458,9 +463,10 @@ for (let k in keys) {
 	}
 }
 
-console.log(keyReplacements);
+// console.log(keyMapDisplay);
+// console.log(keyReplacements);
 // console.log(keyMap);
-debugger;
+// debugger;
 
 const keylayout = [
 	['escape', 'f1', 'f2', 'f3', 'f4', 'f5', 'f6', 'f7', 'f8', 'f9', 'f10', 'f11', 'f12'],
@@ -553,8 +559,21 @@ class App extends Component {
 		
 		text = makeReplacements(text, keyReplacements);
 		
-		const {processedText} = this.state;
+		let {processedText} = this.state;
 		processedText.unshift(text);
+		// highlight keys
+		
+		// todo: display processed keys correctly
+		
+		// processedText = makeReplacements(processedText, keyMapDisplay);
+		// for (let key in keyMapDisplay) {
+		// 	processedText = processedText.replace(new RegExp(keyMapDisplay[key],'g'), key);
+		// 	// // 	let r = '(?<=\\s|^)('+key]+')(?=\\s|$)';
+		// 	// // 	let regex = new RegExp(r, 'i');
+		// 	// //
+		// 	// // 	processedText.replace(regex, );
+		// 	// // 	keyMap
+		// }
 		
 		this.setState({
 			spokenText,

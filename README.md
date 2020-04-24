@@ -100,7 +100,7 @@ These require running the [Jaxcore Desktop Server](https://github.com/jaxcore/ja
 
 This DeepSpeech plugin does not provide any audio recording functionality of it's own.  The purpose of this library is to use VAD (voice activity detection) to stream audio data to an instance of DeepSpeech running in a background thread (fork) in the best way possible.
 
-It is recommended to use [BumbleBee Hotword](https://github.com/jaxcore/bumblebee-hotword) or the [NodeJS version of BumbleBee](https://github.com/jaxcore/bumblebee-hotword-node) to provide record the microphone audio.  These libraries have been tweaked specifically to work with DeepSpeech and has [Porcupine](https://github.com/Picovoice/Porcupine) hotword detection built-in for wake-word support.
+It is recommended to use [BumbleBee Hotword](https://github.com/jaxcore/bumblebee-hotword) or the [NodeJS version of BumbleBee](https://github.com/jaxcore/bumblebee-hotword-node) to record the microphone audio.  These libraries have been tweaked specifically to work with DeepSpeech and has [Porcupine](https://github.com/Picovoice/Porcupine) hotword detection built-in for wake-word support.
 
 The examples above demonstrate different ways to run BumbleBee to record and stream microphone audio into DeepSpeech.
 

@@ -9,7 +9,7 @@ jaxcore.addPlugin(DeepSpeechService);
 // load hotword detection module (bumblebee-hotword-node)
 const BumbleBee = require('bumblebee-hotword-node');
 const bumblebee = new BumbleBee();
-
+bumblebee.addHotword('bumblebee');
 bumblebee.setHotword('bumblebee');
 
 // load text-to-speech module (jaxcore-say-node)

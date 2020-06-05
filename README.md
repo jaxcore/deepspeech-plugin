@@ -115,7 +115,7 @@ bumblebee.setHotword('bumblebee');
 
 DeepSpeechPlugin.start({
 	modelName: 'english',
-	modelPath: process.env.DEEPSPEECH_MODEL || __dirname + '/../../deepspeech-0.6.0-models', // path to deepspeech model,
+	modelPath: process.env.DEEPSPEECH_MODEL || __dirname + '/../../deepspeech-0.7.0-models', // path to deepspeech model,
 	silenceThreshold: 200, // delay for this long before processing the audio
 	vadMode: 'VERY_AGGRESSIVE', // options are: 'NORMAL', 'LOW_BITRATE', 'AGGRESSIVE', 'VERY_AGGRESSIVE'
 	debug: true

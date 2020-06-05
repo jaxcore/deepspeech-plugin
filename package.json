@@ -13,7 +13,7 @@
     "csvtojson": "^2.0.8",
     "deepspeech": "^0.7.3",
     "jaxcore": "0.0.2",
-    "node-abi": "^2.15.0",
+    "node-abi": "^2.18.0",
     "node-vad": "^1.1.4"
   }
 }

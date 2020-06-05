@@ -1,6 +1,7 @@
 // load hotword detection
 const BumbleBee = require('bumblebee-hotword-node');
 const bumblebee = new BumbleBee();
+bumblebee.addHotword('bumblebee');
 bumblebee.setHotword('bumblebee');
 
 // load speech synthesis
@@ -12,10 +13,10 @@ const jokeLogic = require('./lib/knockknock-logic.js');
 
 // load speech recognition
 const DeepSpeech = require('jaxcore-deepspeech-plugin');
-const MODEL_PATH = process.env.DEEPSPEECH_MODEL || __dirname + '/../../deepspeech-0.6.0-models';
+
 DeepSpeech.start({
 	modelName: 'english',
-	modelPath: MODEL_PATH,      // path to deepspeech model
+	modelPath: process.env.DEEPSPEECH_MODEL || __dirname + '/../../deepspeech-0.7.0-models', // path to deepspeech model,
 	silenceThreshold: 200,      // how many milliseconds of silence before processing the audio
 	vadMode: 'VERY_AGGRESSIVE', // options are: 'NORMAL', 'LOW_BITRATE', 'AGGRESSIVE', 'VERY_AGGRESSIVE'
 	debug: 'true'               // show recording status

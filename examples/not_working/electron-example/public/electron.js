@@ -12,9 +12,6 @@ const Jaxcore = require('jaxcore');
 const jaxcore = new Jaxcore();
 jaxcore.addPlugin(require('jaxcore-deepspeech-plugin'));
 
-// path to deepspeech model is relative to the /public directory
-const MODEL_PATH = __dirname + '/../../../deepspeech-0.6.0-models';
-
 if (isDev) process.env.NODE_ENV = 'dev';
 
 let mainWindow;
@@ -76,7 +73,7 @@ function createWindow() {
 	// start the jaxcore deepspeech service
 	jaxcore.startService('deepspeech', {
 		modelName: 'english',
-		modelPath: MODEL_PATH,
+		modelPath: __dirname + '/../../../deepspeech-0.7.0-models',
 		silenceThreshold: 200,
 		vadMode: 'VERY_AGGRESSIVE',
 		debug: true
@@ -96,6 +93,8 @@ function createWindow() {
 		
 		// receive microphone audio stream from browser window
 		ipcMain.on('stream-data', (event, data) => {
+			console.log('data', data.buffer.readInt16LE);
+			// debugger;
 			// stream to the data to the DeepSpeech forked process
 			deepspeech.streamData(data);
 		});

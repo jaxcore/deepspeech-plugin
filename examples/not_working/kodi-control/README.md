@@ -64,7 +64,7 @@ KODI_HOST=192.168.1.100 node start
 
 #### Alternative deepspeech model directory
 
-The example expect deepspeech-0.6-models to be located at the root of the `deepspeech-plugin` directory.  To specify an alternate location use the `DEEPSPEECH_MODEL` environment variable:
+The example expect deepspeech-0.7-models to be located at the root of the `deepspeech-plugin` directory.  To specify an alternate location use the `DEEPSPEECH_MODEL` environment variable:
 
 ```
 DEEPSPEECH_MODEL=/path/to/deepspeech/models node start.js

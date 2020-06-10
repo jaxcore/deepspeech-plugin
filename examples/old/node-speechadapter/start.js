@@ -9,7 +9,7 @@ jaxcore.addPlugin(require('bumblebee-hotword-node'));
 // const bumblebee = new BumbleBee();
 // bumblebee.setHotword('bumblebee');
 
-const MODEL_PATH = process.env.DEEPSPEECH_MODEL || __dirname + '/../../deepspeech-0.7.0-models'; // path to deepspeech model
+const MODEL_PATH = process.env.DEEPSPEECH_MODEL || __dirname + '/../../deepspeech-0.7.3-models'; // path to deepspeech model
 
 class SpeechConsoleAdapter extends Adapter {
 	// static getDefaultState() {

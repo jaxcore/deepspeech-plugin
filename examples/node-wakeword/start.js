@@ -13,7 +13,7 @@ let speechRecognitionActive = false;
 
 jaxcore.startService('deepspeech', {
 	modelName: 'english',
-	modelPath: process.env.DEEPSPEECH_MODEL || __dirname + '/../../deepspeech-0.7.0-models', // path to deepspeech model,
+	modelPath: process.env.DEEPSPEECH_MODEL || __dirname + '/../../deepspeech-0.7.3-models', // path to deepspeech model,
 	silenceThreshold: 200, // how many milliseconds of silence before processing the audio
 	vadMode: 'VERY_AGGRESSIVE', // options are: 'NORMAL', 'LOW_BITRATE', 'AGGRESSIVE', 'VERY_AGGRESSIVE'
 	debug: 'true'

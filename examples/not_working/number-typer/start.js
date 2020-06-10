@@ -19,7 +19,7 @@ jaxcore.defineService('Say Node', 'sayNode', {});
 jaxcore.defineService('Bumblebee Node', 'bumblebeeNode', {});
 jaxcore.defineService('Deepspeech English', 'deepspeech', {
 	modelName: 'english',
-	modelPath: process.env.DEEPSPEECH_MODEL || __dirname + '/../../deepspeech-0.7.0-models', // path to deepspeech model
+	modelPath: process.env.DEEPSPEECH_MODEL || __dirname + '/../../deepspeech-0.7.3-models', // path to deepspeech model
 	silenceThreshold: 200,
 	// vadMode: 'VERY_AGGRESSIVE',
 	vadMode: 'AGGRESSIVE',

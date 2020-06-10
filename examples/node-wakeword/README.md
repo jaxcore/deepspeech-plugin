@@ -7,7 +7,7 @@ npm install
 MacOSX users will need to install the alternative speaker module:  Installing `speaker` with the optional parameters is necessary for the audio to play properly in Mac OSX.
 
 ```
-npm install speaker --mpg123-backend=openal --no-save
+npm install speaker --mpg123-backend=openal
 ```
 
 ```

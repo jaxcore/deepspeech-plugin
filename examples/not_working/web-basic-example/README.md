@@ -23,7 +23,7 @@ node server.js
 
 #### Alternative deepspeech model directory
 
-The example expect deepspeech-0.7-models to be located at the root of the `deepspeech-plugin` directory.  To specify an alternate location use the `DEEPSPEECH_MODEL` environment variable:
+The example expect deepspeech-0.7.3-models to be located at the root of the `deepspeech-plugin` directory.  To specify an alternate location use the `DEEPSPEECH_MODEL` environment variable:
 
 ```
 DEEPSPEECH_MODEL=/path/to/deepspeech-models node server.js

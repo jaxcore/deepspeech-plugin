@@ -4,13 +4,16 @@ const jaxcore = new Jaxcore();
 // PLUGINS
 
 jaxcore.addPlugin(require('bumblebee-hotword-node'));
-jaxcore.addPlugin(require('jaxcore-deepspeech-plugin'));
+// jaxcore.addPlugin(require('jaxcore-deepspeech-plugin'));
+jaxcore.addPlugin(require('../../'));
 jaxcore.addPlugin(require('jaxcore-say-node'));
 
 // SERVICES
 
 jaxcore.defineService('Say Node', 'sayNode', {});
-jaxcore.defineService('Bumblebee Node', 'bumblebeeNode', {});
+
+// jaxcore.defineService('Bumblebee Node', 'bumblebeeNode', {});
+
 jaxcore.defineService('Deepspeech English', 'deepspeech', {
 	modelName: 'english',
 	modelPath: process.env.DEEPSPEECH_MODEL || __dirname + '/../../deepspeech-0.7.3-models', // path to deepspeech model
@@ -43,6 +46,8 @@ class VoiceAssistantToolbox extends Jaxcore.Adapter {
 			}
 		});
 		
+		
+		
 		this.addEvents(bumblebeeNode, {
 			start: function() {
 				setTimeout(() => {
@@ -60,9 +65,9 @@ class VoiceAssistantToolbox extends Jaxcore.Adapter {
 				}
 				deepspeech.streamReset(); // reset to ignore speech recognition of the hotword that was spoken
 			},
-			data: function (data) {
+			data: function (intData, sampleRate, hotword, float32arr) {
 				if (this.state.speechRecognitionActive && !this.state.sayActive) {
-					deepspeech.streamData(data);
+					deepspeech.dualStreamData(intData, float32arr, sampleRate);
 				}
 				else {
 					process.stdout.write('_');
